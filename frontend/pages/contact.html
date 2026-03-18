@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurelia | Contact</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body>
+    <header class="top-nav">
+      <div class="container nav-inner">
+        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
+        <nav class="nav-links" data-nav-links>
+          <a href="../index.html" data-nav-link>Home</a>
+          <a href="shop.html" data-nav-link>Shop</a>
+          <a href="about.html" data-nav-link>About</a>
+          <a href="contact.html" data-nav-link>Contact</a>
+        </nav>
+        <a class="brand" href="../index.html">AURELIA</a>
+        <div class="nav-actions">
+          <a class="nav-icon" href="profile.html">U</a>
+          <a class="nav-icon" href="cart.html">B</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="section">
+      <div class="container two-col" style="grid-template-columns:1fr 1.2fr;">
+        <section class="card panel">
+          <h1>Contact Information</h1>
+          <p>123 Fashion Avenue, New York, NY 10001</p>
+          <p>Phone: +1 (555) 123-4567</p>
+          <p>Email: hello@aurelia.com</p>
+        </section>
+
+        <section class="card panel">
+          <h2>Send A Message</h2>
+          <form>
+            <div class="form-grid">
+              <div><label>First Name</label><input class="input" required></div>
+              <div><label>Last Name</label><input class="input" required></div>
+              <div class="full"><label>Email</label><input class="input" type="email" required></div>
+              <div class="full"><label>Subject</label><input class="input" required></div>
+              <div class="full"><label>Message</label><textarea rows="5" required></textarea></div>
+            </div>
+            <button class="btn btn-dark" style="margin-top:14px;">Send Message</button>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="container footer-note">&copy; <span id="current-year"></span> Aurelia.</div></footer>
+    <script type="module" src="../assets/js/common.js"></script>
+  </body>
+</html>
+

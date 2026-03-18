@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurelia | Cart</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body>
+    <header class="top-nav">
+      <div class="container nav-inner">
+        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
+        <nav class="nav-links" data-nav-links>
+          <a href="../index.html" data-nav-link>Home</a>
+          <a href="shop.html" data-nav-link>Shop</a>
+          <a href="about.html" data-nav-link>About</a>
+          <a href="contact.html" data-nav-link>Contact</a>
+        </nav>
+        <a class="brand" href="../index.html">AURELIA</a>
+        <div class="nav-actions">
+          <a class="nav-icon" href="profile.html">U</a>
+          <a class="nav-icon" href="cart.html">B</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="section">
+      <div class="container two-col" style="grid-template-columns:1.25fr .75fr;">
+        <section class="card panel">
+          <h1>Your Bag</h1>
+          <div id="cart-list"></div>
+        </section>
+
+        <aside class="card panel">
+          <h2 style="font-size:28px;">Order Summary</h2>
+          <div class="summary-row"><span>Subtotal</span><strong id="subtotal">0đ</strong></div>
+          <div class="summary-row"><span>Tax</span><strong id="tax">0đ</strong></div>
+          <div class="summary-row"><span>Total</span><strong id="total">0đ</strong></div>
+          <a href="#" class="btn btn-dark" style="display:block;text-align:center;margin-top:16px;">Proceed to Checkout</a>
+          <a href="shop.html" class="btn btn-outline" style="display:block;text-align:center;margin-top:10px;">Continue Shopping</a>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="container footer-note">&copy; <span id="current-year"></span> Aurelia.</div></footer>
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module" src="../assets/js/cart.js"></script>
+  </body>
+</html>
+

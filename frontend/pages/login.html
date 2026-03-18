@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurelia | Login</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body>
+    <header class="top-nav">
+      <div class="container nav-inner">
+        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
+        <nav class="nav-links" data-nav-links>
+          <a href="../index.html" data-nav-link>Home</a>
+          <a href="shop.html" data-nav-link>Shop</a>
+          <a href="about.html" data-nav-link>About</a>
+          <a href="contact.html" data-nav-link>Contact</a>
+        </nav>
+        <a class="brand" href="../index.html">AURELIA</a>
+        <div class="nav-actions">
+          <a class="nav-icon" href="profile.html">U</a>
+          <a class="nav-icon" href="cart.html">B</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card auth-wrap">
+        <h1 style="margin-bottom:8px;">Welcome Back</h1>
+        <p>Sign in to your Aurelia account</p>
+        <form id="login-form">
+          <div class="form-grid">
+            <div class="full">
+              <label>Email Address</label>
+              <input class="input" type="email" required placeholder="name@example.com" />
+            </div>
+            <div class="full">
+              <label>Password</label>
+              <input class="input" type="password" required placeholder="******" />
+            </div>
+          </div>
+          <button class="btn btn-dark" style="margin-top:16px;width:100%;">Sign In</button>
+          <p class="notice" data-notice></p>
+          <p class="notice">Chua co tai khoan? <a href="register.html">Dang ky</a></p>
+        </form>
+      </section>
+    </main>
+
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module" src="../assets/js/auth.js"></script>
+  </body>
+</html>
+

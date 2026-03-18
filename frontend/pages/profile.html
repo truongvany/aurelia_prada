@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurelia | Profile</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body>
+    <header class="top-nav">
+      <div class="container nav-inner">
+        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
+        <nav class="nav-links" data-nav-links>
+          <a href="../index.html" data-nav-link>Home</a>
+          <a href="shop.html" data-nav-link>Shop</a>
+          <a href="about.html" data-nav-link>About</a>
+          <a href="contact.html" data-nav-link>Contact</a>
+        </nav>
+        <a class="brand" href="../index.html">AURELIA</a>
+        <div class="nav-actions">
+          <a class="nav-icon" href="profile.html">U</a>
+          <a class="nav-icon" href="cart.html">B</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="section">
+      <div class="container two-col" style="grid-template-columns:280px 1fr;">
+        <aside class="card panel">
+          <h3 style="font-family:Manrope,sans-serif;">Jane Doe</h3>
+          <p>jane.doe@example.com</p>
+          <button class="tab-btn active" style="width:100%;margin-bottom:8px;" data-profile-tab="orders">My Orders</button>
+          <button class="tab-btn" style="width:100%;margin-bottom:8px;" data-profile-tab="wishlist">Wishlist</button>
+          <button class="tab-btn" style="width:100%;" data-profile-tab="settings">Account Settings</button>
+        </aside>
+
+        <section class="card panel">
+          <article data-profile-panel="orders">
+            <h1>Order History</h1>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Order</th><th>Date</th><th>Status</th><th>Total</th></tr></thead>
+                <tbody>
+                  <tr><td>#ORD-2026-001</td><td>Oct 12, 2026</td><td><span class="status success">Delivered</span></td><td>2.050.000đ</td></tr>
+                  <tr><td>#ORD-2026-002</td><td>Nov 05, 2026</td><td><span class="status warning">Processing</span></td><td>1.200.000đ</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+          <article data-profile-panel="wishlist" hidden>
+            <h1>Wishlist</h1>
+            <p>Wishlist cua ban hien dang trong.</p>
+          </article>
+          <article data-profile-panel="settings" hidden>
+            <h1>Account Settings</h1>
+            <div class="form-grid">
+              <div><label>First Name</label><input class="input" value="Jane" /></div>
+              <div><label>Last Name</label><input class="input" value="Doe" /></div>
+              <div class="full"><label>Email</label><input class="input" value="jane.doe@example.com" /></div>
+            </div>
+            <button class="btn btn-dark" style="margin-top:14px;">Save Changes</button>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="container footer-note">&copy; <span id="current-year"></span> Aurelia.</div></footer>
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module" src="../assets/js/profile.js"></script>
+  </body>
+</html>
+

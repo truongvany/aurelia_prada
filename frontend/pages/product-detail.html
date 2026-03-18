@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurelia | Product Detail</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body>
+    <header class="top-nav">
+      <div class="container nav-inner">
+        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
+        <nav class="nav-links" data-nav-links>
+          <a href="../index.html" data-nav-link>Home</a>
+          <a href="shop.html" data-nav-link>Shop</a>
+          <a href="about.html" data-nav-link>About</a>
+          <a href="contact.html" data-nav-link>Contact</a>
+        </nav>
+        <a class="brand" href="../index.html">AURELIA</a>
+        <div class="nav-actions">
+          <a class="nav-icon" href="profile.html">U</a>
+          <a class="nav-icon" href="cart.html">B</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="section product-page-main">
+      <div class="container">
+        <nav aria-label="breadcrumb" class="product-breadcrumb">
+          <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li id="product-title-crumb">Silk Slip Dress in Pearl</li>
+          </ol>
+        </nav>
+
+        <div class="product-main-grid">
+          <div class="product-gallery-grid">
+            <div class="product-gallery-track">
+              <img id="product-hero" src="" alt="Main" class="product-gallery-main" />
+              <img id="product-thumb" src="" alt="Thumb" class="product-gallery-sub" />
+              <img src="https://images.unsplash.com/photo-1583391733958-d15319a5120b?auto=format&fit=crop&w=800&q=80" alt="Thumb alt" class="product-gallery-sub" />
+            </div>
+          </div>
+          <div class="card panel product-info-card">
+            <h1 id="product-title">Silk Slip Dress in Pearl</h1>
+            <p id="product-price" class="product-price-text"></p>
+
+            <div class="product-rating-row">
+              <div class="stars">★★★★☆</div>
+              <span>(124 đánh giá)</span>
+            </div>
+
+            <p class="product-desc">A timeless classic. Our Silk Slip Dress is cut on the bias to beautifully drape over your silhouette. Crafted from 100% pure mulberry silk, it features a delicate V-neckline and adjustable spaghetti straps. Perfect for evening wear or layering during the day.</p>
+
+            <div style="margin:20px 0;">
+              <p class="selector-title">Color: <span id="selected-color">Champagne</span></p>
+              <div style="display:flex;gap:8px;margin-top:8px;">
+                <button class="color-swatch active" data-color="Champagne" style="background:#E8D8D0" title="Champagne"></button>
+                <button class="color-swatch" data-color="Black" style="background:#222" title="Black"></button>
+                <button class="color-swatch" data-color="Ivory" style="background:#FDFBF7" title="Ivory"></button>
+              </div>
+            </div>
+
+            <div style="margin:20px 0;">
+              <div class="size-row">
+                <p class="selector-title">Size: <span id="selected-size">M</span></p>
+                <button class="size-guide-btn" type="button">Size Guide</button>
+              </div>
+              <div class="size-list">
+                <button class="size-btn" data-size="XS">XS</button>
+                <button class="size-btn" data-size="S">S</button>
+                <button class="size-btn active" data-size="M">M</button>
+                <button class="size-btn" data-size="L">L</button>
+                <button class="size-btn" data-size="XL">XL</button>
+              </div>
+            </div>
+
+            <a href="cart.html" class="btn btn-dark product-add-btn">Add to Bag - <span id="product-price-cta"></span></a>
+
+            <div class="product-feature-list">
+              <p>Free shipping on orders over $200</p>
+              <p>30-day free returns</p>
+              <p>2-year quality guarantee</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="section product-tabs-wrap" style="padding-bottom:0;">
+          <div class="tab-bar product-tab-bar">
+            <button class="tab-btn active" data-tab="details">Chi tiet</button>
+            <button class="tab-btn" data-tab="reviews">Danh gia</button>
+            <button class="tab-btn" data-tab="privacy">Bao mat</button>
+            <button class="tab-btn" data-tab="faq">FAQ</button>
+          </div>
+
+          <article class="tab-content product-tab-content" data-tab-panel="details">
+            <h4>Chi tiết sản phẩm</h4>
+            <p>Chiếc váy lụa Silk Slip Dress của chúng tôi được thiết kế để mang lại sự thanh lịch và thoải mái tối đa. Được cắt may tỉ mỉ theo đường xéo vải giúp tôn lên đường cong tự nhiên của cơ thể.</p>
+            <ul>
+              <li><strong>Chất liệu:</strong> 100% Lụa Mulberry cao cấp (19 momme).</li>
+              <li><strong>Thiết kế:</strong> Cổ chữ V tinh tế, dây áo spaghetti có thể điều chỉnh độ dài.</li>
+              <li><strong>Sản xuất:</strong> Được may thủ công tại xưởng may đạt chuẩn đạo đức nghề nghiệp.</li>
+              <li><strong>Bảo quản:</strong> Giặt tay bằng nước lạnh hoặc giặt khô, không dùng chất tẩy mạnh.</li>
+            </ul>
+          </article>
+
+          <article class="tab-content product-tab-content" data-tab-panel="reviews" hidden>
+            <div class="review-head">
+              <h4>Đánh giá từ khách hàng</h4>
+              <button class="btn btn-outline" type="button">Viết đánh giá</button>
+            </div>
+            <div class="review-summary">
+              <strong>4.8</strong>
+              <div>
+                <div class="stars">★★★★☆</div>
+                <span>Dựa trên 124 đánh giá</span>
+              </div>
+            </div>
+            <div class="review-list">
+              <article>
+                <div class="review-top">
+                  <h6>Nguyễn Thị A.</h6>
+                  <small>12/10/2026</small>
+                </div>
+                <p class="stars">★★★★★</p>
+                <p>Chất lụa cực kỳ mềm mại và mát. Form váy ôm vừa vặn, mặc lên rất sang trọng. Giao hàng nhanh và đóng gói cẩn thận.</p>
+              </article>
+              <article>
+                <div class="review-top">
+                  <h6>Lê Như Quỳnh</h6>
+                  <small>08/10/2026</small>
+                </div>
+                <p class="stars">★★★★★</p>
+                <p>Sản phẩm đúng như mô tả, chất lượng tốt và rất tinh tế. Đây là món đồ mình yêu thích nhất mùa này.</p>
+              </article>
+            </div>
+          </article>
+
+          <article class="tab-content product-tab-content" data-tab-panel="privacy" hidden>
+            <h4>Chính sách bảo mật thông tin</h4>
+            <p>Tại Aurelia, chúng tôi cam kết bảo vệ sự riêng tư và thông tin cá nhân của bạn. Chính sách này mô tả cách chúng tôi thu thập, sử dụng và bảo vệ dữ liệu của bạn.</p>
+            <h6>1. Thu thập thông tin</h6>
+            <p>Chúng tôi chỉ thu thập thông tin cần thiết để xử lý đơn hàng và cải thiện trải nghiệm mua sắm của bạn.</p>
+            <h6>2. Sử dụng thông tin</h6>
+            <p>Thông tin của bạn được sử dụng để giao hàng, hỗ trợ khách hàng và gửi thông tin khuyến mãi (nếu bạn đồng ý nhận).</p>
+            <h6>3. Bảo mật dữ liệu</h6>
+            <p>Chúng tôi áp dụng các biện pháp bảo mật tiên tiến để đảm bảo thông tin thanh toán và dữ liệu cá nhân luôn an toàn tuyệt đối.</p>
+          </article>
+
+          <article class="tab-content product-tab-content" data-tab-panel="faq" hidden>
+            <h4>Câu hỏi thường gặp</h4>
+            <details>
+              <summary>Làm thế nào để chọn đúng size?</summary>
+              <p>Bạn có thể tham khảo bảng kích cỡ hoặc liên hệ đội ngũ CSKH để được tư vấn theo số đo cơ thể.</p>
+            </details>
+            <details>
+              <summary>Thời gian giao hàng là bao lâu?</summary>
+              <p>Đơn hàng nội địa dự kiến 2-4 ngày làm việc; đơn quốc tế từ 7-14 ngày tùy vị trí địa lý.</p>
+            </details>
+            <details>
+              <summary>Tôi có thể đổi trả sản phẩm không?</summary>
+              <p>Có. Chúng tôi hỗ trợ đổi trả miễn phí trong vòng 30 ngày với điều kiện sản phẩm còn nguyên tem mác.</p>
+            </details>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="container footer-note">&copy; <span id="current-year"></span> Aurelia.</div></footer>
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module" src="../assets/js/product-detail.js"></script>
+  </body>
+</html>
+

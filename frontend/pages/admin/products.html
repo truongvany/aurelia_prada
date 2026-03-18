@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurelia Admin | Products</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css" />
+  </head>
+  <body>
+    <header class="top-nav"><div class="container nav-inner"><a class="brand" href="dashboard.html">AURELIA Admin</a><a class="btn btn-outline" href="../../index.html">View Store</a></div></header>
+    <main class="admin-shell">
+      <aside class="admin-side">
+        <a href="dashboard.html" data-admin-link>Dashboard</a>
+        <a href="products.html" data-admin-link>Products</a>
+        <a href="orders.html" data-admin-link>Orders</a>
+        <a href="customers.html" data-admin-link>Customers</a>
+        <a href="settings.html" data-admin-link>Settings</a>
+      </aside>
+      <section class="admin-main">
+        <h1>Products</h1>
+        <div class="card panel table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Status</th></tr></thead>
+            <tbody id="admin-products-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="../../assets/js/common.js"></script>
+    <script type="module" src="../../assets/js/admin.js"></script>
+  </body>
+</html>
+

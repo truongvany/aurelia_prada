@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurelia Admin | Dashboard</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css" />
+  </head>
+  <body>
+    <header class="top-nav">
+      <div class="container nav-inner">
+        <a class="brand" href="dashboard.html">AURELIA Admin</a>
+        <div class="nav-actions"><a class="btn btn-outline" href="../../index.html">View Store</a></div>
+      </div>
+    </header>
+
+    <main class="admin-shell">
+      <aside class="admin-side">
+        <a href="dashboard.html" data-admin-link>Dashboard</a>
+        <a href="products.html" data-admin-link>Products</a>
+        <a href="orders.html" data-admin-link>Orders</a>
+        <a href="customers.html" data-admin-link>Customers</a>
+        <a href="settings.html" data-admin-link>Settings</a>
+      </aside>
+      <section class="admin-main">
+        <h1>Dashboard Overview</h1>
+        <div class="stats" style="margin:14px 0 20px;">
+          <article class="card stat"><small>Total Revenue</small><h3 style="font-family:Manrope,sans-serif;">45.231.890đ</h3></article>
+          <article class="card stat"><small>Orders</small><h3 style="font-family:Manrope,sans-serif;">2,350</h3></article>
+          <article class="card stat"><small>Customers</small><h3 style="font-family:Manrope,sans-serif;">12,234</h3></article>
+          <article class="card stat"><small>Products</small><h3 style="font-family:Manrope,sans-serif;">142</h3></article>
+        </div>
+        <div class="card panel">
+          <h3>Sales Overview</h3>
+          <div id="sales-chart" style="margin-top:12px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;min-height:210px;"></div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="../../assets/js/common.js"></script>
+    <script type="module" src="../../assets/js/admin.js"></script>
+  </body>
+</html>
+

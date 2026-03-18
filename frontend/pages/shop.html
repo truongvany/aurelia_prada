@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurelia | Shop</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body>
+    <header class="top-nav">
+      <div class="container nav-inner">
+        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
+        <nav class="nav-links" data-nav-links>
+          <a href="../index.html" data-nav-link>Home</a>
+          <a href="shop.html" data-nav-link>Shop</a>
+          <a href="about.html" data-nav-link>About</a>
+          <a href="contact.html" data-nav-link>Contact</a>
+        </nav>
+        <a class="brand" href="../index.html">AURELIA</a>
+        <div class="nav-actions">
+          <a class="nav-icon" href="profile.html">U</a>
+          <a class="nav-icon" href="cart.html">B</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="section shop-page-main">
+      <div class="container page-head">
+        <h1>All Collections</h1>
+        <p>Tat ca san pham cua Aurelia duoc loc theo nhu cau cua ban.</p>
+      </div>
+      <div class="container two-col shop-layout">
+        <aside class="shop-sidebar card panel">
+          <div class="shop-search-wrap">
+            <input id="shop-search" class="input shop-search-input" type="search" placeholder="Search products..." />
+            <span class="shop-search-icon">⌕</span>
+          </div>
+
+          <div class="shop-accordion">
+            <details class="filter-group" open>
+              <summary>Categories</summary>
+              <div class="filter-options">
+                <a href="#" class="active">New In</a>
+                <a href="#">Clothing</a>
+                <a href="#">Shoes</a>
+                <a href="#">Accessories</a>
+              </div>
+              <label for="filter-category" class="filter-hidden-label">Category</label>
+              <select id="filter-category" class="select" style="margin-top:12px;">
+                <option value="all">All categories</option>
+                <option value="Dresses">Dresses</option>
+                <option value="Tops">Tops</option>
+                <option value="Bottoms">Bottoms</option>
+                <option value="Outerwear">Outerwear</option>
+                <option value="Shoes">Shoes</option>
+              </select>
+            </details>
+
+            <details class="filter-group">
+              <summary>Price Range</summary>
+              <input id="filter-price" class="input" type="range" min="500000" max="2500000" step="50000" value="2500000" />
+              <div class="shop-price-row">
+                <span>0đ</span>
+                <span>2.5M+</span>
+              </div>
+            </details>
+
+            <details class="filter-group">
+              <summary>Color</summary>
+              <div class="shop-color-list">
+                <span class="color-swatch" style="background:#000"></span>
+                <span class="color-swatch" style="background:#fff"></span>
+                <span class="color-swatch" style="background:#E8D8D0"></span>
+                <span class="color-swatch" style="background:#C5A89E"></span>
+                <span class="color-swatch" style="background:#8B9D83"></span>
+                <span class="color-swatch" style="background:#A3B1C6"></span>
+              </div>
+            </details>
+          </div>
+        </aside>
+
+        <section>
+          <div class="shop-toolbar">
+            <h2>All Collections</h2>
+            <div class="shop-sort-wrap">
+              <label for="sort-by">Sort By</label>
+              <select id="sort-by" class="select">
+                <option value="featured">Featured</option>
+                <option value="newest">Newest</option>
+                <option value="priceAsc">Price: Low to High</option>
+                <option value="priceDesc">Price: High to Low</option>
+              </select>
+            </div>
+          </div>
+
+          <p class="muted">Showing <strong id="result-count">0</strong> products</p>
+          <div class="grid-3" id="shop-grid"></div>
+
+          <nav class="shop-pagination" aria-label="Page navigation">
+            <a href="#" class="disabled">Prev</a>
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">Next</a>
+          </nav>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-note">&copy; <span id="current-year"></span> Aurelia. All rights reserved.</div>
+    </footer>
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module" src="../assets/js/shop.js"></script>
+  </body>
+</html>
+

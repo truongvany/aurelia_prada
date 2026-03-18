@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurelia | Home</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="home-page">
+    <header class="top-nav">
+      <div class="container nav-inner">
+        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
+        <nav class="nav-links" data-nav-links>
+          <a href="index.html" data-nav-link>Home</a>
+          <a href="pages/shop.html" data-nav-link>Shop</a>
+          <a href="pages/about.html" data-nav-link>About</a>
+          <a href="pages/contact.html" data-nav-link>Contact</a>
+        </nav>
+        <a class="brand" href="index.html">AURELIA</a>
+        <div class="nav-actions">
+          <a class="nav-icon" href="pages/profile.html" aria-label="Profile">U</a>
+          <a class="nav-icon" href="pages/cart.html" aria-label="Cart">B</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="home-hero section">
+        <div class="container hero-grid">
+          <div class="hero-box">
+            <span class="hero-chip">Spring Summer 2026 Collection</span>
+            <h1>
+              Elegance in
+              <br />
+              <em>Simplicity</em>
+            </h1>
+            <p>Discover our new collection of minimalist, sustainable fashion designed for the modern woman.</p>
+            <div class="hero-actions">
+              <a href="pages/shop.html" class="btn btn-dark">Shop Now</a>
+              <a href="pages/about.html" class="btn btn-outline">Our Story</a>
+            </div>
+          </div>
+          <div class="hero-media">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80" alt="Fashion Model" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-soft">
+        <div class="container">
+          <div class="section-head">
+            <h2>New Arrival</h2>
+            <div class="section-tabs">
+              <span class="active">Aurelia</span>
+              <span>Metagent</span>
+            </div>
+          </div>
+          <div class="grid-4" id="new-arrivals"></div>
+          <div class="section-cta">
+            <a href="pages/shop.html" class="btn btn-outline">Xem tat ca</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-sale">
+        <div class="container">
+          <div class="section-head">
+            <h2>Hot Summer Deal | Sale Upto 70%</h2>
+            <div class="section-tabs">
+              <span class="active">Aurelia</span>
+              <span>Metagent</span>
+            </div>
+          </div>
+          <div class="grid-4" id="sale-products"></div>
+          <div class="section-cta">
+            <a href="pages/shop.html" class="btn btn-dark">Xem tat ca</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head center">
+            <h2>Summer Special - Uu dai dac biet tu 150k</h2>
+          </div>
+          <div class="promo-grid">
+            <article class="promo-card">
+              <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1200&q=80" alt="Summer special" />
+              <div class="promo-overlay">
+                <h3>Summer Special</h3>
+                <p>Tu 150K</p>
+              </div>
+            </article>
+            <article class="promo-card">
+              <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1200&q=80" alt="Special offer" />
+              <div class="promo-overlay">
+                <h3>Uu dai dac biet</h3>
+                <p>Len den 50%</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-gallery">
+        <div class="container-fluid gallery-shell">
+          <div class="section-head center">
+            <h2>Gallery</h2>
+          </div>
+          <div class="gallery-grid">
+            <div class="gallery-track">
+              <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80" alt="Gallery 1" />
+              <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80" alt="Gallery 2" />
+              <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80" alt="Gallery 3" />
+              <img src="https://images.unsplash.com/photo-1509631179647-0c500ba14174?auto=format&fit=crop&w=800&q=80" alt="Gallery 4" />
+              <img src="https://images.unsplash.com/photo-1434389678369-182cb1301209?auto=format&fit=crop&w=800&q=80" alt="Gallery 5" />
+              <img src="https://images.unsplash.com/photo-1495385794356-15371f348c31?auto=format&fit=crop&w=800&q=80" alt="Gallery 6" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-marquee">
+        <div class="marquee-track">
+          <span>VOGUE</span><span>ELLE</span><span>HARPER'S BAZAAR</span><span>MARIE CLAIRE</span><span>COSMOPOLITAN</span><span>GQ</span>
+          <span>VOGUE</span><span>ELLE</span><span>HARPER'S BAZAAR</span><span>MARIE CLAIRE</span><span>COSMOPOLITAN</span><span>GQ</span>
+        </div>
+      </section>
+
+      <section class="section section-testimonial">
+        <div class="container">
+          <div class="section-head center">
+            <h2>What Our Muses Say</h2>
+          </div>
+          <div class="testimonial-grid">
+            <article class="testimonial-card">
+              <p class="stars">★★★★★</p>
+              <p>"The quality and fit are absolutely perfect. Aurelia has become my go-to for elegant, everyday pieces."</p>
+              <h6>Sarah Jenkins</h6>
+              <small>Verified Buyer</small>
+            </article>
+            <article class="testimonial-card">
+              <p class="stars">★★★★★</p>
+              <p>"Minimal design but very premium fabric. Every detail feels intentional and refined."</p>
+              <h6>Leah Morris</h6>
+              <small>Verified Buyer</small>
+            </article>
+            <article class="testimonial-card">
+              <p class="stars">★★★★★</p>
+              <p>"Fast shipping, elegant packaging, and silhouettes that are timeless. Love this brand."</p>
+              <h6>Naomi Clark</h6>
+              <small>Verified Buyer</small>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-assistance">
+        <div class="container">
+          <div class="assist-card">
+            <div class="assist-copy">
+              <h2>Need Assistance?</h2>
+              <p>Our styling advisors are here to help you find the perfect piece or answer any questions.</p>
+              <ul>
+                <li><strong>Call Us:</strong> +1 (555) 123-4567</li>
+                <li><strong>Email Us:</strong> hello@aurelia.com</li>
+              </ul>
+            </div>
+            <div class="assist-media">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80" alt="Contact us" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <section>
+          <h3>AURELIA</h3>
+          <p>Empowering women through minimalist and sustainable fashion.</p>
+        </section>
+        <section>
+          <h4>Shop</h4>
+          <p><a href="pages/shop.html">All Products</a></p>
+          <p><a href="pages/shop.html">Sale</a></p>
+        </section>
+        <section>
+          <h4>Support</h4>
+          <p><a href="pages/contact.html">Contact Us</a></p>
+          <p><a href="pages/about.html">Our Story</a></p>
+        </section>
+        <section>
+          <h4>Account</h4>
+          <p><a href="pages/login.html">Login</a></p>
+          <p><a href="pages/register.html">Register</a></p>
+        </section>
+      </div>
+      <div class="container footer-note">&copy; <span id="current-year"></span> Aurelia. All rights reserved.</div>
+    </footer>
+
+    <script type="module">
+      import { products } from './assets/js/data.js';
+      import { createProductCard } from './assets/js/common.js';
+
+      const newArrivals = products.slice(0, 4);
+      const sales = products.filter((product) => product.originalPrice);
+      document.getElementById('new-arrivals').innerHTML = newArrivals.map(createProductCard).join('');
+      document.getElementById('sale-products').innerHTML = sales.map(createProductCard).join('');
+    </script>
+    <script type="module" src="assets/js/common.js"></script>
+  </body>
+</html>
+
+
