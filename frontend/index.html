@@ -3,61 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aurelia | Home</title>
+    <title>Aurelia | Luxury Fashion</title>
+    <link rel="icon" type="image/png" href="assets/images/logo/logo.png" />
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body class="home-page">
-    <header class="top-nav">
-      <div class="container nav-inner">
-        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
-        <nav class="nav-links" data-nav-links>
-          <a href="index.html" data-nav-link>Home</a>
-          <a href="pages/shop.html" data-nav-link>Shop</a>
-          <a href="pages/about.html" data-nav-link>About</a>
-          <a href="pages/contact.html" data-nav-link>Contact</a>
-        </nav>
-        <a class="brand" href="index.html">AURELIA</a>
-        <div class="nav-actions">
-          <a class="nav-icon" href="pages/profile.html" aria-label="Profile">U</a>
-          <a class="nav-icon" href="pages/cart.html" aria-label="Cart">B</a>
-        </div>
-      </div>
-    </header>
+    <header class="top-nav"></header>
 
     <main>
-      <section class="home-hero section">
-        <div class="container hero-grid">
-          <div class="hero-box">
-            <span class="hero-chip">Spring Summer 2026 Collection</span>
-            <h1>
-              Elegance in
-              <br />
-              <em>Simplicity</em>
-            </h1>
-            <p>Discover our new collection of minimalist, sustainable fashion designed for the modern woman.</p>
-            <div class="hero-actions">
-              <a href="pages/shop.html" class="btn btn-dark">Shop Now</a>
-              <a href="pages/about.html" class="btn btn-outline">Our Story</a>
+      <section class="ivy-hero">
+        <div class="ivy-side-text left-text">Beautiful</div>
+        <div class="ivy-side-text right-text">Fashion</div>
+        <div class="ivy-hero-slider">
+          <div class="ivy-slider-track" id="heroTrack">
+            <div class="ivy-slide">
+              <img src="assets/images/hero/hero-1.png" alt="Hero 1" />
+            </div>
+            <div class="ivy-slide">
+              <img src="assets/images/hero/hero-2.png" alt="Hero 2" />
+            </div>
+            <div class="ivy-slide">
+              <img src="assets/images/hero/hero-3.png" alt="Hero 3" />
             </div>
           </div>
-          <div class="hero-media">
-            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80" alt="Fashion Model" />
+          <button class="ivy-nav-btn prev" id="heroPrev"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+          <button class="ivy-nav-btn next" id="heroNext"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+          <div class="ivy-dots" id="heroDots">
+            <span class="active" data-index="0"></span>
+            <span data-index="1"></span>
+            <span data-index="2"></span>
           </div>
         </div>
       </section>
 
-      <section class="section section-soft">
+      <section class="section section-soft new-arrival-sec">
         <div class="container">
           <div class="section-head">
-            <h2>New Arrival</h2>
-            <div class="section-tabs">
+            <h2>NEW ARRIVAL</h2>
+            <div class="section-tabs ivy-tabs">
               <span class="active">Aurelia</span>
               <span>Metagent</span>
             </div>
           </div>
-          <div class="grid-4" id="new-arrivals"></div>
-          <div class="section-cta">
-            <a href="pages/shop.html" class="btn btn-outline">Xem tat ca</a>
+          <div class="grid-6" id="new-arrivals"></div>
+          <div class="section-cta text-center" style="text-align: center; justify-content: center;">
+            <a href="pages/shop.html" class="btn-view-all">Xem tất cả</a>
           </div>
         </div>
       </section>
@@ -72,8 +62,8 @@
             </div>
           </div>
           <div class="grid-4" id="sale-products"></div>
-          <div class="section-cta">
-            <a href="pages/shop.html" class="btn btn-dark">Xem tat ca</a>
+          <div class="section-cta text-center" style="text-align: center; justify-content: center;">
+            <a href="pages/shop.html" class="btn-view-all">Xem tất cả</a>
           </div>
         </div>
       </section>
@@ -81,23 +71,26 @@
       <section class="section">
         <div class="container">
           <div class="section-head center">
-            <h2>Summer Special - Uu dai dac biet tu 150k</h2>
+            <h2>Summer Special - Ưu đãi đặc biệt chỉ từ 150k</h2>
           </div>
-          <div class="promo-grid">
-            <article class="promo-card">
-              <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1200&q=80" alt="Summer special" />
-              <div class="promo-overlay">
-                <h3>Summer Special</h3>
-                <p>Tu 150K</p>
+          <div class="promo-layout">
+            <article class="promo-hero">
+              <div class="promo-hero-wrapper summer-slider" id="summerSlider">
+                <div class="summer-track" id="summerTrack">
+                  <div class="summer-slide"><img src="assets/images/summer/summer_150k.png" alt="Summer special 1" /></div>
+                  <div class="summer-slide"><img src="assets/images/summer/summer_150k_1.png" alt="Summer special 2" /></div>
+                  <div class="summer-slide"><img src="assets/images/summer/summer_150k_2.png" alt="Summer special 3" /></div>
+                </div>
               </div>
             </article>
-            <article class="promo-card">
-              <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1200&q=80" alt="Special offer" />
-              <div class="promo-overlay">
-                <h3>Uu dai dac biet</h3>
-                <p>Len den 50%</p>
-              </div>
-            </article>
+            <div class="promo-grid">
+              <article class="promo-card">
+                <img src="assets/images/summer/summer_1.jpg" alt="Summer special" />
+              </article>
+              <article class="promo-card">
+                <img src="assets/images/summer/summer_2.jpg" alt="Special offer" />
+              </article>
+            </div>
           </div>
         </div>
       </section>
@@ -108,13 +101,8 @@
             <h2>Gallery</h2>
           </div>
           <div class="gallery-grid">
-            <div class="gallery-track">
-              <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80" alt="Gallery 1" />
-              <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80" alt="Gallery 2" />
-              <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80" alt="Gallery 3" />
-              <img src="https://images.unsplash.com/photo-1509631179647-0c500ba14174?auto=format&fit=crop&w=800&q=80" alt="Gallery 4" />
-              <img src="https://images.unsplash.com/photo-1434389678369-182cb1301209?auto=format&fit=crop&w=800&q=80" alt="Gallery 5" />
-              <img src="https://images.unsplash.com/photo-1495385794356-15371f348c31?auto=format&fit=crop&w=800&q=80" alt="Gallery 6" />
+            <div class="gallery-track" id="gallery-track">
+              <!-- Dynamically populated from data.js -->
             </div>
           </div>
         </div>
@@ -130,48 +118,31 @@
       <section class="section section-testimonial">
         <div class="container">
           <div class="section-head center">
-            <h2>What Our Muses Say</h2>
+            <h2>Khách hàng nói gì về chúng tôi</h2>
           </div>
           <div class="testimonial-grid">
             <article class="testimonial-card">
               <p class="stars">★★★★★</p>
-              <p>"The quality and fit are absolutely perfect. Aurelia has become my go-to for elegant, everyday pieces."</p>
-              <h6>Sarah Jenkins</h6>
+              <p>"Chất lượng và kiểu dáng hoàn hảo. Aurelia đã trở thành lựa chọn hàng đầu của tôi cho những món đồ thanh lịch, hàng ngày."</p>
+              <h6>Mai Anh</h6>
+              <small>Verified Buyer</small>
+            </article>
+            <article class="testimonial-card">  
+              <p class="stars">★★★★★</p>
+              <p>"Thiết kế tối giản nhưng chất liệu vải cao cấp. Mọi chi tiết đều tinh tế và sang trọng."</p>
+              <h6>Thanh Hà</h6>
               <small>Verified Buyer</small>
             </article>
             <article class="testimonial-card">
               <p class="stars">★★★★★</p>
-              <p>"Minimal design but very premium fabric. Every detail feels intentional and refined."</p>
-              <h6>Leah Morris</h6>
-              <small>Verified Buyer</small>
-            </article>
-            <article class="testimonial-card">
-              <p class="stars">★★★★★</p>
-              <p>"Fast shipping, elegant packaging, and silhouettes that are timeless. Love this brand."</p>
-              <h6>Naomi Clark</h6>
+              <p>"Giao hàng nhanh, đóng gói đẹp và kiểu dáng vượt thời gian. Yêu thích thương hiệu này."</p>
+              <h6>Thúy Hằng</h6>
               <small>Verified Buyer</small>
             </article>
           </div>
         </div>
       </section>
 
-      <section class="section section-assistance">
-        <div class="container">
-          <div class="assist-card">
-            <div class="assist-copy">
-              <h2>Need Assistance?</h2>
-              <p>Our styling advisors are here to help you find the perfect piece or answer any questions.</p>
-              <ul>
-                <li><strong>Call Us:</strong> +1 (555) 123-4567</li>
-                <li><strong>Email Us:</strong> hello@aurelia.com</li>
-              </ul>
-            </div>
-            <div class="assist-media">
-              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80" alt="Contact us" />
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">
@@ -203,10 +174,283 @@
       import { products } from './assets/js/data.js';
       import { createProductCard } from './assets/js/common.js';
 
-      const newArrivals = products.slice(0, 4);
+      const newArrivals = products.slice(0, 6);
       const sales = products.filter((product) => product.originalPrice);
       document.getElementById('new-arrivals').innerHTML = newArrivals.map(createProductCard).join('');
       document.getElementById('sale-products').innerHTML = sales.map(createProductCard).join('');
+
+      const galleryImages = products.map(product => product.image);
+      const galleryTrackEl = document.getElementById('gallery-track');
+      if (galleryTrackEl && galleryImages.length > 0) {
+        // Double the images array so seamless infinite scroll works
+        const seamlessImages = [...galleryImages, ...galleryImages];
+        galleryTrackEl.innerHTML = seamlessImages.map((src, idx) => `<div class="gallery-item"><img src="${src}" alt="Gallery image ${idx + 1}" /></div>`).join('');
+      }
+
+      // Hero Slider logic (Infinite Loop)
+      const track = document.getElementById('heroTrack');
+      const dots = document.querySelectorAll('#heroDots span');
+      const slides = document.querySelectorAll('.ivy-slide');
+      
+      let isAnimating = false;
+      let currentSlide = 1;
+      
+      // Clone first and last slides for infinite scroll
+      const firstClone = slides[0].cloneNode(true);
+      const lastClone = slides[slides.length - 1].cloneNode(true);
+      
+      track.appendChild(firstClone);
+      track.insertBefore(lastClone, slides[0]);
+      
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-100%)`;
+      
+      function updateSlider(animate = true) {
+        if (!animate) {
+          track.style.transition = 'none';
+        } else {
+          track.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+        }
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        let dotIndex = currentSlide - 1;
+        if (dotIndex < 0) dotIndex = dots.length - 1;
+        if (dotIndex >= dots.length) dotIndex = 0;
+        
+        dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === dotIndex);
+        });
+      }
+
+      setTimeout(() => {
+        track.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+      }, 50);
+
+      document.getElementById('heroNext').addEventListener('click', () => {
+        if (isAnimating) return;
+        isAnimating = true;
+        currentSlide++;
+        updateSlider();
+      });
+
+      document.getElementById('heroPrev').addEventListener('click', () => {
+        if (isAnimating) return;
+        isAnimating = true;
+        currentSlide--;
+        updateSlider();
+      });
+
+      track.addEventListener('transitionend', () => {
+        isAnimating = false;
+        if (currentSlide === 0) {
+          currentSlide = slides.length;
+          updateSlider(false);
+        } else if (currentSlide === slides.length + 1) {
+          currentSlide = 1;
+          updateSlider(false);
+        }
+      });
+
+      dots.forEach(dot => {
+        dot.addEventListener('click', (e) => {
+          if (isAnimating) return;
+          const index = parseInt(e.target.dataset.index);
+          currentSlide = index + 1;
+          updateSlider();
+        });
+      });
+
+      let autoPlayInterval;
+      function startAutoPlay() {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = setInterval(() => {
+          if (!document.hidden && !isAnimating) {
+            isAnimating = true;
+            currentSlide++;
+            updateSlider();
+          }
+        }, 5000);
+      }
+      startAutoPlay();
+
+      // Swipe and Drag Logic
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragOffset = 0;
+
+      // Prevent default image drag
+      document.querySelectorAll('.ivy-hero-slider img').forEach(img => {
+        img.addEventListener('dragstart', (e) => e.preventDefault());
+      });
+
+      track.style.cursor = 'grab';
+
+      track.addEventListener('mousedown', dragStart);
+      track.addEventListener('touchstart', dragStart, { passive: true });
+      window.addEventListener('mouseup', dragEnd);
+      window.addEventListener('touchend', dragEnd);
+      window.addEventListener('mousemove', dragAction);
+      window.addEventListener('touchmove', dragAction, { passive: true });
+
+      function getPositionX(e) {
+        return e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
+      }
+
+      function dragStart(e) {
+        if (isAnimating) return;
+        isDragging = true;
+        dragStartX = getPositionX(e);
+        track.style.transition = 'none';
+        track.style.cursor = 'grabbing';
+        clearInterval(autoPlayInterval);
+      }
+
+      function dragAction(e) {
+        if (!isDragging || isAnimating) return;
+        const currentPosition = getPositionX(e);
+        dragOffset = currentPosition - dragStartX;
+        
+        // percent of track width
+        const percent = (dragOffset / track.offsetWidth) * 100;
+        track.style.transform = `translateX(calc(-${currentSlide * 100}% + ${percent}%))`;
+      }
+
+      function dragEnd(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        track.style.cursor = 'grab';
+        
+        const threshold = track.offsetWidth * 0.15; 
+        
+        if (Math.abs(dragOffset) > threshold) {
+          isAnimating = true;
+          if (dragOffset > 0) {
+            currentSlide--;
+          } else {
+            currentSlide++;
+          }
+        }
+        
+        dragOffset = 0;
+        updateSlider(true);
+        startAutoPlay();
+      }
+
+      // --- Summer Slider specific logic ---
+      const summerTrack = document.getElementById('summerTrack');
+      const summerSlider = document.getElementById('summerSlider');
+      const summerSlides = summerTrack.querySelectorAll('.summer-slide');
+      
+      let isSummerAnimating = false;
+      let summerCurrentSlide = 1;
+
+      const sFirstClone = summerSlides[0].cloneNode(true);
+      const sLastClone = summerSlides[summerSlides.length - 1].cloneNode(true);
+      
+      summerTrack.appendChild(sFirstClone);
+      summerTrack.insertBefore(sLastClone, summerSlides[0]);
+      
+      summerTrack.style.transition = 'none';
+      summerTrack.style.transform = `translateX(-100%)`;
+      
+      function updateSummerSlider(animate = true) {
+        if (animate) {
+          summerTrack.style.transition = 'transform 0.5s ease-out';
+        } else {
+          summerTrack.style.transition = 'none';
+        }
+        summerTrack.style.transform = `translateX(-${summerCurrentSlide * 100}%)`;
+      }
+
+      setTimeout(() => {
+        summerTrack.style.transition = 'transform 0.5s ease-out';
+      }, 50);
+
+      summerTrack.addEventListener('transitionend', () => {
+        isSummerAnimating = false;
+        if (summerCurrentSlide === 0) {
+          summerCurrentSlide = summerSlides.length;
+          updateSummerSlider(false);
+        } else if (summerCurrentSlide === summerSlides.length + 1) {
+          summerCurrentSlide = 1;
+          updateSummerSlider(false);
+        }
+      });
+
+      let summerAutoPlayInterval;
+      function startSummerAutoPlay() {
+        clearInterval(summerAutoPlayInterval);
+        summerAutoPlayInterval = setInterval(() => {
+          if (!document.hidden && !isSummerAnimating) {
+            isSummerAnimating = true;
+            summerCurrentSlide++;
+            updateSummerSlider();
+          }
+        }, 2500); // reduced from 4000
+      }
+      startSummerAutoPlay();
+
+      // Swipe logic for Summer Slider
+      let isSumDragging = false;
+      let sumDragStartX = 0;
+      let sumDragOffset = 0;
+
+      summerSlider.querySelectorAll('img').forEach(img => {
+        img.addEventListener('dragstart', (e) => e.preventDefault());
+      });
+
+      summerSlider.style.cursor = 'grab';
+
+      summerSlider.addEventListener('mousedown', sumDragStart);
+      summerSlider.addEventListener('touchstart', sumDragStart, { passive: true });
+      window.addEventListener('mouseup', sumDragEnd);
+      window.addEventListener('touchend', sumDragEnd);
+      window.addEventListener('mousemove', sumDragAction);
+      window.addEventListener('touchmove', sumDragAction, { passive: true });
+
+      function sumDragStart(e) {
+        if (isSummerAnimating) {
+          // Allow catching it mid-animation if we want, but better to return
+          if(isSummerAnimating) return;
+        }
+        if(!e.target.closest('#summerSlider')) return;
+        isSumDragging = true;
+        sumDragStartX = getPositionX(e);
+        summerTrack.style.transition = 'none';
+        summerSlider.style.cursor = 'grabbing';
+        clearInterval(summerAutoPlayInterval);
+      }
+
+      function sumDragAction(e) {
+        if (!isSumDragging || isSummerAnimating) return;
+        sumDragOffset = getPositionX(e) - sumDragStartX;
+        const percent = (sumDragOffset / summerTrack.offsetWidth) * 100;
+        summerTrack.style.transform = `translateX(calc(-${summerCurrentSlide * 100}% + ${percent}%))`;
+      }
+
+      function sumDragEnd(e) {
+        if (!isSumDragging) return;
+        isSumDragging = false;
+        summerSlider.style.cursor = 'grab';
+        
+        const threshold = summerTrack.offsetWidth * 0.15;
+        if (Math.abs(sumDragOffset) > threshold) {
+          isSummerAnimating = true;
+          if (sumDragOffset > 0) {
+            summerCurrentSlide--;
+          } else {
+            summerCurrentSlide++;
+          }
+        }
+        sumDragOffset = 0;
+        updateSummerSlider(true);
+        startSummerAutoPlay();
+      }
+
+      // Pause summer slider on hover
+      summerSlider.addEventListener('mouseenter', () => clearInterval(summerAutoPlayInterval));
+      summerSlider.addEventListener('mouseleave', () => { if(!isSumDragging) startSummerAutoPlay(); });
+
     </script>
     <script type="module" src="assets/js/common.js"></script>
   </body>

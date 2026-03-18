@@ -4,22 +4,31 @@ export function formatVnd(amount) {
 
 export function createProductCard(product) {
   const badgeType = product.originalPrice ? 'sale' : 'new';
-  const oldPrice = product.originalPrice ? `<span class="old-price">${formatVnd(product.originalPrice)}</span>` : '';
+  const oldPrice = product.originalPrice ? `<span class="ivy-old-price">${formatVnd(product.originalPrice)}</span>` : '';
   const inPagesFolder = window.location.pathname.includes('/pages/');
   const detailHref = inPagesFolder ? `product-detail.html?id=${product.id}` : `pages/product-detail.html?id=${product.id}`;
 
   return `
-    <article class="product-card">
-      <div class="product-media">
-        <span class="badge ${badgeType}" style="position:absolute;top:12px;left:12px;z-index:3;">${product.badge}</span>
+    <article class="ivy-product-card">
+      <div class="ivy-product-media">
+        <div class="ivy-badge ${badgeType}"><span>${product.badge}</span></div>
         <a href="${detailHref}"><img src="${product.image}" alt="${product.name}"></a>
-        <button class="quick-add" data-product-id="${product.id}">Quick Add +</button>
       </div>
-      <div class="product-meta">
-        <h4><a href="${detailHref}">${product.name}</a></h4>
-        <div class="price-row">
-          <strong>${formatVnd(product.price)}</strong>
-          ${oldPrice}
+      <div class="ivy-product-info">
+        <div class="ivy-colors-wishlist">
+          <div class="ivy-colors">
+            <span class="ivy-color active" style="background:#85a195;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" class="check-icon" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+            <span class="ivy-color" style="background:#242424;"></span>
+          </div>
+          <button class="ivy-wishlist" aria-label="Wishlist"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="heart-icon" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        </div>
+        <h4 class="ivy-product-title"><a href="${detailHref}">${product.name}</a></h4>
+        <div class="ivy-price-cart">
+          <div class="ivy-price">
+            <strong>${formatVnd(product.price)}</strong>
+            ${oldPrice}
+          </div>
+          <button class="ivy-cart-btn" aria-label="Add to bag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></button>
         </div>
       </div>
     </article>
@@ -37,46 +46,68 @@ function buildUserShell() {
   const cartHref = inPagesFolder ? 'cart.html' : 'pages/cart.html';
   const loginHref = inPagesFolder ? 'login.html' : 'pages/login.html';
   const registerHref = inPagesFolder ? 'register.html' : 'pages/register.html';
+  const logoSrc = inPagesFolder ? '../assets/images/logo/logo.png' : 'assets/images/logo/logo.png';
+
+  const womenHref = `${shopHref}?gender=women`;
+  const menHref = `${shopHref}?gender=men`;
+  const storeHref = shopHref;
 
   const header = `
     <header class="aura-topbar top-nav">
       <div class="container aura-nav-row">
         <button class="aura-menu-btn" data-menu-toggle aria-label="Toggle menu">Menu</button>
         <a class="aura-logo" href="${homeHref}" aria-label="Aurelia home">
-          <span class="aura-logo-monogram" aria-hidden="true">A</span>
-          <span class="aura-logo-text">
-            <strong>AURELIA</strong>
-            <small>LUXURY FASHION</small>
-          </span>
+          <img class="aura-logo-img" src="${logoSrc}" alt="Aurelia logo" />
         </a>
         <nav class="aura-nav-links" data-nav-links>
-          <a href="${homeHref}" data-nav-link>Home</a>
-          <a href="${shopHref}" data-nav-link>Shop</a>
-          <a href="${aboutHref}" data-nav-link>About</a>
-          <a href="${contactHref}" data-nav-link>Contact</a>
+          <div class="aura-nav-item aura-dropdown">
+            <a href="${womenHref}" data-nav-link>Nữ</a>
+            <div class="aura-dropdown-menu" role="menu" aria-label="Nữ">
+              <a class="aura-dropdown-item" href="${womenHref}&category=dresses" role="menuitem">Đầm & Váy</a>
+              <a class="aura-dropdown-item" href="${womenHref}&category=tops" role="menuitem">Áo & Top</a>
+              <a class="aura-dropdown-item" href="${womenHref}&category=bottoms" role="menuitem">Quần & Chân váy</a>
+              <a class="aura-dropdown-item" href="${womenHref}&category=accessories" role="menuitem">Phụ kiện</a>
+            </div>
+          </div>
+          <div class="aura-nav-item aura-dropdown">
+            <a href="${menHref}" data-nav-link>Nam</a>
+            <div class="aura-dropdown-menu" role="menu" aria-label="Nam">
+              <a class="aura-dropdown-item" href="${menHref}&category=tops" role="menuitem">Áo</a>
+              <a class="aura-dropdown-item" href="${menHref}&category=bottoms" role="menuitem">Quần</a>
+              <a class="aura-dropdown-item" href="${menHref}&category=outerwear" role="menuitem">Áo khoác</a>
+              <a class="aura-dropdown-item" href="${menHref}&category=accessories" role="menuitem">Phụ kiện</a>
+            </div>
+          </div>
+          <a href="${storeHref}" data-nav-link>Cửa hàng</a>
+          <a href="${aboutHref}" data-nav-link>Về chúng tôi</a>
         </nav>
         <div class="aura-nav-actions">
-          <a class="aura-nav-icon" href="${profileHref}" aria-label="Profile">U</a>
-          <a class="aura-nav-icon aura-cart" href="${cartHref}" aria-label="Cart">B<span>3</span></a>
+          <a class="aura-nav-icon" href="${profileHref}" aria-label="Profile">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </a>
+          <a class="aura-nav-icon aura-cart" href="${cartHref}" aria-label="Cart">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            <span class="aura-cart-badge">3</span>
+          </a>
         </div>
       </div>
       <div class="aura-announcement">
         <div class="container aura-announcement-shell">
           <div class="aura-announcement-track">
-            <span>Free shipping over 2.000.000đ</span>
-            <span>New collection every Friday</span>
-            <span>Secure checkout with premium support</span>
-            <span>Easy 30-day returns on all orders</span>
-            <span>Member-only drops and weekly offers</span>
-            <span>Free styling consultation for VIP customers</span>
+            <span>Miễn phí vận chuyển cho đơn hàng trên 2.000.000đ</span>
+            <span>Bộ sưu tập mới mỗi thứ Sáu</span>
+            <span>Thanh toán an toàn với hỗ trợ cao cấp</span>
+            <span>Dễ dàng trả hàng trong 30 ngày cho tất cả các đơn hàng</span>
+            <span>Ưu đãi độc quyền cho thành viên và ưu đãi hàng tuần</span>
+            <span>Tư vấn tạo kiểu miễn phí cho khách hàng VIP</span>
           </div>
           <div class="aura-announcement-track" aria-hidden="true">
-            <span>Free shipping over 2.000.000đ</span>
-            <span>New collection every Friday</span>
-            <span>Secure checkout with premium support</span>
-            <span>Easy 30-day returns on all orders</span>
-            <span>Member-only drops and weekly offers</span>
-            <span>Free styling consultation for VIP customers</span>
+            <span>Miễn phí vận chuyển cho đơn hàng trên 2.000.000đ</span>
+            <span>Bộ sưu tập mới mỗi thứ Sáu</span>
+            <span>Thanh toán an toàn với hỗ trợ cao cấp</span>
+            <span>Dễ dàng trả hàng trong 30 ngày cho tất cả các đơn hàng</span>
+            <span>Ưu đãi độc quyền cho thành viên và ưu đãi hàng tuần</span>
+            <span>Tư vấn tạo kiểu miễn phí cho khách hàng VIP</span>
           </div>
         </div>
       </div>
@@ -153,10 +184,13 @@ export function initBaseUI() {
     });
   }
 
-  const path = window.location.pathname.split('/').pop() || 'index.html';
+  const currentUrl = new URL(window.location.href);
   document.querySelectorAll('[data-nav-link]').forEach((anchor) => {
-    const href = anchor.getAttribute('href');
-    if (href === path || href === `pages/${path}` || (path === '' && href === 'index.html')) {
+    const anchorUrl = new URL(anchor.getAttribute('href'), window.location.origin);
+    const samePath = anchorUrl.pathname === currentUrl.pathname;
+    const searchMatch = !anchorUrl.search || currentUrl.search.startsWith(anchorUrl.search);
+
+    if (samePath && searchMatch) {
       anchor.classList.add('active');
     }
   });

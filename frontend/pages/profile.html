@@ -1,72 +1,301 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aurelia | Profile</title>
+    <title>Hồ Sơ - Aurelia Prada</title>
     <link rel="stylesheet" href="../assets/css/styles.css" />
+    <style>
+      .loading {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+      }
+
+      .user-info-card {
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .user-info-card p {
+        margin: 8px 0;
+        color: #666;
+      }
+
+      .user-info-card .label {
+        font-weight: 600;
+        color: #333;
+      }
+
+      .logout-btn {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        margin-top: 15px;
+      }
+
+      .logout-btn:hover {
+        background-color: #c82333;
+      }
+
+      .alert {
+        padding: 12px 15px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+      }
+
+      .alert.error {
+        background: #fee;
+        color: #c33;
+        border: 1px solid #fcc;
+        display: none;
+      }
+
+      .alert.error.show {
+        display: block;
+      }
+
+      .orders-empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+      }
+    </style>
   </head>
   <body>
-    <header class="top-nav">
-      <div class="container nav-inner">
-        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
-        <nav class="nav-links" data-nav-links>
-          <a href="../index.html" data-nav-link>Home</a>
-          <a href="shop.html" data-nav-link>Shop</a>
-          <a href="about.html" data-nav-link>About</a>
-          <a href="contact.html" data-nav-link>Contact</a>
-        </nav>
-        <a class="brand" href="../index.html">AURELIA</a>
-        <div class="nav-actions">
-          <a class="nav-icon" href="profile.html">U</a>
-          <a class="nav-icon" href="cart.html">B</a>
-        </div>
-      </div>
-    </header>
+    <header class="top-nav"></header>
 
     <main class="section">
-      <div class="container two-col" style="grid-template-columns:280px 1fr;">
-        <aside class="card panel">
-          <h3 style="font-family:Manrope,sans-serif;">Jane Doe</h3>
-          <p>jane.doe@example.com</p>
-          <button class="tab-btn active" style="width:100%;margin-bottom:8px;" data-profile-tab="orders">My Orders</button>
-          <button class="tab-btn" style="width:100%;margin-bottom:8px;" data-profile-tab="wishlist">Wishlist</button>
-          <button class="tab-btn" style="width:100%;" data-profile-tab="settings">Account Settings</button>
-        </aside>
+      <div class="container">
+        <h1>Hồ Sơ Cá Nhân</h1>
 
-        <section class="card panel">
-          <article data-profile-panel="orders">
-            <h1>Order History</h1>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Order</th><th>Date</th><th>Status</th><th>Total</th></tr></thead>
-                <tbody>
-                  <tr><td>#ORD-2026-001</td><td>Oct 12, 2026</td><td><span class="status success">Delivered</span></td><td>2.050.000đ</td></tr>
-                  <tr><td>#ORD-2026-002</td><td>Nov 05, 2026</td><td><span class="status warning">Processing</span></td><td>1.200.000đ</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </article>
-          <article data-profile-panel="wishlist" hidden>
-            <h1>Wishlist</h1>
-            <p>Wishlist cua ban hien dang trong.</p>
-          </article>
-          <article data-profile-panel="settings" hidden>
-            <h1>Account Settings</h1>
-            <div class="form-grid">
-              <div><label>First Name</label><input class="input" value="Jane" /></div>
-              <div><label>Last Name</label><input class="input" value="Doe" /></div>
-              <div class="full"><label>Email</label><input class="input" value="jane.doe@example.com" /></div>
-            </div>
-            <button class="btn btn-dark" style="margin-top:14px;">Save Changes</button>
-          </article>
-        </section>
+        <div class="alert error" id="errorAlert"></div>
+
+        <div id="loadingSpinner" class="loading">
+          Đang tải thông tin...
+        </div>
+
+        <div id="profileContent" style="display: none;">
+          <div class="two-col" style="grid-template-columns:280px 1fr;">
+            <aside class="card panel">
+              <div class="user-info-card">
+                <h3 id="userName" style="margin: 0 0 10px 0;">Đang tải...</h3>
+                <p id="userEmail" style="margin: 0; color: #999;"></p>
+                <hr style="margin: 15px 0; border: none; border-top: 1px solid #ddd;" />
+                <p><span class="label">Vị trí:</span> <span id="userRole" style="color: #666;"></span></p>
+                <p><span class="label">Số điện thoại:</span> <span id="userPhone" style="color: #666;">---</span></p>
+                <p><span class="label">Thành phố:</span> <span id="userCity" style="color: #666;">---</span></p>
+              </div>
+
+              <button class="tab-btn active" style="width:100%;margin-bottom:8px;" data-profile-tab="orders">Đơn Hàng Của Tôi</button>
+              <button class="tab-btn" style="width:100%;margin-bottom:8px;" data-profile-tab="settings">Cài Đặt Tài Khoản</button>
+              <button class="logout-btn" id="logoutBtn">Đăng Xuất</button>
+            </aside>
+
+            <section class="card panel">
+              <article data-profile-panel="orders">
+                <h2>Lịch Sử Đơn Hàng</h2>
+                <div id="ordersContainer"></div>
+              </article>
+
+              <article data-profile-panel="settings" hidden>
+                <h2>Cài Đặt Tài Khoản</h2>
+                <form id="settingsForm">
+                  <div class="form-grid">
+                    <div class="full">
+                      <label>Họ và Tên</label>
+                      <input class="input" id="settingName" type="text" />
+                    </div>
+                    <div class="full">
+                      <label>Email</label>
+                      <input class="input" id="settingEmail" type="email" disabled />
+                    </div>
+                    <div class="full">
+                      <label>Số Điện Thoại</label>
+                      <input class="input" id="settingPhone" type="tel" />
+                    </div>
+                    <div>
+                      <label>Thành Phố</label>
+                      <input class="input" id="settingCity" type="text" />
+                    </div>
+                    <div>
+                      <label>Quốc Gia</label>
+                      <input class="input" id="settingCountry" type="text" />
+                    </div>
+                  </div>
+                  <button class="btn btn-dark" type="submit" style="margin-top:20px;">Lưu Thay Đổi</button>
+                </form>
+              </article>
+            </section>
+          </div>
+        </div>
       </div>
     </main>
 
-    <footer class="site-footer"><div class="container footer-note">&copy; <span id="current-year"></span> Aurelia.</div></footer>
+    <footer class="site-footer"></footer>
+
     <script type="module" src="../assets/js/common.js"></script>
-    <script type="module" src="../assets/js/profile.js"></script>
+    <script>
+      const API_URL = 'http://localhost:5000/api';
+      const profileContent = document.getElementById('profileContent');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const errorAlert = document.getElementById('errorAlert');
+
+      // Check authentication on page load
+      window.addEventListener('DOMContentLoaded', async () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        try {
+          await fetchUserProfile();
+          profileContent.style.display = 'block';
+          loadingSpinner.style.display = 'none';
+        } catch (error) {
+          showError(error.message);
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
+        }
+
+        setupEventListeners();
+      });
+
+      async function fetchUserProfile() {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(`${API_URL}/auth/me`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch profile');
+        }
+
+        const data = await response.json();
+        const user = data.user;
+
+        // Update header info
+        document.getElementById('userName').textContent = user.name || 'Không rõ';
+        document.getElementById('userEmail').textContent = user.email;
+        document.getElementById('userRole').textContent = user.role === 'admin' ? 'Quản Trị Viên' : 'Khách Hàng';
+        document.getElementById('userPhone').textContent = user.phone || '---';
+        document.getElementById('userCity').textContent = user.city || '---';
+
+        // Update settings form
+        document.getElementById('settingName').value = user.name || '';
+        document.getElementById('settingEmail').value = user.email;
+        document.getElementById('settingPhone').value = user.phone || '';
+        document.getElementById('settingCity').value = user.city || '';
+        document.getElementById('settingCountry').value = user.country || '';
+
+        // Fetch orders
+        await fetchUserOrders(user.id, token);
+      }
+
+      async function fetchUserOrders(userId, token) {
+        try {
+          // Note: This assumes /api/orders endpoint exists and is protected
+          // For now, show empty orders list as a placeholder
+          const ordersContainer = document.getElementById('ordersContainer');
+          
+          ordersContainer.innerHTML = `
+            <div class="orders-empty">
+              <p>Bạn chưa có đơn hàng nào.</p>
+              <a href="shop.html" class="btn btn-outline" style="margin-top: 15px; display: inline-block;">Bắt Đầu Mua Sắm</a>
+            </div>
+          `;
+        } catch (error) {
+          console.error('Error fetching orders:', error);
+        }
+      }
+
+      function setupEventListeners() {
+        // Tab switching
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        tabButtons.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const tabName = e.target.dataset.profileTab;
+            
+            // Remove active class from all buttons
+            tabButtons.forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+
+            // Hide all panels
+            const panels = document.querySelectorAll('[data-profile-panel]');
+            panels.forEach(p => p.hidden = true);
+
+            // Show selected panel
+            document.querySelector(`[data-profile-panel="${tabName}"]`).hidden = false;
+          });
+        });
+
+        // Settings form submit
+        document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          await updateProfile();
+        });
+
+        // Logout button
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          window.location.href = 'login.html';
+        });
+
+        // Update year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+      }
+
+      async function updateProfile() {
+        const token = localStorage.getItem('token');
+        const name = document.getElementById('settingName').value;
+        const phone = document.getElementById('settingPhone').value;
+        const city = document.getElementById('settingCity').value;
+        const country = document.getElementById('settingCountry').value;
+
+        try {
+          const response = await fetch(`${API_URL}/auth/profile`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ name, phone, city, country })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to update profile');
+          }
+
+          showSuccess('Hồ sơ đã được cập nhật thành công!');
+          await fetchUserProfile();
+        } catch (error) {
+          showError(error.message);
+        }
+      }
+
+      function showError(message) {
+        errorAlert.textContent = message;
+        errorAlert.classList.add('show');
+      }
+
+      function showSuccess(message) {
+        alert(message);
+      }
+    </script>
   </body>
 </html>
 
