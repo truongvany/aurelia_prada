@@ -1,0 +1,73 @@
+{
+  "User": {
+    "$jsonSchema": {
+      "bsonType": "object",
+      "required": ["name", "email", "password", "role"],
+      "properties": {
+        "name": { "bsonType": "string", "description": "must be a string and is required" },
+        "email": { "bsonType": "string", "description": "must be a string and is required" },
+        "password": { "bsonType": "string", "description": "must be a string and is required" },
+        "role": { "enum": ["user", "admin"], "description": "can only be one of the enum values" },
+        "phone": { "bsonType": "string" },
+        "address": {
+          "bsonType": "object",
+          "properties": {
+            "street": { "bsonType": "string" },
+            "city": { "bsonType": "string" },
+            "state": { "bsonType": "string" },
+            "zipCode": { "bsonType": "string" },
+            "country": { "bsonType": "string" }
+          }
+        }
+      }
+    }
+  },
+  "Product": {
+    "$jsonSchema": {
+      "bsonType": "object",
+      "required": ["name", "description", "price", "category", "stock"],
+      "properties": {
+        "name": { "bsonType": "string" },
+        "description": { "bsonType": "string" },
+        "price": { "bsonType": "double" },
+        "originalPrice": { "bsonType": "double" },
+        "category": { "bsonType": "objectId" },
+        "stock": { "bsonType": "int" },
+        "images": { "bsonType": "array", "items": { "bsonType": "string" } },
+        "status": { "enum": ["Active", "Low Stock", "Out of Stock"] },
+        "isNewArrival": { "bsonType": "bool" },
+        "isSale": { "bsonType": "bool" }
+      }
+    }
+  },
+  "Order": {
+    "$jsonSchema": {
+      "bsonType": "object",
+      "required": ["user", "orderItems", "shippingAddress", "paymentMethod", "totalPrice"],
+      "properties": {
+        "user": { "bsonType": "objectId" },
+        "orderItems": {
+          "bsonType": "array",
+          "items": {
+            "bsonType": "object",
+            "required": ["product", "name", "quantity", "price"],
+            "properties": {
+              "product": { "bsonType": "objectId" },
+              "name": { "bsonType": "string" },
+              "quantity": { "bsonType": "int" },
+              "price": { "bsonType": "double" },
+              "image": { "bsonType": "string" }
+            }
+          }
+        },
+        "shippingAddress": {
+          "bsonType": "object",
+          "required": ["street", "city", "state", "zipCode", "country"]
+        },
+        "paymentMethod": { "bsonType": "string" },
+        "totalPrice": { "bsonType": "double" },
+        "status": { "enum": ["Processing", "Shipped", "Delivered", "Cancelled"] }
+      }
+    }
+  }
+}
