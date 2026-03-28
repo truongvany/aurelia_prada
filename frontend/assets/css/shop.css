@@ -40,7 +40,7 @@
 
 .filter-group {
     border-top: 1px solid #f0f0f0;
-    padding: 20px 0;
+    padding: 6px 0; /* Ultra compact */
 }
 
 .filter-group-header {
@@ -49,14 +49,17 @@
     align-items: center;
     cursor: pointer;
     user-select: none;
+    padding: 4px 0;
 }
 
 .filter-group-header h5 {
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 10px; /* Ultra small and bold */
+    font-weight: 800;
     text-transform: uppercase;
     margin: 0;
     font-family: 'Manrope', sans-serif;
+    letter-spacing: 0.6px;
+    color: #111;
 }
 
 .filter-group-content {
@@ -65,9 +68,28 @@
     transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin-top 0.3s ease;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 16px;
+    margin-top: 4px; /* Reduced from 10px */
     opacity: 1;
+}
+
+/* Dynamic Filter Sections inside a group */
+.filter-group-section {
+    margin-bottom: 8px !important; /* Extremely tight */
+}
+
+.filter-section-title {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+}
+
+.filter-links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px; /* Very close */
 }
 
 .filter-group-content.collapsed {
@@ -80,25 +102,27 @@
 .filter-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px; /* Slightly closer */
     cursor: pointer;
-    font-size: 13px;
-    color: #555;
-    transition: color 0.2s;
+    font-size: 12px; /* Smaller font for items */
+    color: #333;
+    transition: color 0.1s;
+    line-height: 1.2;
 }
 
 .filter-item:hover {
-    color: #000;
+    color: #af2e2e;
 }
 
 .filter-checkbox {
-    width: 16px;
-    height: 16px;
-    border: 1px solid #ccc;
+    width: 14px; /* Smaller checkbox */
+    height: 14px;
+    border: 1px solid #ddd;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
+    background: #fff;
 }
 
 .filter-item.active .filter-checkbox {
@@ -108,10 +132,10 @@
 
 .filter-item.active .filter-checkbox::after {
     content: "";
-    width: 4px;
-    height: 8px;
+    width: 3px;
+    height: 6px;
     border: solid #fff;
-    border-width: 0 2px 2px 0;
+    border-width: 0 1.5px 1.5px 0;
     transform: rotate(45deg);
     position: relative;
     top: -1px;
@@ -266,21 +290,75 @@
     align-items: center;
 }
 
-.aura-card-colors {
+.aura-card-dots {
     display: flex;
-    gap: 6px;
+    gap: 8px;
+    align-items: center;
 }
 
-.aura-card-colors .dot {
-    width: 14px;
-    height: 14px;
+.aura-dot {
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    border: 1px solid #eee;
     cursor: pointer;
+    border: 2.5px solid #fff;
+    box-shadow: 0 0 0 1px #eee;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
 }
 
-.aura-card-colors .dot.active {
-    box-shadow: 0 0 0 1px #000;
+.aura-dot:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px #ccc;
+}
+
+.aura-dot.active {
+    width: 28px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 1.5px #111;
+}
+
+.aura-mini-cart-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px; /* More square */
+    background: #fff;
+    border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #111;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.aura-mini-cart-btn:hover {
+    background: #111;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.aura-buy-now-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px; /* More square */
+    background: #111; /* Black */
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.aura-buy-now-btn:hover {
+    background: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .aura-card-wishlist {
@@ -294,6 +372,14 @@
 
 .aura-card-wishlist:hover {
     color: #d63384;
+}
+
+.aura-card-wishlist.active {
+    color: #d63384;
+}
+
+.aura-card-wishlist.active svg {
+    fill: #d63384;
 }
 
 /* Floating Tools (Sticky on the right bottom) */
@@ -438,4 +524,64 @@
 
 .aura-range-slider:hover::-webkit-slider-thumb {
     transform: scale(1.1);
+}
+
+/* Toast Notifications */
+.aura-toast-container {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.aura-toast {
+    background: #fff;
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    pointer-events: auto;
+    min-width: 300px;
+    transform: translateX(120%);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border-left: 4px solid #111;
+}
+
+.aura-toast.show {
+    transform: translateX(0);
+}
+
+.aura-toast.removing {
+    transform: translateX(120%);
+    opacity: 0;
+}
+
+.aura-toast-icon {
+    width: 24px;
+    height: 24px;
+    background: #f4f4f4;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #111;
+    font-size: 12px;
+}
+
+.aura-toast-content h6 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.aura-toast-content p {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: #666;
 }

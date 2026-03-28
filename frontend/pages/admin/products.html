@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../../assets/css/styles.css" />
     <link rel="stylesheet" href="../../assets/css/admin.css" />
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+      /* Page specific tweaks if needed */
     </style>
   </head>
   <body class="admin-body">
@@ -42,47 +42,6 @@
       </main>
     </div>
 
-    <!-- Product Modal -->
-    <div class="modal-overlay" id="product-modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 id="modal-title">Cập nhật Sản phẩm</h2>
-          <button class="btn-close-modal" id="close-modal">&times;</button>
-        </div>
-        <form id="product-form">
-          <input type="hidden" id="edit-product-id" />
-          <div class="admin-input-group">
-            <label class="admin-label">Tên sản phẩm</label>
-            <input class="admin-input" id="prod-name" required />
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="admin-input-group">
-              <label class="admin-label">Giá bán (đ)</label>
-              <input type="number" class="admin-input" id="prod-price" required />
-            </div>
-            <div class="admin-input-group">
-              <label class="admin-label">Danh mục</label>
-              <select class="admin-input" id="prod-category" required>
-                <!-- JS Injected -->
-              </select>
-            </div>
-          </div>
-          <div class="admin-input-group">
-            <label class="admin-label">Tồn kho</label>
-            <input type="number" class="admin-input" id="prod-stock" required />
-          </div>
-          <div class="admin-input-group">
-            <label class="admin-label">Đường dẫn ảnh</label>
-            <input class="admin-input" id="prod-image" placeholder="/assets/images/products/..." required />
-          </div>
-          <div class="admin-input-group">
-            <label class="admin-label">Mô tả</label>
-            <textarea class="admin-input" id="prod-desc" rows="3"></textarea>
-          </div>
-          <button type="submit" class="btn-admin-save" style="width:100%">LƯU THAY ĐỔI</button>
-        </form>
-      </div>
-    </div>
 
     <script type="module" src="../../assets/js/common.js"></script>
     <script type="module" src="../../assets/js/admin.js"></script>

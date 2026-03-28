@@ -106,10 +106,11 @@ async function renderProducts() {
       </tr>
     `).join('');
 
+    // Redirect to Edit Page
     body.querySelectorAll('.edit').forEach(btn => {
       btn.addEventListener('click', () => {
-        const prod = JSON.parse(btn.getAttribute('data-prod'));
-        openProductModal(prod);
+        const id = btn.getAttribute('data-id');
+        window.location.href = `product-form.html?id=${id}`;
       });
     });
 
@@ -232,73 +233,11 @@ async function renderCustomers() {
   }
 }
 
-// Modal Logic
-async function openProductModal(product = null) {
-  const modal = document.getElementById('product-modal');
-  const title = document.getElementById('modal-title');
-  const form = document.getElementById('product-form');
-  
-  const categorySelect = document.getElementById('prod-category');
-  try {
-    const cats = await fetchCategories();
-    categorySelect.innerHTML = cats.map(c => `<option value="${c._id}">${c.name}</option>`).join('');
-  } catch (err) { console.error(err); }
-
-  if (product) {
-    title.textContent = 'Cập nhật Sản phẩm';
-    document.getElementById('edit-product-id').value = product._id;
-    document.getElementById('prod-name').value = product.name;
-    document.getElementById('prod-price').value = product.price;
-    document.getElementById('prod-category').value = product.category?._id || product.category || '';
-    document.getElementById('prod-stock').value = product.stock;
-    document.getElementById('prod-image').value = product.image;
-    document.getElementById('prod-desc').value = product.description || '';
-  } else {
-    title.textContent = 'Thêm Sản phẩm mới';
-    form.reset();
-    document.getElementById('edit-product-id').value = '';
-  }
-  
-  modal.style.display = 'flex';
-}
-
-function setupProductModal() {
-  const modal = document.getElementById('product-modal');
+function setupProductRedirect() {
   const addBtn = document.getElementById('add-product-btn');
-  const closeBtn = document.getElementById('close-modal');
-  const form = document.getElementById('product-form');
-
-  if (addBtn) addBtn.onclick = () => openProductModal();
-  if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
-  
-  window.onclick = (e) => {
-    if (e.target == modal) modal.style.display = 'none';
-  };
-
-  if (form) {
-    form.onsubmit = async (e) => {
-      e.preventDefault();
-      const id = document.getElementById('edit-product-id').value;
-      const data = {
-        name: document.getElementById('prod-name').value,
-        price: document.getElementById('prod-price').value,
-        category: document.getElementById('prod-category').value,
-        stock: document.getElementById('prod-stock').value,
-        image: document.getElementById('prod-image').value,
-        description: document.getElementById('prod-desc').value,
-      };
-
-      try {
-        if (id) {
-          await updateProduct(id, data);
-        } else {
-          await createProduct(data);
-        }
-        modal.style.display = 'none';
-        renderProducts();
-      } catch (err) {
-        alert(err.message);
-      }
+  if (addBtn) {
+    addBtn.onclick = () => {
+      window.location.href = 'product-form.html';
     };
   }
 }
@@ -325,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (path.includes('dashboard.html') || path === '/pages/admin/' || path === '/pages/admin') initDashboard();
   if (path.includes('products.html')) {
     renderProducts();
-    setupProductModal();
+    setupProductRedirect();
   }
   if (path.includes('orders.html')) renderOrders();
   if (path.includes('customers.html')) renderCustomers();

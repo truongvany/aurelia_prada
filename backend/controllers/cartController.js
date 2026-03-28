@@ -95,9 +95,38 @@ const clearCart = async (req, res) => {
     }
   };
 
+// @desc    Update item quantity in cart
+// @route   PATCH /api/cart/:itemId
+// @access  Private
+const updateCartItemQuantity = async (req, res) => {
+  try {
+    const { quantity } = req.body;
+    const cart = await Cart.findOne({ user: req.user._id });
+
+    if (cart) {
+      const itemIndex = cart.items.findIndex((item) => item._id.toString() === req.params.itemId);
+
+      if (itemIndex > -1) {
+        cart.items[itemIndex].quantity = Number(quantity);
+        await cart.save();
+        
+        const updatedCart = await Cart.findById(cart._id).populate('items.product');
+        res.json(updatedCart);
+      } else {
+        res.status(404).json({ message: 'Item not found in cart' });
+      }
+    } else {
+      res.status(404).json({ message: 'Cart not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getCart,
   addToCart,
   removeFromCart,
   clearCart,
+  updateCartItemQuantity,
 };

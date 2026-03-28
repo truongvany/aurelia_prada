@@ -30,25 +30,34 @@ const seedData = async () => {
         });
 
         const categoriesData = [
-            // ÁO
+            // ÁO & ÁO KHOÁC (Exist)
             { name: 'Áo sơ mi', slug: 'ao-so-mi', group: 'ÁO' },
             { name: 'Áo thun', slug: 'ao-thun', group: 'ÁO' },
             { name: 'Áo len', slug: 'ao-len', group: 'ÁO' },
             { name: 'Áo vest / Blazer', slug: 'ao-vest-blazer', group: 'ÁO' },
-            { name: 'Áo giữ nhiệt', slug: 'ao-giu-nhiet', group: 'ÁO' },
-            // ÁO KHOÁC
-            { name: 'Áo chống nắng', slug: 'ao-chong-nang', group: 'ÁO KHOÁC' },
-            { name: 'Áo lông vũ', slug: 'ao-long-vu', group: 'ÁO KHOÁC' },
             { name: 'Áo khoác dạ', slug: 'ao-khoac-da', group: 'ÁO KHOÁC' },
-            // QUẦN & VÁY
-            { name: 'Quần âu', slug: 'quan-au', group: 'QUẦN & VÁY' },
-            { name: 'Quần Jeans', slug: 'quan-jeans', group: 'QUẦN & VÁY' },
-            { name: 'Chân váy', slug: 'chan-vay', group: 'QUẦN & VÁY' },
-            { name: 'Đầm liền', slug: 'dam-lien', group: 'QUẦN & VÁY' },
+            
+            // THEO DỊP / SỰ KIỆN
+            { name: 'Tết / Holiday Collection', slug: 'holiday-tet', group: 'THEO DỊP' },
+            { name: 'Valentine / Noel / Halloween', slug: 'seasonal-events', group: 'THEO DỊP' },
+            { name: 'Tiệc cưới & Dạ hội', slug: 'evening-bridal', group: 'THEO DỊP' },
+            { name: 'Du lịch & Nghỉ hè', slug: 'resort-collection', group: 'THEO DỊP' },
+
+            // SẢN PHẨM ĐẶC TRƯNG
+            { name: 'Đầm & Váy (Dress Edit)', slug: 'dress-edit', group: 'SẢN PHẨM ĐẶC TRƯNG' },
+            { name: 'Áo khoác (Outerwear)', slug: 'outerwear', group: 'SẢN PHẨM ĐẶC TRƯNG' },
+            { name: 'Đồ Denim', slug: 'denim-wear', group: 'SẢN PHẨM ĐẶC TRƯNG' },
+            { name: 'Đồ cơ bản (Essentials)', slug: 'basics-essentials', group: 'SẢN PHẨM ĐẶC TRƯNG' },
+
+            // THEO MÙA
+            { name: 'Xuân Hè 2026', slug: 'spring-summer-2026', group: 'THEO MÙA' },
+            { name: 'Thu Đông 2025', slug: 'fall-winter-2025', group: 'THEO MÙA' },
+            { name: 'Pre-Fall Collection', slug: 'pre-fall', group: 'THEO MÙA' },
+            { name: 'Holiday Capsule', slug: 'holiday-capsule', group: 'THEO MÙA' },
+
             // PHỤ KIỆN
             { name: 'Giày dép', slug: 'giay-dep', group: 'PHỤ KIỆN' },
             { name: 'Túi xách', slug: 'tui-xach', group: 'PHỤ KIỆN' },
-            { name: 'Thắt lưng', slug: 'that-lung', group: 'PHỤ KIỆN' },
             { name: 'Kính mắt', slug: 'kinh-mat', group: 'PHỤ KIỆN' }
         ];
 
@@ -59,16 +68,16 @@ const seedData = async () => {
         const materials = ['Silk', 'Linen', 'Wool', 'Cashmere', 'Polyester', 'Soft Cotton'];
         const collections = ['Premium Silk by Format', 'First Class', 'No.11 Être Douce', 'Urban Glow 2026'];
         
-        // Realistic Unsplash / IvyModa Style Image pool for high quality display
+        // Reliable Unsplash Fashion Image pool for high quality display (Avoids CORS/Opaque blocking)
         const images = [
-            'https://pubcdn.ivymoda.com/files/product/thumab/400/2026/03/06/b1dc876b0be0daccf2f3d334cfcf27d6.webp',
-            'https://pubcdn.ivymoda.com/files/product/thumab/400/2026/03/06/554530918643b20e07f912d8d7650e02.webp',
-            'https://pubcdn.ivymoda.com/files/product/thumab/400/2026/03/06/5ed8763b426af135a4cc0f688bd9f1bd.webp',
-            'https://pubcdn.ivymoda.com/files/product/thumab/400/2026/03/06/f0e3776d7e00d7bd1c080cb95c80ce9d.webp',
-            'https://pubcdn.ivymoda.com/files/product/thumab/400/2026/03/06/49ce975d8dcc87c1af8b5f3d334cfcf2.webp',
-            'https://pubcdn.ivymoda.com/files/product/thumab/400/2026/03/06/07e8763b426af135a4cc0f688bd9f1bd.webp',
-            'https://pubcdn.ivymoda.com/files/product/thumab/400/2026/03/06/57a2529097e90cffd3b4a83ad8b99f2c.webp',
-            'https://pubcdn.ivymoda.com/files/product/thumab/400/2026/03/06/a1dc876b0be0daccf2f3d334cfcf27d6.webp',
+            'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1539109132314-34a936ee5530?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1111663110294-f73c1d9361a9?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80',
         ];
 
         const productsToCreate = [];

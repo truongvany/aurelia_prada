@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sản phẩm | AURELIA Admin</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+    <style>
+      .image-link-input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .btn-remove-link {
+        background: #C53030;
+        color: white;
+        border: none;
+        padding: 0 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 800;
+      }
+      .btn-add-link {
+        background: #2D3748;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 800;
+        margin-top: 5px;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 15px;
+      }
+      .preview-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid #eee;
+      }
+    </style>
+  </head>
+  <body class="admin-body">
+    <div id="admin-app">
+      <main class="dashboard-main">
+        <div class="dashboard-title-row">
+          <div>
+            <h2 id="page-title">Thêm Sản phẩm mới</h2>
+            <p>Nhập thông tin chi tiết và nhiều hình ảnh cho sản phẩm.</p>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: stretch;">
+            <a href="products.html" class="btn-export" style="background: #e2e8f0; color: #2d3748; height: 44px; display: flex; align-items: center; padding: 0 24px;">QUAY LẠI</a>
+            <button type="submit" form="product-page-form" class="btn-admin-save" id="btn-submit-top" style="height: 44px; padding: 0 32px; font-size: 12px; margin: 0;">LƯU SẢN PHẨM</button>
+          </div>
+        </div>
+
+        <div class="table-card" style="padding: 24px; box-sizing: border-box; max-width: 100%; margin: 0;">
+          <form id="product-page-form">
+            <input type="hidden" id="edit-product-id" />
+            
+            <div style="display: grid; grid-template-columns: 1.8fr 1fr; gap: 40px;">
+              <!-- Left side: Basic Info -->
+              <div class="form-section">
+                <div class="admin-input-group">
+                  <label class="admin-label">Tên sản phẩm</label>
+                  <input class="admin-input" id="prod-name" placeholder="Ví dụ: Áo sơ mi lụa Heritage" required />
+                </div>
+
+                <div class="admin-input-group">
+                  <label class="admin-label">Mô tả sản phẩm</label>
+                  <textarea class="admin-input" id="prod-desc" rows="8" placeholder="Viết mô tả chi tiết về sản phẩm..."></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                  <div class="admin-input-group">
+                    <label class="admin-label">Giá bán (đ)</label>
+                    <input type="number" class="admin-input" id="prod-price" required />
+                  </div>
+                  <div class="admin-input-group">
+                    <label class="admin-label">Giá gốc (đ) - Để trống nếu không giảm giá</label>
+                    <input type="number" class="admin-input" id="prod-original-price" />
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                  <div class="admin-input-group">
+                    <label class="admin-label">Danh mục</label>
+                    <select class="admin-input" id="prod-category" required>
+                      <!-- Loaded via JS -->
+                    </select>
+                  </div>
+                  <div class="admin-input-group">
+                    <label class="admin-label">Số lượng tồn kho</label>
+                    <input type="number" class="admin-input" id="prod-stock" required />
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="admin-input-group">
+                      <label class="admin-label">Chất liệu</label>
+                      <input class="admin-input" id="prod-material" placeholder="Lụa, Cotton,..." />
+                    </div>
+                    <div class="admin-input-group">
+                      <label class="admin-label">Nhãn sản phẩm (Badge)</label>
+                      <select class="admin-input" id="prod-badge">
+                        <option value="">Không có</option>
+                        <option value="NEW">NEW</option>
+                        <option value="SALE">SALE</option>
+                        <option value="BEST SELLER">BEST SELLER</option>
+                      </select>
+                    </div>
+                </div>
+
+                <div class="admin-input-group" style="margin-top: 20px;">
+                  <label class="admin-label">Ảnh bảng Size (Size Guide URL)</label>
+                  <input class="admin-input" id="prod-size-guide" placeholder="Link ảnh cho bảng chọn size..." />
+                </div>
+              </div>
+
+               <!-- Right side: Images & Variants -->
+              <div class="form-section">
+                <!-- Variants Section -->
+                <div class="admin-input-group">
+                  <label class="admin-label" style="display: flex; justify-content: space-between; align-items: center;">
+                    Biến thể theo Màu sắc
+                    <button type="button" class="btn-add-link" id="add-variant-btn" style="margin-top: 0;">+ THÊM MÀU MỚI</button>
+                  </label>
+                  <p style="font-size: 11px; color: #888; margin-bottom: 20px;">Mỗi màu sắc có thể có bộ ảnh và bảng size riêng.</p>
+                  
+                  <div id="variant-tabs" class="admin-variant-tabs" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <!-- JS Injected Tabs -->
+                  </div>
+                  
+                  <div id="variants-container">
+                    <!-- JS Injected Variant Cards -->
+                  </div>
+                </div>
+
+                </div>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="../../assets/js/common.js"></script>
+    <script type="module" src="../../assets/js/admin-product-form.js"></script>
+  </body>
+</html>

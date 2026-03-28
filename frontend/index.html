@@ -59,32 +59,41 @@
           <div class="section-head reveal-item">
             <span class="section-subtitle">BỘ SƯU TẬP 2026</span>
             <h2>NEW ARRIVAL</h2>
-            <div class="section-tabs ivy-tabs">
-              <span class="active">Aurelia</span>
-              <span>Metagent</span>
-            </div>
           </div>
-          <div class="grid-6 reveal-item" id="new-arrivals"></div>
+          <div class="new-arrival-slider reveal-item">
+            <div class="new-arrival-track" id="new-arrivals"></div>
+          </div>
           <div class="section-cta reveal-item">
             <a href="pages/shop.html" class="btn-aura-outline">XEM TẤT CẢ SẢN PHẨM</a>
           </div>
         </div>
       </section>
 
-      <section class="section section-sale-enhanced" data-reveal="up">
-        <div class="container sale-container">
-          <div class="sale-banner-content reveal-item">
-             <div class="sale-label">LIMITED OFFER</div>
-             <h2>Hot Summer Deal<br>Sale Upto 70%</h2>
-             <p>Khám phá bộ sưu tập mùa hè với những thiết kế tinh tế và mức giá ưu đãi nhất năm.</p>
-             <div class="section-tabs reveal-item">
-               <span class="active">Aurelia Shop</span>
-               <span>Metagent Outlet</span>
+      <section class="section section-sale-hotsummer" data-reveal="up">
+        <div class="container">
+          <div class="section-head" style="margin-bottom: 40px; align-items: flex-start; text-align: left; display: flex; justify-content: space-between;">
+             <div>
+                <span class="section-subtitle" style="font-size: 14px; letter-spacing: 2px;">BỘ SƯU TẬP MỚI</span>
+             </div>
+             <div class="hotsummer-tabs" style="display: flex; gap: 10px;">
+                <button class="hotsummer-tab-btn active">ÁO</button>
+                <button class="hotsummer-tab-btn">ÁO KHOÁC</button>
+                <button class="hotsummer-tab-btn">PHỤ KIỆN</button>
+                <button class="hotsummer-tab-btn highlight">GIẢM GIÁ</button>
              </div>
           </div>
-          <div class="grid-4 reveal-item" id="sale-products"></div>
-          <div class="section-cta reveal-item">
-            <a href="pages/shop.html" class="btn-aura-solid">MUA NGAY BÂY GIỜ</a>
+          
+          <div class="sale-hotsummer-grid">
+            <aside class="sale-sidebar reveal-item">
+               <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=800&q=80" alt="Summer Promo" />
+            </aside>
+            <div class="sale-products-grid" id="sale-products-hotsummer">
+              <!-- Dynamically populated with 12 cards -->
+            </div>
+          </div>
+
+          <div class="section-cta" style="margin-top: 40px;">
+            <a href="pages/shop.html" class="btn-view-all">XEM TẤT CẢ SẢN PHẨM</a>
           </div>
         </div>
       </section>
@@ -166,57 +175,170 @@
 
     </main>
 
-    <footer class="site-footer">
-      <div class="container footer-grid">
-        <section>
-          <h3>AURELIA</h3>
-          <p>Empowering women through minimalist and sustainable fashion.</p>
-        </section>
-        <section>
-          <h4>Shop</h4>
-          <p><a href="pages/shop.html">All Products</a></p>
-          <p><a href="pages/shop.html">Sale</a></p>
-        </section>
-        <section>
-          <h4>Support</h4>
-          <p><a href="pages/contact.html">Contact Us</a></p>
-          <p><a href="pages/about.html">Our Story</a></p>
-        </section>
-        <section>
-          <h4>Account</h4>
-          <p><a href="pages/login.html">Login</a></p>
-          <p><a href="pages/register.html">Register</a></p>
-        </section>
+    <footer class="site-footer aura-footer-renewed">
+      <div class="aura-footer-service">
+        <div class="container aura-service-grid">
+          <div class="aura-service-item">
+            <div class="service-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="m7 8 3 3 7-7"/></svg></div>
+            <div class="service-content"><h6>Miễn phí vận chuyển</h6><p>Miễn phí đơn hàng từ 500k</p></div>
+          </div>
+          <div class="aura-service-item">
+            <div class="service-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div>
+            <div class="service-content"><h6>Đổi trả dễ dàng</h6><p>Đổi trả hàng trong 60 ngày</p></div>
+          </div>
+          <div class="aura-service-item">
+            <div class="service-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div class="service-content"><h6>Hỗ trợ 24/7</h6><p>Gọi hotline để được tư vấn</p></div>
+          </div>
+          <div class="aura-service-item">
+            <div class="service-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+            <div class="service-content"><h6>Thanh toán đa dạng</h6><p>Nhiều phương thức thanh toán online</p></div>
+          </div>
+        </div>
       </div>
-      <div class="container footer-note">&copy; <span id="current-year"></span> Aurelia. All rights reserved.</div>
+      <div class="aura-footer-subscriber">
+        <div class="container subscriber-grid">
+          <div class="sub-form-wrap">
+            <h5>ĐĂNG KÍ NHẬN TIN</h5>
+            <div class="sub-input-group">
+              <input type="email" placeholder="Email">
+              <button type="button" class="sub-btn">Đăng ký</button>
+            </div>
+          </div>
+          <div class="sub-socials">
+            <a href="#" class="social-dot zl"><img src="https://img.icons8.com/color/48/zalo.png" alt="Zalo"></a>
+            <a href="#" class="social-dot tk"><img src="https://img.icons8.com/color/48/tiktok.png" alt="TikTok"></a>
+            <a href="#" class="social-dot yt"><img src="https://img.icons8.com/color/48/youtube-play.png" alt="YouTube"></a>
+            <a href="#" class="social-dot ig"><img src="https://img.icons8.com/color/48/instagram-new.png" alt="Instagram"></a>
+            <a href="#" class="social-dot fb"><img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook"></a>
+          </div>
+        </div>
+      </div>
+      <div class="aura-footer-main">
+        <div class="container main-grid">
+          <div class="footer-col intro-col">
+            <h5>Giới thiệu</h5>
+            <p>AURELIA là thương hiệu thời trang thiết kế cao cấp, mang đến phong cách thanh lịch và sang trọng cho phụ nữ hiện đại.</p>
+            <div class="footer-contact-stack">
+              <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 036.8771.773 (8:00AM-22:00PM)</p>
+              <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> info@ptgrow.com</p>
+              <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> 488/30 Phạm Văn Chiêu, HCM</p>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h5>Chính sách</h5>
+            <ul class="footer-links">
+              <li><a href="#">Chính sách giao hàng</a></li>
+              <li><a href="#">Chính sách hoàn tiền</a></li>
+              <li><a href="#">Bảo mật thông tin</a></li>
+              <li><a href="#">Điều kiện đổi trả hàng</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h5>Hỗ trợ</h5>
+            <ul class="footer-links">
+              <li><a href="#">Hướng dẫn đặt hàng</a></li>
+              <li><a href="#">Phương thức thanh toán</a></li>
+              <li><a href="pages/about.html">Giới thiệu</a></li>
+              <li><a href="#">Blogs thời trang</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h5>Hợp tác</h5>
+            <ul class="footer-links">
+              <li><a href="#">Affiliate & KOC</a></li>
+              <li><a href="#">Cung cấp sỉ</a></li>
+              <li><a href="#">Đồng phục doanh nghiệp</a></li>
+              <li><a href="#">Hợp tác gia công</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="aura-footer-copyright">
+        <div class="container copyright-inner">
+          <div class="copy-text"><p>© CÔNG TY TNHH AURELIA FASHION - Mã số doanh nghiệp: 0315165728</p></div>
+          <div class="bct-badge"><img src="https://pub-83c51323386e4176a95383562629e46a.r2.dev/bct.png" alt="Bộ Công Thương"></div>
+        </div>
+      </div>
     </footer>
 
     <script type="module">
-      import { fetchProducts } from './assets/js/api.js';
-      import { createProductCard } from './assets/js/common.js';
+      import { fetchProducts, fetchCategories } from './assets/js/api.js';
+      import { createProductCard, syncWishlistVisuals } from './assets/js/common.js';
 
       async function initHomeProducts() {
         try {
-          const products = await fetchProducts();
-          const newArrivals = products.slice(0, 6);
-          const sales = products.filter((product) => product.originalPrice);
-          
+          const [products, categories] = await Promise.all([fetchProducts(), fetchCategories()]);
+          const newArrivals = products.slice(0, 12);
           const newArrivalsEl = document.getElementById('new-arrivals');
-          const saleProductsEl = document.getElementById('sale-products');
+          if (newArrivalsEl) {
+              const doubled = [...newArrivals, ...newArrivals];
+              newArrivalsEl.innerHTML = doubled.map(createProductCard).join('');
+              newArrivalsEl.classList.add('animated');
+          }
           
-          if (newArrivalsEl) newArrivalsEl.innerHTML = newArrivals.map(createProductCard).join('');
-          if (saleProductsEl) saleProductsEl.innerHTML = sales.map(createProductCard).join('');
+          // Hot Summer Deal Logic - Initial Active Tab (ÁO)
+          initHotSummerTabs(products, categories);
+
+          // Sync Wishlist Visuals for Home Products
+          syncWishlistVisuals();
 
           const galleryImages = products.map(product => product.image);
           const galleryTrackEl = document.getElementById('gallery-track');
           if (galleryTrackEl && galleryImages.length > 0) {
-            // Double the images array so seamless infinite scroll works
             const seamlessImages = [...galleryImages, ...galleryImages];
             galleryTrackEl.innerHTML = seamlessImages.map((src, idx) => `<div class="gallery-item"><img src="${src}" alt="Gallery image ${idx + 1}" /></div>`).join('');
           }
         } catch (error) {
           console.error('Failed to load home products:', error);
         }
+      }
+
+      function initHotSummerTabs(products, categories) {
+          const tabBtns = document.querySelectorAll('.hotsummer-tab-btn');
+          const grid = document.getElementById('sale-products-hotsummer');
+          if (!grid || tabBtns.length === 0) return;
+
+          const categoryMap = {};
+          categories.forEach(cat => {
+              categoryMap[cat._id] = cat;
+          });
+
+          function renderTab(tabText) {
+              let filtered = [];
+              const text = tabText.trim().toUpperCase();
+
+              if (text === 'GIẢM GIÁ') {
+                  filtered = products.filter(p => p.originalPrice && p.originalPrice > p.price);
+              } else {
+                  // Filter by group name derived from tabText
+                  // Mapping tab labels to groups: ÁO -> ÁO, ÁO KHOÁC -> ÁO KHOÁC, PHỤ KIỆN -> PHỤ KIỆN
+                  filtered = products.filter(p => {
+                      const catId = p.category?._id || p.category;
+                      const cat = categoryMap[catId];
+                      return cat && cat.group === text;
+                  });
+              }
+
+              if (filtered.length === 0) {
+                  grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">Không có sản phẩm nào trong mục này.</div>';
+              } else {
+                  grid.innerHTML = filtered.slice(0, 12).map(createProductCard).join('');
+              }
+              syncWishlistVisuals();
+          }
+
+          tabBtns.forEach(btn => {
+              btn.addEventListener('click', () => {
+                  tabBtns.forEach(b => b.classList.remove('active'));
+                  btn.classList.add('active');
+                  renderTab(btn.textContent);
+              });
+          });
+
+          // Initial Render based on active button
+          const activeTab = document.querySelector('.hotsummer-tab-btn.active');
+          if (activeTab) renderTab(activeTab.textContent);
       }
 
       initHomeProducts();

@@ -53,7 +53,7 @@ const deleteProduct = async (req, res) => {
 // @access  Private/Admin
 const createProduct = async (req, res) => {
   try {
-    const { name, price, originalPrice, description, image, category, stock, color, badge } = req.body;
+    const { name, price, originalPrice, description, images, image, category, stock, variants, badge, material, sizeGuideImage } = req.body;
     
     const product = new Product({
       name: name || 'New Product',
@@ -61,10 +61,13 @@ const createProduct = async (req, res) => {
       originalPrice: originalPrice || 0,
       category: category, 
       stock: stock || 0,
-      image: image || '/images/sample.jpg',
+      images: images || [],
+      image: image || images?.[0] || '/images/sample.jpg',
       description: description || '',
-      color: color || '',
+      variants: variants || [],
       badge: badge || '',
+      material: material || '',
+      sizeGuideImage: sizeGuideImage || '',
     });
 
     const createdProduct = await product.save();
@@ -84,33 +87,47 @@ const updateProduct = async (req, res) => {
       price,
       originalPrice,
       description,
+      images,
       image,
       category,
       stock,
-      color,
+      variants,
       badge,
+      material,
+      sizeGuideImage,
+      collectionName,
+      status
     } = req.body;
 
     const product = await Product.findById(req.params.id);
 
     if (product) {
-      product.name = name || product.name;
-      product.price = price || product.price;
+      product.name = name !== undefined ? name : product.name;
+      product.price = price !== undefined ? price : product.price;
       product.originalPrice = originalPrice !== undefined ? originalPrice : product.originalPrice;
-      product.description = description || product.description;
-      product.image = image || product.image;
-      product.category = category || product.category;
+      product.description = description !== undefined ? description : product.description;
+      product.image = image !== undefined ? image : product.image;
+      product.images = images !== undefined ? images : product.images;
+      product.variants = variants !== undefined ? variants : product.variants;
+      product.category = (category && category !== '') ? category : product.category;
       product.stock = stock !== undefined ? stock : product.stock;
-      product.color = color || product.color;
-      product.badge = badge || product.badge;
+      product.badge = badge !== undefined ? badge : product.badge;
+      product.material = material !== undefined ? material : product.material;
+      product.sizeGuideImage = sizeGuideImage !== undefined ? sizeGuideImage : product.sizeGuideImage;
+      product.collectionName = collectionName !== undefined ? collectionName : product.collectionName;
+      if (status !== undefined) product.status = status;
 
       const updatedProduct = await product.save();
       res.json(updatedProduct);
     } else {
-      res.status(404).json({ message: 'Product not found' });
+      res.status(404).json({ message: 'Sản phẩm không tồn tại' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Lỗi khi cập nhật sản phẩm:', error);
+    res.status(500).json({ 
+      message: 'Lỗi máy chủ khi cập nhật sản phẩm',
+      error: error.message 
+    });
   }
 };
 

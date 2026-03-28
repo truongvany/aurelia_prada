@@ -197,17 +197,33 @@ p {
 .aura-search-bar {
     display: flex;
     align-items: center;
-    gap: 8px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 4px;
-    width: 240px;
+    gap: 10px;
+    border: 1px solid #eee;
+    background: #f9f9f9;
+    padding: 6px 16px;
+    border-radius: 999px;
+    width: 260px;
+    transition: all 0.3s ease;
+}
+
+.aura-search-bar:focus-within {
+    border-color: #ddd;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.aura-search-bar svg {
+    color: #999;
 }
 
 .aura-search-bar input {
     border: none;
     outline: none;
+    background: transparent;
     font-size: 11px;
-    letter-spacing: 1px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #333;
     width: 100%;
 }
 
@@ -244,6 +260,32 @@ p {
     color: #888;
 }
 
+.aura-action-item.aura-cart {
+    position: relative;
+    padding-top: 0;
+}
+
+.aura-cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -2px;
+    background: #ff3b30; /* Bright iOS-style red */
+    color: #fff;
+    font-size: 10px;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    line-height: 1;
+    padding: 0 4px;
+    border: 2px solid #fff; /* White border to separate from icon */
+    transform: scale(0.9);
+    z-index: 2;
+}
+
 .aura-action-item svg {
     margin-bottom: 2px;
 }
@@ -265,10 +307,14 @@ p {
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.5px;
-    color: #222;
+    color: #111;
     text-transform: uppercase;
     position: relative;
-    transition: color 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: color 0.2s ease;
+}
+
+.aura-nav-link-new:hover {
+    color: #af2e2e;
 }
 
 .aura-nav-link-new::after {
@@ -277,77 +323,96 @@ p {
     bottom: 8px;
     left: 0;
     width: 100%;
-    height: 2.5px;
-    background: currentColor;
+    height: 2px;
+    background: #af2e2e;
     transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .aura-nav-link-new:hover::after {
     transform: scaleX(1);
-    transform-origin: left;
 }
 
 .aura-nav-link-new.sale-hl {
     color: #af2e2e;
 }
 
-/* Mega Menu Popover */
+/* Mega Menu Popover - RECOMPACT & CENTERED */
 .aura-nav-item-new {
-    position: static; /* Required for full-width child */
+    position: relative; /* Context for centered child */
 }
 
 .aura-mega-menu {
     position: absolute;
     top: 100%;
-    left: 0;
-    width: 100%;
-    background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 35%, #ffffff 65%, #fff1f2 100%);
-    border-top: 1px solid #eee;
-    box-shadow: 0 40px 60px rgba(0,0,0,0.1);
-    padding: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    width: 800px;
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 10px;
     visibility: hidden;
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: 
+        opacity 0.2s ease, 
+        transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), 
+        visibility 0.2s;
     z-index: 1000;
     pointer-events: none;
+}
+
+/* Invisible bridge to prevent closing when moving mouse between nav item and menu */
+/* REFINED: Only exists directly under the link to avoid blocking siblings */
+.aura-mega-menu::before {
+    content: '';
+    position: absolute;
+    top: -20px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px; /* Enough to cover the menu link area */
+    height: 25px;
+    background: transparent;
 }
 
 .aura-nav-item-new:hover .aura-mega-menu {
     visibility: visible;
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
     pointer-events: auto;
 }
 
+/* Internal Content Refinement */
 .aura-mega-content {
     display: flex;
-    min-height: 480px;
+    min-height: auto; /* Remove fixed height for compactness */
+    width: 100%;
 }
 
 .aura-mega-left {
     flex: 1;
-    padding: 60px 0 60px 40px;
+    padding: 36px 48px;
     background: #fff;
-    border-right: 1px solid #f0f0f0;
 }
 
+/* Keep promo if user liked it, but make it slim */
 .aura-mega-right {
-    width: 380px;
-    padding: 40px;
+    width: 280px;
+    padding: 30px;
     background: #fafafa;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 16px;
+    border-left: 1px solid #f0f0f0;
 }
 
 .aura-mega-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 30px;
-    max-width: 900px;
+    width: 100%;
 }
 
 .mega-column h5 {
@@ -369,38 +434,29 @@ p {
     opacity: 0.4;
 }
 
-.mega-column a {
-    display: inline-block;
+.mega-links-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mega-item-link {
+    display: block;
     font-size: 14px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Manrope', sans-serif;
     color: #666;
-    margin-bottom: 14px;
-    transition: color 0.3s;
+    transition: all 0.2s ease;
     font-weight: 400;
     text-decoration: none;
     position: relative;
     width: fit-content;
+    padding-left: 0;
 }
 
-.mega-column a::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #000;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-}
-
-.mega-column a:hover {
+.mega-item-link:hover {
     color: #000;
-}
-
-.mega-column a:hover::after {
-    transform: scaleX(1);
+    padding-left: 10px;
+    font-weight: 800;
 }
 
 /* Promotional Cards in Mega Menu */
@@ -4219,7 +4275,7 @@ th {
     margin-left: 4px;
 }
 
-.aura-product-title {
+.aura-product-title, .aura-product-title-sm {
     font-family: 'Manrope', sans-serif;
     font-size: 13px;
     font-weight: 500;
@@ -4234,8 +4290,8 @@ th {
     height: 3em; color: #444;
 }
 
-.aura-product-title a:hover {
-    color: var(--rose-deep);
+.aura-product-title a:hover, .aura-product-title-sm a:hover {
+    color: #c5a89e;
 }
 
 .aura-price-row {
@@ -4466,3 +4522,384 @@ th {
     .grid-6 { grid-template-columns: 1fr; }
     .grid-4 { grid-template-columns: 1fr; }
 }
+
+
+/* --- GLOBAL PRODUCT CARD STYLE --- */
+.aura-product-card { display: flex; flex-direction: column; transition: transform 0.3s; }
+.aura-product-card:hover { transform: translateY(-5px); }
+.aura-product-media { position: relative; aspect-ratio: 3/4; overflow: hidden; background: #f8f8f8; }
+.aura-product-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.aura-product-card:hover .aura-product-media img { transform: scale(1.05); }
+.aura-sale-tag { position: absolute; bottom: 0; left: 0; background: #000; color: #fff; font-size: 24px; font-weight: 800; padding: 10px 15px; z-index: 10; }
+.aura-top-badge { position: absolute; top: 12px; right: 12px; color: #999; font-size: 10px; text-transform: uppercase; font-weight: 700; }
+.aura-card-overlay { position: absolute; bottom: 0; right: 0; width: 65%; background: rgba(255,255,255,0.95); padding: 12px; border-top-left-radius: 4px; }
+.aura-promo-labels { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.label-best { color: #d63384; font-weight: 800; font-size: 14px; }
+.label-limit { font-size: 11px; color: #333; font-weight: 600; }
+.aura-product-info { padding: 15px 0; }
+.aura-brand { font-size: 11px; font-weight: 700; color: #666; margin-bottom: 8px; font-family: "Manrope", sans-serif; letter-spacing: 0.5px; }
+.aura-ref { color: #aaa; font-weight: 400; margin-left: 5px; }
+.aura-product-title { font-size: 14px; font-weight: 500; margin: 0 0 6px 0; text-transform: uppercase; line-height: 1.4; height: 2.8em; overflow: hidden; font-family: "Manrope", sans-serif; color: #111; }
+.aura-product-sub { font-size: 12px; color: #777; margin-bottom: 10px; }
+.aura-price-row { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+.aura-old-price { font-size: 13px; color: #aaa; text-decoration: line-through; }
+.aura-current-price { font-size: 15px; font-weight: 800; color: #000; }
+.aura-card-dots { display: flex; gap: 8px; align-items: center; }
+.aura-dot { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 2.5px solid #fff; box-shadow: 0 0 0 1px #eee; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
+.aura-dot:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px #ccc; }
+.aura-dot.active { width: 28px; border-radius: 10px; box-shadow: 0 0 0 1.5px #111 !important; }
+.aura-mini-cart-btn, .aura-buy-now-btn { width: 36px; height: 36px; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; }
+.aura-mini-cart-btn { background: #fff; border: 1px solid #eee; color: #111; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.aura-mini-cart-btn:hover { background: #111; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.aura-buy-now-btn { background: #111; border: none; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.aura-buy-now-btn:hover { background: #333; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.aura-card-wishlist { background: none; border: none; cursor: pointer; color: #333; padding: 1px; transition: color 0.2s; }
+.aura-card-wishlist:hover, .aura-card-wishlist.active { color: #d63384; }
+.aura-card-wishlist.active svg { fill: #d63384; }
+
+
+/* --- HOT SUMMER DEAL REDESIGN --- */
+.section-sale-hotsummer { background: #fff; padding: 0 0 80px 0; }
+.sale-hotsummer-grid { display: grid; grid-template-columns: 350px 1fr; gap: 20px; align-items: stretch; }
+.sale-sidebar { position: relative; border-radius: 4px; overflow: hidden; background: #f0f0f0; }
+.sale-sidebar img { width: 100%; height: 100%; object-fit: cover; }
+.sale-products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+
+/* Product Card Overrides for Hot Summer Deal */
+#sale-products-hotsummer .aura-product-card { padding: 12px; border: 1px solid #f2f2f2; background: #fff; }
+#sale-products-hotsummer .aura-product-media { aspect-ratio: 1/1 !important; margin-bottom: 12px; }
+#sale-products-hotsummer .aura-product-title { font-size: 13px !important; height: 1.2em !important; font-weight: 700 !important; color: #444 !important; }
+#sale-products-hotsummer .aura-price-row { margin-bottom: 10px; }
+#sale-products-hotsummer .aura-current-price { font-size: 14px !important; }
+#sale-products-hotsummer .aura-card-footer { padding-top: 10px; border-top: 1px solid #f2f2f2; margin-top: 5px; }
+
+/* Tabs for Hot Summer */
+.hotsummer-tab-btn { background: #fff; border: 1px solid #eee; padding: 6px 18px; border-radius: 99px; font-size: 11px; font-weight: 800; color: #888; cursor: pointer; transition: all 0.2s; }
+.hotsummer-tab-btn:hover { border-color: #333; color: #333; }
+.hotsummer-tab-btn.active { background: #000; color: #fff; border-color: #000; }
+.hotsummer-tab-btn.highlight { color: #d11212; }
+
+@media (max-width: 1200px) {
+    .sale-hotsummer-grid { grid-template-columns: 1fr; }
+    .sale-sidebar { height: 400px; }
+    .sale-products-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+    .sale-products-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.section-sale-hotsummer h2 { font-family: "Manrope", sans-serif !important; letter-spacing: 0px !important; } .hotsummer-tab-btn { font-family: "Manrope", sans-serif !important; }
+
+/* --- NEW ARRIVAL CONTINUOUS CAROUSEL --- */
+.new-arrival-sec .container {
+    max-width: 1500px !important;
+    padding: 0 !important;
+    margin: 0 auto;
+}
+
+.new-arrival-slider {
+    position: relative;
+    overflow: hidden;
+    padding: 20px 0;
+}
+
+.new-arrival-track {
+    display: flex;
+    gap: 15px;
+    width: max-content;
+    will-change: transform;
+}
+
+.new-arrival-track.animated {
+    animation: continuous-scroll 50s linear infinite;
+}
+
+.new-arrival-track .aura-product-card {
+    width: 210px;
+    flex-shrink: 0;
+}
+
+@keyframes continuous-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); } 
+}
+
+.new-arrival-track:hover {
+    animation-play-state: paused;
+}
+
+
+/* --- NEW PREMIUM FOOTER V2 --- */
+.aura-footer-renewed {
+    background: #fff;
+    color: #333;
+    font-family: "Manrope", sans-serif;
+    border-top: 1px solid #f0f0f0;
+}
+
+.aura-footer-service {
+    padding: 30px 0;
+    background: #fff;
+}
+
+.aura-service-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.aura-service-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+}
+
+.service-icon {
+    color: #333;
+    flex-shrink: 0;
+}
+
+.service-content h6 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111;
+}
+
+.service-content p {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: #888;
+}
+
+.aura-footer-subscriber {
+    padding: 40px 0;
+    border-top: 1px solid #f0f0f0;
+    background: #fff;
+}
+
+.subscriber-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.sub-form-wrap {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex: 1;
+}
+
+.sub-form-wrap h5 {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.sub-input-group {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.sub-input-group input {
+    flex: 1;
+    border: none;
+    padding: 12px 15px;
+    outline: none;
+    font-size: 14px;
+}
+
+.sub-btn {
+    background: #888;
+    color: #fff;
+    border: none;
+    padding: 0 25px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.sub-btn:hover {
+    background: #333;
+}
+
+.sub-socials {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.social-dot {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s;
+}
+
+.social-dot:hover {
+    transform: translateY(-3px);
+}
+
+.social-dot img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.aura-footer-main {
+    padding: 60px 0;
+    border-top: 1px solid #f0f0f0;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 40px;
+}
+
+.footer-col h5 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #111;
+}
+
+.intro-col p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.footer-contact-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-contact-stack p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.footer-contact-stack svg {
+    color: #111;
+}
+
+.footer-payment-section {
+    margin-top: 30px;
+}
+
+.footer-payment-section h6 {
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: #111;
+}
+
+.payment-flex {
+    display: flex;
+    gap: 10px;
+}
+
+.payment-flex img {
+    height: 24px;
+    width: auto;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.payment-flex img:hover {
+    opacity: 1;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    font-size: 14px;
+    color: #666;
+    transition: all 0.2s;
+}
+
+.footer-links a:hover {
+    color: #111;
+    padding-left: 5px;
+}
+
+.aura-footer-copyright {
+    padding: 20px 0;
+    border-top: 1px solid #f0f0f0;
+}
+
+.copyright-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.copy-text p {
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+}
+
+.bct-badge img {
+    height: 40px;
+}
+
+@media (max-width: 992px) {
+    .aura-service-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .main-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .sub-form-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .aura-service-grid {
+        grid-template-columns: 1fr;
+    }
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+    .copyright-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+    .subscriber-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+

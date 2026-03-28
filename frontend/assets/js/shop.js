@@ -1,5 +1,5 @@
 import { fetchProducts } from './api.js';
-import { createProductCard } from './common.js';
+import { createProductCard, syncWishlistVisuals } from './common.js';
 
 let products = [];
 let filteredProducts = [];
@@ -15,6 +15,7 @@ function renderProducts() {
   const paginatedList = filteredProducts.slice(startIndex, endIndex);
 
   grid.innerHTML = paginatedList.map(createProductCard).join('');
+  syncWishlistVisuals();
   renderPaginationUI();
 }
 
@@ -90,16 +91,37 @@ async function initShop() {
     const categories = await fetchCategories();
     products = await fetchProducts();
     
-    // 1. Populate Categories
+    // 1. Populate Dynamic Filters Grouped by Logic
     const catFilter = document.getElementById('cat-filter');
-    if (catFilter) {
-      catFilter.innerHTML = categories.map(c => `
-        <label class="filter-item">
-          <input type="checkbox" name="category" value="${c.name}" hidden>
-          <div class="filter-checkbox"></div>
-          <span>${c.name}</span>
-        </label>
-      `).join('');
+    const colFilter = document.getElementById('col-filter');
+
+    if (catFilter || colFilter) {
+      const catGroups = ['ÁO', 'ÁO KHOÁC', 'QUẦN & VÁY', 'PHỤ KIỆN'];
+      const colGroups = ['SẢN PHẨM ĐẶC TRƯNG', 'THEO DỊP', 'THEO MÙA'];
+
+      const generateFilterHtml = (targetGroups) => {
+        return targetGroups.map(groupName => {
+          const groupCats = categories.filter(c => c.group === groupName);
+          if (groupCats.length === 0) return '';
+          return `
+            <div class="filter-group-section" style="margin-bottom: 16px;">
+              <h6 class="filter-section-title">${groupName}</h6>
+              <div class="filter-links-list">
+                ${groupCats.map(c => `
+                  <label class="filter-item">
+                    <input type="checkbox" name="category" value="${c.name}" hidden>
+                    <div class="filter-checkbox"></div>
+                    <span>${c.name}</span>
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+      };
+
+      if (catFilter) catFilter.innerHTML = generateFilterHtml(catGroups);
+      if (colFilter) colFilter.innerHTML = generateFilterHtml(colGroups);
     }
 
     // 2. Initialize Price Slider
@@ -127,18 +149,7 @@ async function initShop() {
       });
     }
 
-    // 3. Populate Collections
-    const collections = [...new Set(products.map(p => p.collectionName).filter(Boolean))];
-    const colFilter = document.querySelector('.filter-group:last-of-type .filter-group-content');
-    if (colFilter) {
-      colFilter.innerHTML = collections.map(c => `
-        <label class="filter-item">
-          <input type="checkbox" name="collection" value="${c}" hidden>
-          <div class="filter-checkbox"></div>
-          <span>${c}</span>
-        </label>
-      `).join('');
-    }
+    // 3. (Handled above by dynamic filters)
 
     // Parse URL params for initial category
     const urlParams = new URLSearchParams(window.location.search);

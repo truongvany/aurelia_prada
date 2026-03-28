@@ -13,39 +13,58 @@ export function createProductCard(product) {
   
   const badgeContent = product.isBestSeller ? `<div class="aura-badge-best">Best Seller</div>` : (product.isNew ? `<div class="aura-badge-new">NEW</div>` : '');
   
+  const dotsHtml = (product.variants && product.variants.length > 0)
+    ? product.variants.slice(0, 5).map((v, i) => `
+        <span class="aura-dot ${i === 0 ? 'active' : ''}" 
+              style="background: ${v.colorCode || '#ddd'};" 
+              data-variant-img="${v.images?.[0] || product.image}"
+              title="${v.color}">
+        </span>
+      `).join('')
+    : '<span class="aura-dot active" style="background:#ccc;"></span>';
+
+  const allImgs = Array.from(new Set([
+    product.image,
+    ...(product.images || []),
+    ...(product.variants ? product.variants.flatMap(v => v.images) : [])
+  ])).filter(Boolean);
+
   return `
     <article class="aura-product-card">
-      <div class="aura-product-media">
+      <div class="aura-product-media" data-images='${JSON.stringify(allImgs)}'>
         ${badgeContent}
         ${hasSale ? `<div class="aura-sale-bubble">-${salePercent}%</div>` : ''}
         <a href="${detailHref}" class="aura-image-link">
           <img src="${product.image}" alt="${product.name}" loading="lazy" 
+               class="aura-main-img"
                onerror="this.closest('.aura-product-media').classList.add('img-error')">
         </a>
       </div>
       <div class="aura-product-info">
         <div class="aura-card-meta">
           <div class="aura-card-dots">
-            <span class="aura-dot has-check" style="background:#ddd;"></span>
-            <span class="aura-dot" style="background:#555;"></span>
-            <span class="aura-dot" style="background:#8b0000;"></span>
-            <span class="aura-dot" style="background:#ccac00;"></span>
+            ${dotsHtml}
           </div>
-          <button class="aura-card-wishlist" aria-label="Add to wishlist">
+          <button class="aura-card-wishlist" data-product-id="${productId}" aria-label="Add to wishlist">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
             </svg>
           </button>
         </div>
         <h4 class="aura-product-title-sm"><a href="${detailHref}">${product.name}</a></h4>
-        <div class="aura-card-buy-row">
+        <div class="aura-card-buy-row" style="gap: 8px;">
             <div class="aura-price-stack">
                 <strong class="aura-price-bold">${formatVnd(product.price)}</strong>
                 ${hasSale ? `<span class="aura-price-old-sm">${formatVnd(product.originalPrice)}</span>` : ''}
             </div>
-            <button class="aura-mini-cart-btn ivy-cart-btn" data-product-id="${productId}">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
-            </button>
+            <div style="display: flex; gap: 8px;">
+                <button class="aura-mini-cart-btn ivy-cart-btn" data-product-id="${productId}" title="Thêm vào giỏ">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
+                </button>
+                <button class="aura-buy-now-btn ivy-buy-now-btn" data-product-id="${productId}" title="Mua ngay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+            </div>
         </div>
       </div>
     </article>
@@ -61,7 +80,7 @@ function buildUserShell() {
   const contactHref = inPagesFolder ? 'contact.html' : 'pages/contact.html';
   const profileHref = inPagesFolder ? 'profile.html' : 'pages/profile.html';
   const cartHref = inPagesFolder ? 'cart.html' : 'pages/cart.html';
-  const favHref = inPagesFolder ? 'favorites.html' : 'pages/favorites.html';
+  const favHref = `${profileHref}?tab=wishlist`;
   const loginHref = inPagesFolder ? 'login.html' : 'pages/login.html';
   const registerHref = inPagesFolder ? 'register.html' : 'pages/register.html';
   const logoSrc = inPagesFolder ? '../assets/images/logo/logo.png' : 'assets/images/logo/logo.png';
@@ -77,7 +96,7 @@ function buildUserShell() {
         <div class="container aura-header-top-inner">
           <div class="aura-search-bar">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" placeholder="TÌM KIẾM" aria-label="Search" />
+            <input type="text" id="aura-search-input" placeholder="TÌM KIẾM" aria-label="Search" />
           </div>
           
           <a class="aura-logo" href="${homeHref}" aria-label="Aurelia home">
@@ -162,24 +181,24 @@ function buildUserShell() {
                 <div class="aura-mega-main">
                   <div class="aura-mega-content">
                     <div class="aura-mega-left">
-                        <div class="container-fluid aura-mega-grid">
+                        <div id="mega-collections-container" class="container-fluid aura-mega-grid">
+                            <!-- Populated dynamically via JS -->
                             <div class="mega-column">
-                                <h5>THEO MÙA</h5>
-                                <a href="#">Xuân Hè 2026</a>
-                                <a href="#">Thu Đông 2025</a>
-                                <a href="#">Pre-Fall Collection</a>
-                                <a href="#">Holiday Capsule</a>
-                            </div>
-                            <div class="mega-column">
-                                <h5>CONCEPT</h5>
-                                <a href="#">Minimalist Muse</a>
-                                <a href="#">Urban Chic</a>
-                                <a href="#">Classic Elegance</a>
-                                <a href="#">Evening Glamour</a>
+                                <h5 class="skeleton-text">TẢI DỮ LIỆU...</h5>
                             </div>
                         </div>
                     </div>
                   </div>
+                </div>
+                <!-- Optional footer for collections -->
+                <div class="aura-mega-footer">
+                    <div class="container-fluid" style="display:flex; align-items:center; gap:40px;">
+                        <span>GỢI Ý:</span>
+                        <div class="aura-mega-foot-links">
+                            <a href="${shopHref}?sort=new">BST Mới nhất</a>
+                            <a href="${shopHref}?promo=true">Lookbook 2026</a>
+                        </div>
+                    </div>
                 </div>
               </div>
             </div>
@@ -193,10 +212,12 @@ function buildUserShell() {
                         <div class="container-fluid aura-mega-grid">
                             <div class="mega-column">
                                 <h5>HÀNG MỚI VỀ</h5>
-                                <a href="#">Trang sức cao cấp</a>
-                                <a href="#">Khăn lụa</a>
-                                <a href="#">Mũ thời trang</a>
-                                <a href="#">Kính mát Heritage</a>
+                                <div class="mega-links-stack">
+                                    <a href="#" class="mega-item-link">Trang sức cao cấp</a>
+                                    <a href="#" class="mega-item-link">Khăn lụa</a>
+                                    <a href="#" class="mega-item-link">Mũ thời trang</a>
+                                    <a href="#" class="mega-item-link">Kính mát Heritage</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -215,91 +236,175 @@ function buildUserShell() {
   `;
 
   const footer = `
-    <footer class="site-footer ivy-footer">
-      <div class="container ivy-footer-grid">
-        <!-- Column 1: Brand & Socials -->
-        <div class="ivy-footer-col brand-col">
-          <div class="ivy-footer-logo-wrap">
-            <img src="${logoSrc}" alt="AURELIA" class="footer-logo">
-            <div class="cert-badges">
-                <img src="https://pub-83c51323386e4176a95383562629e46a.r2.dev/dmca.png" alt="DMCA" style="height:20px;">
-                <img src="https://pub-83c51323386e4176a95383562629e46a.r2.dev/bct.png" alt="BCT" style="height:20px;">
+    <footer class="site-footer aura-footer-renewed">
+      <!-- Service Bar Section -->
+      <div class="aura-footer-service">
+        <div class="container aura-service-grid">
+          <div class="aura-service-item">
+            <div class="service-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="m7 8 3 3 7-7"/></svg>
+            </div>
+            <div class="service-content">
+              <h6>Miễn phí vận chuyển</h6>
+              <p>Miễn phí đơn hàng từ 500k</p>
             </div>
           </div>
-          <div class="ivy-footer-socials">
-            <a href="#" class="social-icon fb"></a>
-            <a href="#" class="social-icon gg"></a>
-            <a href="#" class="social-icon ig"></a>
-            <a href="#" class="social-icon zl"></a>
-            <a href="#" class="social-icon yt"></a>
+          <div class="aura-service-item">
+            <div class="service-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            </div>
+            <div class="service-content">
+              <h6>Đổi trả dễ dàng</h6>
+              <p>Đổi trả hàng trong 60 ngày</p>
+            </div>
           </div>
-          <div class="ivy-footer-hotline">
-            HOTLINE: 0246 662 3434
+          <div class="aura-service-item">
+            <div class="service-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div class="service-content">
+              <h6>Hỗ trợ 24/7</h6>
+              <p>Gọi hotline để được tư vấn</p>
+            </div>
           </div>
-        </div>
-
-        <!-- Column 2: Intro -->
-        <div class="ivy-footer-col">
-          <h5>Giới thiệu</h5>
-          <ul>
-            <li><a href="#">Về AURELIA</a></li>
-            <li><a href="#">Tuyển dụng</a></li>
-            <li><a href="#">Hệ thống cửa hàng</a></li>
-          </ul>
-        </div>
-
-        <!-- Column 3: Customer Service -->
-        <div class="ivy-footer-col">
-          <h5>Dịch vụ khách hàng</h5>
-          <ul>
-            <li><a href="#">Chính sách điều khoản</a></li>
-            <li><a href="#">Hướng dẫn mua hàng</a></li>
-            <li><a href="#">Chính sách thanh toán</a></li>
-            <li><a href="#">Chính sách đổi trả</a></li>
-            <li><a href="#">Chính sách bảo hành</a></li>
-            <li><a href="#">Chính sách giao nhận</a></li>
-            <li><a href="#">Thẻ thành viên</a></li>
-            <li><a href="#">Q&A</a></li>
-          </ul>
-        </div>
-
-        <!-- Column 4: Contact -->
-        <div class="ivy-footer-col">
-          <h5>Liên hệ</h5>
-          <ul>
-            <li><a href="#">Hotline</a></li>
-            <li><a href="#">Email</a></li>
-            <li><a href="#">Live Chat</a></li>
-            <li><a href="#">Messenger</a></li>
-            <li><a href="#">Liên hệ</a></li>
-          </ul>
-        </div>
-
-        <!-- Column 5: Subscribe & App -->
-        <div class="ivy-footer-col side-col">
-          <div class="newsletter-box">
-            <h6>Nhận thông tin các chương trình của AURELIA</h6>
-            <form class="newsletter-form-minimal">
-                <input type="email" placeholder="Nhập địa chỉ email">
-                <button type="button">Đăng ký</button>
-            </form>
-          </div>
-          <div class="app-download-wrap">
-            <h5>Download App</h5>
-            <div class="app-links">
-                <a href="#"><img src="https://pub-83c51323386e4176a95383562629e46a.r2.dev/appstore.png" alt="App Store"></a>
-                <a href="#"><img src="https://pub-83c51323386e4176a95383562629e46a.r2.dev/googleplay.png" alt="Google Play"></a>
+          <div class="aura-service-item">
+            <div class="service-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            </div>
+            <div class="service-content">
+              <h6>Thanh toán đa dạng</h6>
+              <p>Nhiều phương thức thanh toán online</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="container ivy-footer-bottom">
-        <p>©AURELIA All rights reserved</p>
+
+      <!-- Newsletter & Socials Row -->
+      <div class="aura-footer-subscriber">
+        <div class="container subscriber-grid">
+          <div class="sub-form-wrap">
+            <h5>ĐĂNG KÍ NHẬN TIN</h5>
+            <div class="sub-input-group">
+              <input type="email" placeholder="Email" id="footer-sub-email">
+              <button type="button" class="sub-btn">Đăng ký</button>
+            </div>
+          </div>
+          <div class="sub-socials">
+            <a href="#" aria-label="Zalo" class="social-dot zl"><img src="https://img.icons8.com/color/48/zalo.png" alt="Zalo"></a>
+            <a href="#" aria-label="TikTok" class="social-dot tk"><img src="https://img.icons8.com/color/48/tiktok.png" alt="TikTok"></a>
+            <a href="#" aria-label="YouTube" class="social-dot yt"><img src="https://img.icons8.com/color/48/youtube-play.png" alt="YouTube"></a>
+            <a href="#" aria-label="Instagram" class="social-dot ig"><img src="https://img.icons8.com/color/48/instagram-new.png" alt="Instagram"></a>
+            <a href="#" aria-label="Facebook" class="social-dot fb"><img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook"></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Footer Columns -->
+      <div class="aura-footer-main">
+        <div class="container main-grid">
+          <!-- Col 1: Intro -->
+          <div class="footer-col intro-col">
+            <h5>Giới thiệu</h5>
+            <p>AURELIA là thương hiệu thời trang thiết kế cao cấp, mang đến phong cách thanh lịch và sang trọng cho phụ nữ hiện đại.</p>
+            <div class="footer-contact-stack">
+              <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 036.8771.773 (8:00AM-22:00PM)</p>
+              <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> info@ptgrow.com</p>
+              <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> 488/30 Phạm Văn Chiêu, HCM</p>
+            </div>
+            
+            <div class="footer-payment-section">
+              <h6>PHƯƠNG THỨC THANH TOÁN</h6>
+              <div class="payment-flex">
+                <img src="https://img.icons8.com/color/48/visa.png" alt="Visa">
+                <img src="https://img.icons8.com/color/48/mastercard.png" alt="Mastercard">
+                <img src="https://img.icons8.com/color/48/momo.png" alt="MoMo">
+                <img src="https://img.icons8.com/color/48/zalo.png" alt="ZaloPay">
+              </div>
+            </div>
+          </div>
+
+          <!-- Col 2: Policies -->
+          <div class="footer-col">
+            <h5>Chính sách</h5>
+            <ul class="footer-links">
+              <li><a href="#">Chính sách giao hàng</a></li>
+              <li><a href="#">Chính sách hoàn tiền</a></li>
+              <li><a href="#">Bảo mật thông tin</a></li>
+              <li><a href="#">Điều kiện đổi trả hàng</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 3: Support -->
+          <div class="footer-col">
+            <h5>Hỗ trợ</h5>
+            <ul class="footer-links">
+              <li><a href="#">Hướng dẫn đặt hàng</a></li>
+              <li><a href="#">Phương thức thanh toán</a></li>
+              <li><a href="${aboutHref}">Giới thiệu</a></li>
+              <li><a href="#">Blogs thời trang</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 4: Partnership -->
+          <div class="footer-col">
+            <h5>Hợp tác</h5>
+            <ul class="footer-links">
+              <li><a href="#">Affiliate & KOC</a></li>
+              <li><a href="#">Cung cấp sỉ</a></li>
+              <li><a href="#">Đồng phục doanh nghiệp</a></li>
+              <li><a href="#">Hợp tác gia công</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copyright Bar -->
+      <div class="aura-footer-copyright">
+        <div class="container copyright-inner">
+          <div class="copy-text">
+            <p>© CÔNG TY TNHH AURELIA FASHION - Mã số doanh nghiệp: 0315165728</p>
+          </div>
+          <div class="bct-badge">
+            <img src="https://pub-83c51323386e4176a95383562629e46a.r2.dev/bct.png" alt="Đã thông báo Bộ Công Thương">
+          </div>
+        </div>
       </div>
     </footer>
   `;
 
   return { header, footer };
+}
+
+export function showToast(title, message, type = 'success') {
+    let container = document.querySelector('.aura-toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'aura-toast-container';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'aura-toast';
+    const icon = type === 'success' ? '✓' : '!';
+    
+    toast.innerHTML = `
+        <div class="aura-toast-icon">${icon}</div>
+        <div class="aura-toast-content">
+            <h6>${title}</h6>
+            <p>${message}</p>
+        </div>
+    `;
+
+    container.appendChild(toast);
+    
+    // Trigger animation
+    setTimeout(() => toast.classList.add('show'), 10);
+
+    // Auto remove
+    setTimeout(() => {
+        toast.classList.add('removing');
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
 }
 
 export function initBaseUI() {
@@ -353,39 +458,160 @@ export function initBaseUI() {
   updateCartBadge();
   initMegaMenu();
 
-  // Global "Add to Cart" Handling (Event Delegation)
+    // Global Event Delegation Handling
   document.addEventListener('click', async (e) => {
+    // 1. Color Swatch Handling
+    const dot = e.target.closest('.aura-dot');
+    if (dot) {
+        const card = dot.closest('.aura-product-card');
+        const mainImg = card?.querySelector('.aura-main-img');
+        const variantImg = dot.getAttribute('data-variant-img');
+        
+        if (mainImg && variantImg) {
+            mainImg.src = variantImg;
+            // Update active state
+            card.querySelectorAll('.aura-dot').forEach(d => d.classList.remove('active'));
+            dot.classList.add('active');
+        }
+        return; 
+    }
+
+    // 2. Add to Cart & Buy Now Handling
     const cartBtn = e.target.closest('.ivy-cart-btn');
-    if (cartBtn) {
+    const buyNowBtn = e.target.closest('.ivy-buy-now-btn');
+    
+    if (cartBtn || buyNowBtn) {
         e.preventDefault();
-        const productId = cartBtn.getAttribute('data-product-id');
+        const btn = cartBtn || buyNowBtn;
+        const productId = btn.getAttribute('data-product-id');
         if (!productId) return;
 
         const { addToCart } = await import('./api.js');
         
-        cartBtn.disabled = true;
-        const originalContent = cartBtn.innerHTML;
-        cartBtn.innerHTML = '...';
+        btn.disabled = true;
+        const originalContent = btn.innerHTML;
+        btn.innerHTML = '<span style="font-size:10px">...</span>';
 
         try {
-            await addToCart(productId, 1, 'L'); // Default size L
+            const userInfo = localStorage.getItem('userInfo');
+            if (!userInfo) {
+                showToast('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để tiếp tục mua sắm', 'error');
+                return;
+            }
+
+            await addToCart(productId, 1, 'M'); 
             updateCartBadge();
-            // Show a simple alert for now
-            alert('Added to cart!');
+            
+            showToast('Thành công', 'Đã thêm sản phẩm vào giỏ hàng');
+
+            if (buyNowBtn) {
+                const inPages = window.location.pathname.includes('/pages/');
+                window.location.href = inPages ? 'cart.html' : 'pages/cart.html';
+            }
         } catch (error) {
-            alert('Please login to add to cart.');
+            showToast('Lỗi', 'Không thể thêm vào giỏ hàng', 'error');
         } finally {
-            cartBtn.disabled = false;
-            cartBtn.innerHTML = originalContent;
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
         }
+    }
+
+    // 3. Wishlist Toggle Handling
+    const favBtn = e.target.closest('.aura-card-wishlist');
+    if (favBtn) {
+        e.preventDefault();
+        const productId = favBtn.getAttribute('data-product-id');
+        if (!productId) return;
+
+        try {
+            const userInfo = localStorage.getItem('userInfo');
+            if (!userInfo) {
+                showToast('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để lưu sản phẩm yêu thích', 'error');
+                return;
+            }
+
+            const { toggleWishlist } = await import('./api.js');
+            const res = await toggleWishlist(productId);
+            
+            // Sync global cache
+            window.AURELIA_WISH_LIST = res.wishlist;
+
+            // Toggle visual state
+            favBtn.classList.toggle('active');
+            
+            showToast('Thành công', 'Đã cập nhật danh sách yêu thích');
+        } catch (error) {
+            showToast('Lỗi', 'Không thể cập nhật danh sách yêu thích', 'error');
+        }
+        return;
     }
   });
 
-  // Infinite scroll gallery track duplication
-  const galleryTrack = document.querySelector('.gallery-track');
-  if (galleryTrack) {
-    galleryTrack.innerHTML += galleryTrack.innerHTML;
+  // Search functionality
+  const searchInput = document.getElementById('aura-search-input');
+  
+  // Sync wishlist visuals if logged in
+  const userInfoStr = localStorage.getItem('userInfo');
+  if (userInfoStr) {
+      import('./api.js').then(({ getUserProfile }) => {
+          getUserProfile().then(user => {
+              window.AURELIA_WISH_LIST = user.wishlist;
+              syncWishlistVisuals(user.wishlist);
+          });
+      });
   }
+  if (searchInput) {
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const query = searchInput.value.trim();
+        if (query) {
+          const pathname = window.location.pathname;
+          const inPagesFolder = pathname.includes('/pages/');
+          const shopPath = inPagesFolder ? 'shop.html' : 'pages/shop.html';
+          window.location.href = `${shopPath}?q=${encodeURIComponent(query)}`;
+        }
+      }
+    });
+  }
+
+  // 3. Hover Carousel for Product Media
+  let currentCarouselInterval;
+  document.addEventListener('mouseover', (e) => {
+    const media = e.target.closest('.aura-product-media');
+    if (media) {
+        const imagesData = media.getAttribute('data-images');
+        if (!imagesData) return;
+        
+        const images = JSON.parse(imagesData);
+        if (images.length <= 1) return;
+        
+        const img = media.querySelector('.aura-main-img');
+        const originalSrc = img.src;
+        let idx = images.indexOf(originalSrc);
+        if (idx === -1) idx = 0;
+
+        clearInterval(currentCarouselInterval);
+        currentCarouselInterval = setInterval(() => {
+            idx = (idx + 1) % images.length;
+            if (img) {
+                img.style.transition = 'opacity 0.3s';
+                img.style.opacity = '0.5';
+                setTimeout(() => {
+                    img.src = images[idx];
+                    img.style.opacity = '1';
+                }, 300);
+            }
+        }, 1200);
+
+        media.onmouseleave = () => {
+            clearInterval(currentCarouselInterval);
+            if (img) {
+                img.src = originalSrc;
+                img.style.opacity = '1';
+            }
+        };
+    }
+  });
 }
 
 export async function updateCartBadge() {
@@ -408,8 +634,10 @@ export async function updateCartBadge() {
 }
 
 async function initMegaMenu() {
-  const megaContainer = document.getElementById('mega-menu-categories');
-  if (!megaContainer) return;
+  const fashionContainer = document.getElementById('mega-menu-categories');
+  const collectionsContainer = document.getElementById('mega-collections-container');
+  
+  if (!fashionContainer && !collectionsContainer) return;
 
   try {
     const { fetchCategories } = await import('./api.js');
@@ -418,36 +646,76 @@ async function initMegaMenu() {
     const inPagesFolder = pathname.includes('/pages/');
     const shopHref = inPagesFolder ? 'shop.html' : 'pages/shop.html';
 
-    // Grouping by "group" field from Database accurately
-    const groups = ['ÁO', 'ÁO KHOÁC', 'QUẦN & VÁY', 'PHỤ KIỆN'];
-    
-    // First column: Static links (TẤT CẢ SẢN PHẨM)
-    let html = `
-      <div class="mega-column">
-        <h5>TẤT CẢ SẢN PHẨM</h5>
-        <a href="${shopHref}?isNew=true">Sản phẩm mới</a>
-        <a href="${shopHref}?isBestSeller=true">Bán chạy nhất</a>
-        <a href="${shopHref}?promo=true">Siêu Ưu đãi</a>
-        <a href="${shopHref}">Khám phá toàn bộ</a>
-      </div>
-    `;
+    // 1. Populate Fashion Menu
+    if (fashionContainer) {
+        const fashionGroups = ['ÁO', 'ÁO KHOÁC', 'QUẦN & VÁY'];
+        let fashionHtml = `
+          <div class="mega-column">
+            <h5>TẤT CẢ SẢN PHẨM</h5>
+            <div class="mega-links-stack">
+              <a href="${shopHref}?isNew=true" class="mega-item-link">Sản phẩm mới</a>
+              <a href="${shopHref}?isBestSeller=true" class="mega-item-link">Bán chạy nhất</a>
+              <a href="${shopHref}?promo=true" class="mega-item-link">Siêu Ưu đãi</a>
+              <a href="${shopHref}" class="mega-item-link">Khám phá toàn bộ</a>
+            </div>
+          </div>
+        `;
 
-    groups.forEach(groupName => {
-        const groupCats = categories.filter(c => c.group === groupName);
-        if (groupCats.length === 0) return;
-        
-        html += `<div class="mega-column"><h5>${groupName}</h5>`;
-        groupCats.forEach(c => {
-            html += `<a href="${shopHref}?category=${c.name}">${c.name}</a>`;
+        fashionGroups.forEach(groupName => {
+            const groupCats = categories.filter(c => c.group === groupName);
+            if (groupCats.length > 0) {
+                fashionHtml += `
+                  <div class="mega-column">
+                    <h5>${groupName}</h5>
+                    <div class="mega-links-stack">
+                      ${groupCats.map(c => `<a href="${shopHref}?category=${c.name}" class="mega-item-link">${c.name}</a>`).join('')}
+                    </div>
+                  </div>
+                `;
+            }
         });
-        html += `</div>`;
-    });
+        fashionContainer.innerHTML = fashionHtml;
+    }
 
-    megaContainer.innerHTML = html;
+    // 2. Populate Collections Menu
+    if (collectionsContainer) {
+        const collectionGroups = ['THEO DỊP', 'SẢN PHẨM ĐẶC TRƯNG', 'THEO MÙA'];
+        let collectionsHtml = '';
+
+        collectionGroups.forEach(groupName => {
+            const groupCats = categories.filter(c => c.group === groupName);
+            if (groupCats.length > 0) {
+                collectionsHtml += `
+                  <div class="mega-column">
+                    <h5>${groupName}</h5>
+                    <div class="mega-links-stack">
+                      ${groupCats.map(c => `<a href="${shopHref}?category=${c.name}" class="mega-item-link">${c.name}</a>`).join('')}
+                    </div>
+                  </div>
+                `;
+            }
+        });
+
+        if (!collectionsHtml) collectionsHtml = '<div class="mega-column"><h5>ĐANG CẬP NHẬT...</h5></div>';
+        collectionsContainer.innerHTML = collectionsHtml;
+    }
+
   } catch (error) {
     console.warn('MegaMenu loading error:', error);
-    megaContainer.innerHTML = '<div class="mega-column"><h5>Lỗi tải dữ liệu</h5></div>';
   }
+}
+
+export function syncWishlistVisuals(wishlistIds = null) {
+    const list = wishlistIds || window.AURELIA_WISH_LIST || [];
+    const cleanIds = list.map(id => id._id || id);
+    document.querySelectorAll('.aura-card-wishlist').forEach(btn => {
+        const productId = btn.getAttribute('data-product-id');
+        if (cleanIds.includes(productId)) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', initBaseUI);

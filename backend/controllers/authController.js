@@ -157,7 +157,7 @@ const toggleWishlist = async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
-    const alreadyExists = user.wishlist.includes(productId);
+    const alreadyExists = user.wishlist.some((id) => id.toString() === productId);
     if (alreadyExists) {
       user.wishlist = user.wishlist.filter((id) => id.toString() !== productId);
     } else {

@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="../../assets/css/styles.css" />
     <link rel="stylesheet" href="../../assets/css/admin.css" />
     <style>
-      /* Quick additional fixes for icons or fonts */
-      @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+      /* Page specific tweaks if needed */
     </style>
   </head>
   <body class="admin-body">
@@ -17,10 +16,13 @@
       <main class="dashboard-main">
         <div class="dashboard-title-row">
           <div>
-            <h2>Tổng quan</h2>
-            <p>Hiệu suất hoạt động và phân tích hệ thống thời gian thực.</p>
+            <h2>Chào buổi tối, Admin</h2>
+            <p>Dưới đây là một số cập nhật về hiệu suất hoạt động của hệ thống hôm nay.</p>
           </div>
-          <button class="btn-export">XUẤT BÁO CÁO</button>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <small style="color: var(--admin-text-muted); font-weight: 600;">Cập nhật lúc: 20:06</small>
+            <button class="btn-export">XUẤT BÁO CÁO</button>
+          </div>
         </div>
 
         <!-- KPI Grid -->

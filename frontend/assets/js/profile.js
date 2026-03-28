@@ -16,6 +16,8 @@ async function initProfile() {
     renderAddresses(user);
     renderViewedProducts(user.viewedProducts);
     renderWishlist(user.wishlist);
+    const { syncWishlistVisuals } = await import('./common.js');
+    syncWishlistVisuals(user.wishlist);
     
     profileContent.style.display = 'block';
     if (loadingSpinner) loadingSpinner.style.display = 'none';
@@ -26,6 +28,14 @@ async function initProfile() {
     setupTabs();
     setupForm(user);
     setupLogout();
+    
+    // Check for 'tab' in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialTab = urlParams.get('tab');
+    if (initialTab) {
+        const tabBtn = document.querySelector(`[data-profile-tab="${initialTab}"]`);
+        if (tabBtn) tabBtn.click();
+    }
     
   } catch (error) {
     if (errorAlert) {
@@ -273,17 +283,16 @@ function setupTabs() {
 }
 
 async function loadWishlist() {
+    // Note: renderWishlist(user.wishlist) is already called in initProfile
+    // This function can be used to re-fetch if needed
     const container = document.getElementById('wishlistContainer');
     if (!container) return;
     
     try {
-        const { fetchProducts } = await import('./api.js');
-        const products = await fetchProducts();
-        const { createProductCard } = await import('./common.js');
-        
-        container.innerHTML = products.slice(0, 4).map(createProductCard).join('');
+        const user = await getUserProfile();
+        renderWishlist(user.wishlist);
     } catch (err) {
-        container.innerHTML = '<p class="text-muted">Không thể tải danh sách sản phẩm yêu thích.</p>';
+        console.error('Error reloading wishlist:', err);
     }
 }
 

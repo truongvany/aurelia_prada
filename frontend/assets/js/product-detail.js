@@ -1,5 +1,5 @@
-import { fetchProductById, addToCart } from './api.js';
-import { formatVnd, updateCartBadge } from './common.js';
+import { fetchProducts, fetchProductById, addToCart } from './api.js';
+import { formatVnd, updateCartBadge, createProductCard, syncWishlistVisuals } from './common.js';
 
 function getProductId() {
   const params = new URLSearchParams(window.location.search);
@@ -32,103 +32,334 @@ async function initDetail() {
   if (priceElem) priceElem.textContent = formatVnd(product.price);
   if (heroElem) heroElem.src = product.image;
 
-  // Update thumbnails
-  for (let i = 0; i < 4; i++) {
-    const thumb = document.getElementById(`product-thumb-${i}`);
-    if (thumb) {
-        // For demo, we use the main image for all thumbs or placeholders
-        thumb.src = i === 0 ? product.image : thumb.src || product.image;
+  // NEW: Rating and Sold stats
+  const ratingVal = document.getElementById('product-rating-val');
+  const soldVal = document.getElementById('product-sold-val');
+  if (ratingVal) ratingVal.textContent = `(${product.rating?.toFixed(1) || '5.0'})`;
+  if (soldVal) soldVal.textContent = (product.totalSold || 0).toLocaleString();
+
+  // Handle Original Price & Discount Badge
+  const originalPriceElem = document.getElementById('product-original-price');
+  const discountBadge = document.getElementById('product-discount-badge');
+  if (product.originalPrice && product.originalPrice > product.price) {
+      if (originalPriceElem) {
+          originalPriceElem.textContent = formatVnd(product.originalPrice);
+          originalPriceElem.style.display = 'block';
+      }
+      if (discountBadge) {
+          const pct = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+          discountBadge.textContent = `Giam ${pct}%`;
+          discountBadge.style.display = 'block';
+      }
+  } else {
+      if (originalPriceElem) originalPriceElem.style.display = 'none';
+      if (discountBadge) discountBadge.style.display = 'none';
+  }
+
+  // 3. Dynamic Variant Handling (Colors & Sizes)
+  const colorContainer = document.querySelector('.color-list');
+  const sizeContainer = document.querySelector('.size-grid');
+  const thumbContainer = document.getElementById('product-thumbnails');
+  const selectedColorText = document.getElementById('selected-color');
+  const selectedSizeText = document.getElementById('selected-size');
+
+  let currentVariant = product.variants?.[0] || { 
+    color: product.color || 'Mặc định', 
+    colorCode: '#000000', 
+    images: product.images && product.images.length > 0 ? product.images : [product.image],
+    sizes: ['S', 'M', 'L'] 
+  };
+
+  const allImages = Array.from(new Set([
+    product.image,
+    ...(product.images || []),
+    ...(product.variants ? product.variants.flatMap(v => v.images) : [])
+  ])).filter(Boolean);
+
+  function renderGallery(images, activeUrl) {
+    if (!thumbContainer) return;
+    thumbContainer.innerHTML = images.map((url, i) => `
+      <div class="thumb-item ${url === activeUrl ? 'active' : ''}" data-url="${url}">
+        <img src="${url}" alt="Thumbnail ${i + 1}" />
+      </div>
+    `).join('');
+    if (activeUrl && heroElem) heroElem.src = activeUrl;
+  }
+
+  function renderSizes(sizes) {
+    if (!sizeContainer) return;
+    sizeContainer.innerHTML = sizes.map((s, i) => `
+      <div class="size-option ${i === 0 ? 'active' : ''}" data-size="${s}">${s}</div>
+    `).join('');
+    if (selectedSizeText) selectedSizeText.textContent = sizes[0] || 'N/A';
+  }
+
+  // Initial Render
+  renderGallery(allImages, currentVariant.images[0] || product.image);
+  renderSizes(currentVariant.sizes);
+
+  if (product.variants && product.variants.length > 0) {
+    colorContainer.innerHTML = product.variants.map((v, i) => `
+      <div class="color-dot ${i === 0 ? 'active' : ''}" 
+           data-color="${v.color}" 
+           style="background: ${v.colorCode || '#eee'};" 
+           title="${v.color}">
+      </div>
+    `).join('');
+  }
+
+  // Color Selection Logic
+  document.querySelectorAll('.color-dot').forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+        document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+        
+        const variant = product.variants ? product.variants[index] : currentVariant;
+        if (selectedColorText) selectedColorText.textContent = variant.color;
+        
+        const firstVariantImg = (variant.images && variant.images.length > 0) ? variant.images[0] : product.image;
+        if (heroElem) heroElem.src = firstVariantImg;
+        
+        document.querySelectorAll('.thumb-item').forEach(t => {
+            t.classList.toggle('active', t.getAttribute('data-url') === firstVariantImg);
+        });
+
+        renderSizes(variant.sizes);
+    });
+  });
+
+  // Size Selection Logic
+  sizeContainer.onclick = (e) => {
+    const opt = e.target.closest('.size-option');
+    if (opt) {
+        document.querySelectorAll('.size-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        if (selectedSizeText) selectedSizeText.textContent = opt.getAttribute('data-size');
+    }
+  };
+
+  // Gallery Click Logic
+  thumbContainer.onclick = (e) => {
+    const item = e.target.closest('.thumb-item');
+    if (item) {
+        document.querySelectorAll('.thumb-item').forEach(li => li.classList.remove('active'));
+        item.classList.add('active');
+        const newSrc = item.querySelector('img').src;
+        if (heroElem) heroElem.src = newSrc;
+    }
+  };
+
+  // Quantity control
+  const qtyInput = document.getElementById('qty-value');
+  const qtyPlus = document.getElementById('qty-plus');
+  const qtyMinus = document.getElementById('qty-minus');
+  if (qtyPlus && qtyMinus && qtyInput) {
+    qtyPlus.onclick = () => {
+        qtyInput.value = parseInt(qtyInput.value) + 1;
+    };
+    qtyMinus.onclick = () => {
+        let val = parseInt(qtyInput.value);
+        if (val > 1) qtyInput.value = val - 1;
+    };
+  }
+
+  // Buy now click
+  const buyNowBtn = document.getElementById('btn-buy-now-main');
+  if (buyNowBtn) {
+    buyNowBtn.addEventListener('click', async () => {
+      if (addCartBtn) {
+          await addCartBtn.click();
+          window.location.href = 'cart.html';
+      }
+    });
+  }
+
+  // NEW: Redesigned Description Section
+  function renderStructuredDescription() {
+    const container = document.getElementById('product-desc-structured');
+    if (!container) return;
+
+    const sizesAvail = product.variants?.[0]?.sizes?.join(', ') || 'S, M, L, XL';
+    container.innerHTML = `
+      <div class="desc-structured-item">
+          <h4>1. Thông tin sản phẩm</h4>
+          <ul>
+              <li>Kích thước: ${sizesAvail}</li>
+              <li>Kiểu dáng: Form rộng unisex, phù hợp cả nam và nữ.</li>
+              <li>Màu sắc: Đa dạng – dễ phối với mọi phong cách.</li>
+              <li>Nơi sản xuất: Việt Nam.</li>
+          </ul>
+      </div>
+      <div class="desc-structured-item">
+          <h4>2. Chất vải</h4>
+          <ul>
+              <li>Basic: Vải được làm từ 35% cotton tự nhiên và 65% sợi polyester, thân thiện và an toàn cho làn da.</li>
+              <li>Premium: 100% cotton tự nhiên chọn lọc, dệt mật độ cao, xử lý công nghệ kháng khuẩn tiên tiến.</li>
+          </ul>
+      </div>
+      <div class="desc-structured-item">
+          <h4>3. Ưu điểm nổi bật</h4>
+          <ul>
+              <li>Chất vải dầy vừa, co giãn tốt, giữ form chuẩn sau nhiều lần giặt.</li>
+              <li>Không nhăn, không co rút, không xù lông – bền đẹp lâu dài.</li>
+              <li>Giữ màu bền, hình in True HD rõ nét, không bong tróc.</li>
+              <li>Dễ phối cùng quần jean, short, jogger hoặc layer với sơ mi.</li>
+          </ul>
+      </div>
+      <div class="desc-structured-item">
+          <h4>4. Hướng dẫn chọn size</h4>
+          <p>Bạn tham khảo bảng dưới để chọn size phù hợp nhé:</p>
+          <ul>
+              <li>M: Cao <165cm, nặng <55kg</li>
+              <li>L: Cao <170cm, nặng <65kg</li>
+              <li>XL: Cao <180cm, nặng <90kg</li>
+          </ul>
+      </div>
+    `;
+  }
+  renderStructuredDescription();
+
+  const toggleBtn = document.getElementById('toggle-desc-btn');
+  const descWrapper = document.getElementById('desc-wrapper');
+  if (toggleBtn && descWrapper) {
+      toggleBtn.onclick = () => {
+          descWrapper.classList.toggle('collapsed');
+          toggleBtn.textContent = descWrapper.classList.contains('collapsed') ? 'Xem thêm' : 'Ẩn bớt';
+      };
+  }
+
+  // NEW: Classic Tab switching
+  const classicTabs = document.querySelectorAll('.classic-tab');
+  const panels = document.querySelectorAll('.tab-content-classic');
+
+  classicTabs.forEach(tab => {
+    tab.onclick = () => {
+        classicTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        const target = tab.getAttribute('data-tab');
+        panels.forEach(p => p.style.display = 'none');
+        document.getElementById(`tab-panel-${target}`).style.display = 'block';
+    };
+  });
+
+  // NEW: Review logic
+  const openReviewBtn = document.getElementById('open-review-form');
+  const reviewFormBox = document.getElementById('review-form-box');
+  const cancelReviewBtn = document.getElementById('cancel-review');
+  const emptyReviewMsg = document.getElementById('no-reviews-msg');
+
+  if (openReviewBtn && reviewFormBox) {
+      openReviewBtn.onclick = () => {
+          reviewFormBox.style.display = 'block';
+          emptyReviewMsg.style.display = 'none';
+      };
+  }
+
+  if (cancelReviewBtn) {
+      cancelReviewBtn.onclick = () => {
+          reviewFormBox.style.display = 'none';
+          emptyReviewMsg.style.display = 'block';
+      };
+  }
+
+  // Star rating
+  const stars = document.querySelectorAll('.star-rating-input .star');
+  stars.forEach(star => {
+      star.onclick = () => {
+          const val = parseInt(star.getAttribute('data-val'));
+          stars.forEach(s => s.classList.remove('selected'));
+          for (let i = 0; i < val; i++) {
+              stars[i].classList.add('selected');
+          }
+      };
+  });
+
+  // NEW: Suggestions & Recently Viewed Logic
+  async function initSuggestions() {
+      const relatedGrid = document.getElementById('related-products-grid');
+      const recentlyGrid = document.getElementById('recently-viewed-grid');
+      const suggestTabs = document.querySelectorAll('.suggest-tab');
+      const suggestPanels = document.querySelectorAll('.suggest-panel');
+
+      // 1. Fetch Related Products
+      try {
+          const allProducts = await fetchProducts();
+          const pId = productId;
+          const currentCatId = product.category?._id || product.category;
+          
+          let related = allProducts.filter(p => (p._id || p.id) !== pId && ((p.category?._id || p.category) === currentCatId));
+          if (related.length < 10) {
+              related = [...related, ...allProducts.filter(p => (p._id || p.id) !== pId && !related.find(r => (r._id || r.id) === (p._id || p.id)))];
+          }
+          
+          relatedGrid.innerHTML = related.slice(0, 10).map(createProductCard).join('');
+          syncWishlistVisuals();
+      } catch (err) {
+          console.error('Suggestions error:', err);
+      }
+
+      // 2. Track recently viewed
+      let recently = JSON.parse(localStorage.getItem('aura_recently_viewed') || '[]');
+      // Add current product
+      recently = recently.filter(p => (p._id || p.id) !== productId);
+      recently.unshift(product);
+      recently = recently.slice(0, 12); // Keep up to 12
+      localStorage.setItem('aura_recently_viewed', JSON.stringify(recently));
+
+      // 3. Tab switching
+      suggestTabs.forEach(tab => {
+          tab.onclick = () => {
+              suggestTabs.forEach(t => t.classList.remove('active'));
+              tab.classList.add('active');
+              
+              const target = tab.getAttribute('data-tab');
+              suggestPanels.forEach(p => p.style.display = 'none');
+              const targetPanel = document.getElementById(`panel-${target}`);
+              if (targetPanel) targetPanel.style.display = 'block';
+
+              if (target === 'recently') {
+                  const items = JSON.parse(localStorage.getItem('aura_recently_viewed') || '[]');
+                  recentlyGrid.innerHTML = items.map(createProductCard).join('');
+                  syncWishlistVisuals();
+              }
+          };
+      });
+  }
+  initSuggestions();
+
+  // 7. Size Guide Modal
+  const sizeGuideLink = document.querySelector('.size-guide-link');
+  const sizeModal = document.getElementById('size-guide-modal');
+  const sizeModalImg = document.getElementById('size-guide-img');
+
+  if (sizeGuideLink) {
+    if (product.sizeGuideImage) {
+        sizeGuideLink.onclick = (e) => {
+            e.preventDefault();
+            sizeModalImg.src = product.sizeGuideImage;
+            sizeModal.style.display = 'flex';
+        };
+    } else {
+        sizeGuideLink.style.display = 'none';
     }
   }
 
-  // Color selection
-  const colorDots = document.querySelectorAll('.color-dot');
-  colorDots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      colorDots.forEach(d => d.classList.remove('active'));
-      dot.classList.add('active');
-      const selectedColor = document.getElementById('selected-color');
-      if (selectedColor) selectedColor.textContent = dot.getAttribute('data-color');
-    });
-  });
-
-  // Size selection
-  const sizeOptions = document.querySelectorAll('.size-option');
-  sizeOptions.forEach(opt => {
-    opt.addEventListener('click', () => {
-      sizeOptions.forEach(o => o.classList.remove('active'));
-      opt.classList.add('active');
-      const selectedSize = document.getElementById('selected-size');
-      if (selectedSize) selectedSize.textContent = opt.getAttribute('data-size');
-    });
-  });
-
-  // Quantity control
-  const qtyValue = document.getElementById('qty-value');
-  const qtyPlus = document.getElementById('qty-plus');
-  const qtyMinus = document.getElementById('qty-minus');
-
-  if (qtyPlus && qtyMinus && qtyValue) {
-    qtyPlus.addEventListener('click', () => {
-      let val = parseInt(qtyValue.textContent);
-      qtyValue.textContent = val + 1;
-    });
-    qtyMinus.addEventListener('click', () => {
-      let val = parseInt(qtyValue.textContent);
-      if (val > 1) qtyValue.textContent = val - 1;
-    });
+  if (sizeModal) {
+    sizeModal.onclick = (e) => {
+        if (e.target === sizeModal || e.target.closest('.close-modal-btn')) {
+            sizeModal.style.display = 'none';
+        }
+    };
   }
 
-  // Thumbnail click to change main image
-  const thumbItems = document.querySelectorAll('.thumb-item');
-  thumbItems.forEach(item => {
-    item.addEventListener('click', () => {
-      thumbItems.forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      const img = item.querySelector('img');
-      if (img && heroElem) {
-        heroElem.src = img.src;
-      }
-    });
-  });
-
-  // Buy now click
-  const buyNowBtn = document.querySelector('.btn-buy-now');
-  if (buyNowBtn) {
-    buyNowBtn.addEventListener('click', async () => {
-      // For now, Buy Now does the same as Add to Cart but could redirect to checkout
-      await addCartBtn.click();
-      window.location.href = 'cart.html';
-    });
-  }
-
-  // Tab switching
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.getAttribute('data-tab');
-      tabBtns.forEach(b => {
-        b.classList.remove('active');
-        b.style.fontWeight = '500';
-        b.style.color = '#666';
-        b.style.borderBottom = 'none';
-      });
-      btn.classList.add('active');
-      btn.style.fontWeight = '700';
-      btn.style.color = '#000';
-      btn.style.borderBottom = '2px solid #000';
-      
-      // Note: In this simple version, we only have one panel being updated
-      // If we had multiple panels, we'd toggle their hidden attribute here.
-    });
-  });
-
-  // Add to cart click
+  // Add to cart
   const addCartBtn = document.getElementById('add-to-cart-btn');
   if (addCartBtn) {
-    addCartBtn.addEventListener('click', async () => {
+    addCartBtn.onclick = async () => {
       const activeSize = document.querySelector('.size-option.active')?.getAttribute('data-size') || 'L';
-      const qtyStr = qtyValue ? qtyValue.textContent : '1';
+      const activeColor = document.querySelector('.color-dot.active')?.getAttribute('data-color') || 'Mặc định';
+      const qtyStr = qtyInput ? qtyInput.value : '1';
       
       addCartBtn.disabled = true;
       const originalText = addCartBtn.textContent;
@@ -137,14 +368,60 @@ async function initDetail() {
       try {
         await addToCart(product._id, Number(qtyStr), activeSize);
         updateCartBadge();
-        alert('Đã thêm sản phẩm vào giỏ hàng!');
+        const { showToast } = await import('./common.js');
+        showToast('Thành công', `Đã thêm ${qtyStr} sản phẩm (${activeColor} - Size ${activeSize}) vào giỏ hàng!`);
       } catch (error) {
-        alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
+        const { showToast } = await import('./common.js');
+        showToast('Lỗi', 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.', 'error');
       } finally {
         addCartBtn.disabled = false;
         addCartBtn.textContent = originalText;
       }
-    });
+    };
+  }
+
+  // 8. Wishlist & Share Logic
+  const wishBtn = document.getElementById('detail-wishlist-btn');
+  const shareBtn = document.getElementById('detail-share-btn');
+
+  if (wishBtn) {
+    wishBtn.onclick = async () => {
+        const userInfo = localStorage.getItem('userInfo');
+        if (!userInfo) {
+            const { showToast } = await import('./common.js');
+            showToast('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để lưu sản phẩm yêu thích', 'error');
+            return;
+        }
+
+        try {
+            const { toggleWishlist } = await import('./api.js');
+            const { showToast } = await import('./common.js');
+            const res = await toggleWishlist(productId);
+            window.AURELIA_WISH_LIST = res.wishlist;
+            wishBtn.classList.toggle('active');
+            showToast('Thành công', 'Đã cập nhật danh sách yêu thích');
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    
+    if (window.AURELIA_WISH_LIST) {
+        if (window.AURELIA_WISH_LIST.some(id => (id._id || id) === productId)) {
+            wishBtn.classList.add('active');
+        }
+    }
+  }
+
+  if (shareBtn) {
+    shareBtn.onclick = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            const { showToast } = await import('./common.js');
+            showToast('Thành công', 'Đã sao chép liên kết sản phẩm vào bộ nhớ tạm!');
+        } catch (err) {
+            alert('Không thể sao chép liên kết.');
+        }
+    };
   }
 }
 

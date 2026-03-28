@@ -110,6 +110,16 @@ export async function clearCart() {
   return res.json();
 }
 
+export async function updateCartItemQuantity(itemId, quantity) {
+  const res = await fetch(`${API_URL}/cart/${itemId}`, {
+    method: 'PATCH',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ quantity }),
+  });
+  if (!res.ok) throw new Error('Failed to update cart item quantity');
+  return res.json();
+}
+
 // User Profile
 export async function getUserProfile() {
   const res = await fetch(`${API_URL}/auth/profile`, {
@@ -222,4 +232,22 @@ export async function deleteProduct(id) {
   return res.json();
 }
 
+export async function toggleWishlist(productId) {
+  const res = await fetch(`${API_URL}/auth/wishlist`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ productId }),
+  });
+  if (!res.ok) throw new Error('Failed to update wishlist');
+  return res.json();
+}
 
+export async function trackViewedProduct(productId) {
+  const res = await fetch(`${API_URL}/auth/viewed`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ productId }),
+  });
+  if (!res.ok) throw new Error('Failed to track viewed product');
+  return res.json();
+}
