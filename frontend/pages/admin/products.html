@@ -7,87 +7,30 @@
     <link rel="stylesheet" href="../../assets/css/styles.css" />
     <link rel="stylesheet" href="../../assets/css/admin.css" />
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700;800&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
     </style>
   </head>
   <body class="admin-body">
-    <!-- Sidebar -->
-    <aside class="admin-sidebar">
-      <div class="admin-logo">
-        <h1>AURELIA</h1>
-        <small>Luxury Editorial Admin</small>
-      </div>
-
-      <nav class="admin-nav">
-        <a href="dashboard.html" class="admin-nav-item">
-          <span>📊</span>
-          Dashboard
-        </a>
-        <a href="products.html" class="admin-nav-item active">
-          <span>📦</span>
-          Products
-        </a>
-        <a href="orders.html" class="admin-nav-item">
-          <span>🛒</span>
-          Orders
-        </a>
-        <a href="customers.html" class="admin-nav-item">
-          <span>👥</span>
-          Customers
-        </a>
-        <a href="settings.html" class="admin-nav-item">
-          <span>⚙️</span>
-          Settings
-        </a>
-      </nav>
-
-      <div class="admin-sidebar-footer">
-        <div class="upgrade-card">
-          <button id="upgrade-btn">UPGRADE PLAN</button>
-        </div>
-        <a href="#" class="admin-nav-item" id="admin-logout">
-          <span>🚪</span>
-          Logout
-        </a>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <div class="admin-content">
-      <!-- Header -->
-      <header class="admin-header">
-        <div class="admin-header-left">
-          <span class="admin-header-title">Products Management</span>
-          <a href="../../index.html" class="btn-view-store">View Store</a>
-        </div>
-        <div class="admin-header-right">
-          <div class="admin-notif">🔔</div>
-          <div class="admin-user-pill">
-            <span>👤</span>
-            <span id="admin-name">Director</span>
-          </div>
-        </div>
-      </header>
-
+    <div id="admin-app">
       <!-- Main Section -->
       <main class="dashboard-main">
         <div class="dashboard-title-row">
           <div>
-            <h2>Inventory Products</h2>
-            <p>Manage your luxury collection and stock levels.</p>
+            <h2>Danh sách Sản phẩm</h2>
+            <p>Quản lý kho hàng và thông tin sản phẩm.</p>
           </div>
-          <button class="btn-export" id="add-product-btn">ADD NEW PRODUCT</button>
+          <button class="btn-export" id="add-product-btn">THÊM SẢN PHẨM MỚI</button>
         </div>
 
         <div class="table-card">
           <table class="admin-table">
             <thead>
               <tr>
-                <th>Product Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>Sản phẩm</th>
+                <th>Danh mục</th>
+                <th>Giá bán</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
               </tr>
             </thead>
             <tbody id="admin-products-body">
@@ -96,10 +39,6 @@
           </table>
         </div>
 
-        <!-- Footer -->
-        <footer class="footer-admin">
-          <span>© <span id="current-year">2024</span> AURELIA EDITORIAL GROUP</span>
-        </footer>
       </main>
     </div>
 
@@ -107,40 +46,40 @@
     <div class="modal-overlay" id="product-modal">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 id="modal-title">Edit Product</h2>
+          <h2 id="modal-title">Cập nhật Sản phẩm</h2>
           <button class="btn-close-modal" id="close-modal">&times;</button>
         </div>
         <form id="product-form">
           <input type="hidden" id="edit-product-id" />
           <div class="admin-input-group">
-            <label class="admin-label">Product Name</label>
+            <label class="admin-label">Tên sản phẩm</label>
             <input class="admin-input" id="prod-name" required />
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
             <div class="admin-input-group">
-              <label class="admin-label">Price (đ)</label>
+              <label class="admin-label">Giá bán (đ)</label>
               <input type="number" class="admin-input" id="prod-price" required />
             </div>
             <div class="admin-input-group">
-              <label class="admin-label">Category</label>
+              <label class="admin-label">Danh mục</label>
               <select class="admin-input" id="prod-category" required>
                 <!-- JS Injected -->
               </select>
             </div>
           </div>
           <div class="admin-input-group">
-            <label class="admin-label">Stock Quantity</label>
+            <label class="admin-label">Tồn kho</label>
             <input type="number" class="admin-input" id="prod-stock" required />
           </div>
           <div class="admin-input-group">
-            <label class="admin-label">Image URL</label>
+            <label class="admin-label">Đường dẫn ảnh</label>
             <input class="admin-input" id="prod-image" placeholder="/assets/images/products/..." required />
           </div>
           <div class="admin-input-group">
-            <label class="admin-label">Description</label>
+            <label class="admin-label">Mô tả</label>
             <textarea class="admin-input" id="prod-desc" rows="3"></textarea>
           </div>
-          <button type="submit" class="btn-admin-save" style="width:100%">SAVE CHANGES</button>
+          <button type="submit" class="btn-admin-save" style="width:100%">LƯU THAY ĐỔI</button>
         </form>
       </div>
     </div>

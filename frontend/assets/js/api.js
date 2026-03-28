@@ -141,6 +141,15 @@ export async function createOrder(orderData) {
   return res.json();
 }
 
+export async function updateOrderToDelivered(id) {
+  const res = await fetch(`${API_URL}/orders/${id}/deliver`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to update order to delivered');
+  return res.json();
+}
+
 export async function getMyOrders() {
   const res = await fetch(`${API_URL}/orders/myorders`, {
     headers: getAuthHeaders(),
@@ -163,6 +172,15 @@ export async function fetchAllUsers() {
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error('Failed to load users');
+  return res.json();
+}
+
+export async function deleteUser(id) {
+  const res = await fetch(`${API_URL}/users/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to delete user');
   return res.json();
 }
 

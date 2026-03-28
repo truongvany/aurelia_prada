@@ -3,13 +3,15 @@ import {
   fetchAllOrders, 
   fetchAllUsers, 
   fetchDashboardStats, 
-  logoutUser,
   createProduct,
   updateProduct,
   deleteProduct,
-  fetchCategories
+  fetchCategories,
+  updateOrderToDelivered,
+  deleteUser
 } from './api.js';
 import { formatVnd } from './common.js';
+import { renderAdminLayout } from './admin-layout.js';
 
 async function initDashboard() {
   const chartEl = document.getElementById('dashboard-chart');
@@ -18,11 +20,11 @@ async function initDashboard() {
 
   try {
     const data = await fetchDashboardStats();
-    if (!data.success) throw new Error('API Error');
+    if (!data.success) throw new Error('Lỗi API');
 
     const { stats, recentSales, monthlySales } = data;
 
-    // 1. Update KPI Cards
+    // 1. Cập nhật thẻ KPI
     document.getElementById('stat-revenue').textContent = formatVnd(stats.totalRevenue);
     document.getElementById('stat-orders').textContent = stats.totalOrders.toLocaleString();
     document.getElementById('stat-customers').textContent = stats.totalUsers.toLocaleString();
@@ -37,12 +39,12 @@ async function initDashboard() {
         return `
             <div class="bar-item">
                 <div class="bar-pillar ${isActive}" style="height: ${height}%"></div>
-                <span class="bar-label">${s.month}</span>
+                <span class="bar-label">Tháng ${s.month.split('-')[1]}</span>
             </div>
         `;
     }).join('');
 
-    // 3. Render Recent Sales
+    // 3. Render Đơn hàng gần đây
     recentSalesEl.innerHTML = recentSales.map(sale => {
         const firstItem = sale.orderItems[0];
         const timeAgo = getTimeAgo(new Date(sale.createdAt));
@@ -53,7 +55,7 @@ async function initDashboard() {
                     <span class="sale-name">${firstItem.name}</span>
                     <span class="sale-time">${timeAgo}</span>
                 </div>
-                <div class="sale-amount" style="color: ${sale.status === 'Cancelled' ? '#be3f3f' : '#1A1A1A'}">
+                <div class="sale-amount" style="color: ${sale.status === 'Cancelled' ? '#C53030' : 'var(--admin-text-main)'}">
                     ${sale.status === 'Cancelled' ? '-' : '+'}${formatVnd(sale.totalPrice)}
                 </div>
             </div>
@@ -61,23 +63,23 @@ async function initDashboard() {
     }).join('');
 
   } catch (err) {
-    console.error('Error loading dashboard stats:', err);
+    console.error('Lỗi tải dữ liệu Tổng quan:', err);
   }
 }
 
 function getTimeAgo(date) {
     const seconds = Math.floor((new Date() - date) / 1000);
     let interval = seconds / 31536000;
-    if (interval > 1) return Math.floor(interval) + " years ago";
+    if (interval > 1) return Math.floor(interval) + " năm trước";
     interval = seconds / 2592000;
-    if (interval > 1) return Math.floor(interval) + " months ago";
+    if (interval > 1) return Math.floor(interval) + " tháng trước";
     interval = seconds / 86400;
-    if (interval > 1) return Math.floor(interval) + " days ago";
+    if (interval > 1) return Math.floor(interval) + " ngày trước";
     interval = seconds / 3600;
-    if (interval > 1) return Math.floor(interval) + " hours ago";
+    if (interval > 1) return Math.floor(interval) + " giờ trước";
     interval = seconds / 60;
-    if (interval > 1) return Math.floor(interval) + " mins ago";
-    return Math.floor(seconds) + " secs ago";
+    if (interval > 1) return Math.floor(interval) + " phút trước";
+    return Math.floor(seconds) + " giây trước";
 }
 
 async function renderProducts() {
@@ -88,18 +90,22 @@ async function renderProducts() {
     const products = await fetchProducts();
     body.innerHTML = products.map((p) => `
       <tr>
-        <td>${p.name}</td>
-        <td>${p.category?.name || 'Unknown'}</td>
-        <td>${formatVnd(p.price)}</td>
-        <td><span class="status-pill ${p.stock <= 0 ? 'danger' : p.stock <= 20 ? 'warning' : 'success'}">${p.stock <= 0 ? 'Out of Stock' : 'Active'}</span></td>
         <td>
-          <button class="btn-admin-action edit" data-id="${p._id}" data-prod='${JSON.stringify(p).replace(/'/g, "&apos;")}'>EDIT</button>
-          <button class="btn-admin-action delete" data-id="${p._id}">DEL</button>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="${p.image}" alt="${p.name}" style="width: 40px; height: 40px; object-fit: cover; border: 1px solid var(--admin-border);" />
+            <span style="font-weight: 700;">${p.name}</span>
+          </div>
+        </td>
+        <td>${p.category?.name || 'Chưa phân loại'}</td>
+        <td>${formatVnd(p.price)}</td>
+        <td><span class="status-pill ${p.stock <= 0 ? 'danger' : p.stock <= 20 ? 'warning' : 'success'}">${p.stock <= 0 ? 'Hết hàng' : 'Đang bán'}</span></td>
+        <td>
+          <button class="btn-admin-action edit" data-id="${p._id}" data-prod='${JSON.stringify(p).replace(/'/g, "&apos;")}'>SỬA</button>
+          <button class="btn-admin-action delete" data-id="${p._id}">XÓA</button>
         </td>
       </tr>
     `).join('');
 
-    // Attach row events
     body.querySelectorAll('.edit').forEach(btn => {
       btn.addEventListener('click', () => {
         const prod = JSON.parse(btn.getAttribute('data-prod'));
@@ -109,7 +115,7 @@ async function renderProducts() {
 
     body.querySelectorAll('.delete').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (confirm('Are you sure you want to delete this product?')) {
+        if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
           try {
             await deleteProduct(btn.getAttribute('data-id'));
             renderProducts();
@@ -119,7 +125,7 @@ async function renderProducts() {
     });
 
   } catch (err) {
-    body.innerHTML = `<tr><td colspan="5">Error loading products</td></tr>`;
+    body.innerHTML = `<tr><td colspan="5">Lỗi tải danh sách sản phẩm</td></tr>`;
   }
 }
 
@@ -131,34 +137,37 @@ async function renderOrders() {
     const orders = await fetchAllOrders();
     body.innerHTML = orders.map((o) => `
       <tr>
-        <td>${o._id.substring(0, 8).toUpperCase()}</td>
-        <td>${o.user?.name || 'Guest'}</td>
-        <td>${new Date(o.createdAt).toLocaleDateString()}</td>
-        <td>${o.orderItems?.length || 0}</td>
+        <td><strong>#${o._id.substring(0, 8).toUpperCase()}</strong></td>
+        <td>${o.user?.name || 'Khách vãng lai'}</td>
+        <td>${new Date(o.createdAt).toLocaleDateString('vi-VN')}</td>
+        <td>${o.orderItems?.length || 0} mục</td>
         <td>${formatVnd(o.totalPrice)}</td>
-        <td><span class="status-pill ${o.status === 'Delivered' ? 'success' : o.status === 'Processing' ? 'warning' : o.status === 'Shipped' ? 'info' : 'danger'}">${o.status}</span></td>
-        <td><button class="btn-admin-action edit view-details" data-id="${o._id}">Chi tiết</button></td>
+        <td><span class="status-pill ${o.status === 'Delivered' ? 'success' : o.status === 'Processing' ? 'warning' : o.status === 'Shipped' ? 'info' : 'danger'}">${o.status === 'Delivered' ? 'Đã giao' : o.status === 'Processing' ? 'Đang xử lý' : o.status === 'Cancelled' ? 'Hủy' : o.status}</span></td>
+        <td>
+            <button class="btn-admin-action edit view-details" data-id="${o._id}">CHI TIẾT</button>
+            ${o.status !== 'Delivered' && o.status !== 'Cancelled' ? `<button class="btn-admin-action mark-delivered" data-id="${o._id}" style="color:var(--success); border-color:var(--success);">ĐÃ GIAO</button>` : ''}
+        </td>
       </tr>
-      <tr class="order-details-row" id="details-${o._id}" style="display:none; background: #fafafa;">
+      <tr class="order-details-row" id="details-${o._id}" style="display:none; background: var(--admin-sidebar);">
         <td colspan="7" style="padding: 20px;">
           <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px;">
             <div>
-              <h5 style="margin-top:0">Thông tin giao hàng</h5>
-              <p style="font-size:13px; margin:5px 0;"><strong>Địa chỉ:</strong> ${o.shippingAddress?.street}, ${o.shippingAddress?.city}</p>
-              <p style="font-size:13px; margin:5px 0;"><strong>Thanh toán:</strong> ${o.paymentMethod}</p>
-              <p style="font-size:13px; margin:5px 0;"><strong>Phí ship:</strong> ${formatVnd(o.shippingPrice)}</p>
+              <h5 style="margin-top:0; font-size: 13px; text-transform: uppercase;">Thông tin Giao hàng</h5>
+              <p style="font-size:12px; margin:5px 0;"><strong>Địa chỉ:</strong> ${o.shippingAddress?.street}, ${o.shippingAddress?.city}</p>
+              <p style="font-size:12px; margin:5px 0;"><strong>Thanh toán:</strong> ${o.paymentMethod}</p>
+              <p style="font-size:12px; margin:5px 0;"><strong>Phí Ship:</strong> ${formatVnd(o.shippingPrice)}</p>
             </div>
             <div>
-              <h5 style="margin-top:0">Sản phẩm</h5>
-              <table style="width:100%; font-size: 13px; border-collapse: collapse;">
+              <h5 style="margin-top:0; font-size: 13px; text-transform: uppercase;">Sản phẩm</h5>
+              <table style="width:100%; font-size: 12px; border-collapse: collapse;">
                 ${o.orderItems.map(item => `
                   <tr>
-                    <td style="padding: 5px 0; border-bottom: 1px solid #eee;">${item.name} x ${item.qty}</td>
-                    <td style="padding: 5px 0; border-bottom: 1px solid #eee; text-align:right;">${formatVnd(item.price * item.qty)}</td>
+                    <td style="padding: 5px 0; border-bottom: 1px dotted var(--admin-border);">${item.name} x ${item.qty}</td>
+                    <td style="padding: 5px 0; border-bottom: 1px dotted var(--admin-border); text-align:right;">${formatVnd(item.price * item.qty)}</td>
                   </tr>
                 `).join('')}
               </table>
-              <div style="text-align:right; font-weight:800; margin-top:10px;">Tổng: ${formatVnd(o.totalPrice)}</div>
+              <div style="text-align:right; font-weight:800; margin-top:10px; font-size: 14px;">Tổng cộng: ${formatVnd(o.totalPrice)}</div>
             </div>
           </div>
         </td>
@@ -173,8 +182,19 @@ async function renderOrders() {
       });
     });
 
+    body.querySelectorAll('.mark-delivered').forEach(btn => {
+      btn.addEventListener('click', async () => {
+         if(confirm('Xác nhận Đơn hàng đã được giao thành công?')) {
+             try {
+                 await updateOrderToDelivered(btn.getAttribute('data-id'));
+                 renderOrders();
+             } catch(err) { alert(err.message); }
+         }
+      });
+    });
+
   } catch (err) {
-    body.innerHTML = `<tr><td colspan="7">Error loading orders</td></tr>`;
+    body.innerHTML = `<tr><td colspan="7">Lỗi tải danh sách đơn hàng</td></tr>`;
   }
 }
 
@@ -186,15 +206,29 @@ async function renderCustomers() {
     const users = await fetchAllUsers();
     body.innerHTML = users.map((c) => `
       <tr>
-        <td>${c.name}</td>
-        <td>${c.email}<br><small>${c.phone || 'N/A'}</small></td>
-        <td>Admin: ${c.role === 'admin' ? 'Yes' : 'No'}</td>
-        <td>${c.createdAt ? new Date(c.createdAt).toLocaleDateString() : 'N/A'}</td>
-        <td><span class="status-pill ${c.role === 'admin' ? 'info' : 'success'}">${c.role}</span></td>
+        <td><strong>${c.name}</strong></td>
+        <td>${c.email}<br><small style="color:var(--admin-text-muted);">${c.phone || 'Chưa cung cấp SĐT'}</small></td>
+        <td><span class="status-pill ${c.role === 'admin' ? 'info' : 'success'}">${c.role === 'admin' ? 'QUẢN TRỊ VIÊN' : 'NGƯỜI DÙNG'}</span></td>
+        <td>${c.createdAt ? new Date(c.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
+        <td>
+           ${c.role !== 'admin' ? `<button class="btn-admin-action delete delete-user" data-id="${c._id}">XÓA</button>` : ''}
+        </td>
       </tr>
     `).join('');
+
+    body.querySelectorAll('.delete-user').forEach(btn => {
+      btn.addEventListener('click', async () => {
+         if(confirm('Hành động này không thể hoàn tác. Bạn có chắc chắn xóa tài khoản này?')) {
+             try {
+                 await deleteUser(btn.getAttribute('data-id'));
+                 renderCustomers();
+             } catch(err) { alert(err.message); }
+         }
+      });
+    });
+
   } catch (err) {
-    body.innerHTML = `<tr><td colspan="5">Error loading customers</td></tr>`;
+    body.innerHTML = `<tr><td colspan="5">Lỗi tải danh sách khách hàng</td></tr>`;
   }
 }
 
@@ -204,7 +238,6 @@ async function openProductModal(product = null) {
   const title = document.getElementById('modal-title');
   const form = document.getElementById('product-form');
   
-  // Fill Categories
   const categorySelect = document.getElementById('prod-category');
   try {
     const cats = await fetchCategories();
@@ -212,7 +245,7 @@ async function openProductModal(product = null) {
   } catch (err) { console.error(err); }
 
   if (product) {
-    title.textContent = 'Edit Product';
+    title.textContent = 'Cập nhật Sản phẩm';
     document.getElementById('edit-product-id').value = product._id;
     document.getElementById('prod-name').value = product.name;
     document.getElementById('prod-price').value = product.price;
@@ -221,7 +254,7 @@ async function openProductModal(product = null) {
     document.getElementById('prod-image').value = product.image;
     document.getElementById('prod-desc').value = product.description || '';
   } else {
-    title.textContent = 'Add New Product';
+    title.textContent = 'Thêm Sản phẩm mới';
     form.reset();
     document.getElementById('edit-product-id').value = '';
   }
@@ -276,26 +309,20 @@ function setupSettings() {
     if (form && notice) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            notice.textContent = 'Configuration saved successfully (Simulated)';
+            notice.textContent = 'Đã lưu cấu hình (Mô phỏng)';
             setTimeout(() => { notice.textContent = ''; }, 3000);
         });
     }
 }
 
-function setupLogout() {
-    const btn = document.getElementById('admin-logout');
-    if (btn) {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            logoutUser();
-        });
-    }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
+  // 1. Dựng Layout chung (Sidebar, Header, Dark Mode...)
+  renderAdminLayout();
+
   const path = window.location.pathname;
   
-  if (path.includes('dashboard.html')) initDashboard();
+  // 2. Tải Data tùy theo trang
+  if (path.includes('dashboard.html') || path === '/pages/admin/' || path === '/pages/admin') initDashboard();
   if (path.includes('products.html')) {
     renderProducts();
     setupProductModal();
@@ -304,8 +331,4 @@ document.addEventListener('DOMContentLoaded', () => {
   if (path.includes('customers.html')) renderCustomers();
   
   setupSettings();
-  setupLogout();
-
-  const yearEl = document.getElementById('current-year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
 });

@@ -7,118 +7,57 @@
     <link rel="stylesheet" href="../../assets/css/styles.css" />
     <link rel="stylesheet" href="../../assets/css/admin.css" />
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700;800&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
     </style>
   </head>
   <body class="admin-body">
-    <!-- Sidebar -->
-    <aside class="admin-sidebar">
-      <div class="admin-logo">
-        <h1>AURELIA</h1>
-        <small>Luxury Editorial Admin</small>
-      </div>
-
-      <nav class="admin-nav">
-        <a href="dashboard.html" class="admin-nav-item">
-          <span>📊</span>
-          Dashboard
-        </a>
-        <a href="products.html" class="admin-nav-item">
-          <span>📦</span>
-          Products
-        </a>
-        <a href="orders.html" class="admin-nav-item">
-          <span>🛒</span>
-          Orders
-        </a>
-        <a href="customers.html" class="admin-nav-item">
-          <span>👥</span>
-          Customers
-        </a>
-        <a href="settings.html" class="admin-nav-item active">
-          <span>⚙️</span>
-          Settings
-        </a>
-      </nav>
-
-      <div class="admin-sidebar-footer">
-        <div class="upgrade-card">
-          <button id="upgrade-btn">UPGRADE PLAN</button>
-        </div>
-        <a href="#" class="admin-nav-item" id="admin-logout">
-          <span>🚪</span>
-          Logout
-        </a>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <div class="admin-content">
-      <!-- Header -->
-      <header class="admin-header">
-        <div class="admin-header-left">
-          <span class="admin-header-title">System Settings</span>
-          <a href="../../index.html" class="btn-view-store">View Store</a>
-        </div>
-        <div class="admin-header-right">
-          <div class="admin-notif">🔔</div>
-          <div class="admin-user-pill">
-            <span>👤</span>
-            <span id="admin-name">Director</span>
-          </div>
-        </div>
-      </header>
-
+    <div id="admin-app">
       <!-- Main Section -->
       <main class="dashboard-main">
         <div class="dashboard-title-row">
           <div>
-            <h2>Global Configuration</h2>
-            <p>Define your store identity and system preferences.</p>
+            <h2>Cấu hình Hệ thống</h2>
+            <p>Thiết lập thông tin thương hiệu và tùy chỉnh.</p>
           </div>
         </div>
 
         <div class="chart-card form-section">
           <form id="settings-form">
             <div class="admin-input-group">
-              <label class="admin-label">Store Brand Name</label>
+              <label class="admin-label">Tên Thương Hiệu</label>
               <input class="admin-input" value="AURELIA PRADA" />
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
               <div class="admin-input-group">
-                <label class="admin-label">Support Email</label>
+                <label class="admin-label">Email hỗ trợ</label>
                 <input class="admin-input" value="concierge@aureliaprda.com" />
               </div>
               <div class="admin-input-group">
-                <label class="admin-label">Official Hotline</label>
+                <label class="admin-label">Hotline</label>
                 <input class="admin-input" value="+84 (0) 898 123 456" />
               </div>
             </div>
 
             <div class="admin-input-group">
-              <label class="admin-label">Default Currency</label>
+              <label class="admin-label">Đơn vị tiền tệ</label>
               <select class="admin-input" style="appearance: auto;">
-                <option>VND (đ) - Vietnamese Dong</option>
-                <option>USD ($) - US Dollar</option>
+                <option>VND (đ) - Đồng Việt Nam</option>
+                <option>USD ($) - Đô la Mỹ</option>
                 <option>EUR (€) - Euro</option>
               </select>
             </div>
 
             <div class="admin-input-group">
-              <label class="admin-label">Flagship Store Address</label>
-              <textarea class="admin-input" rows="4">123 Luxury Editorial Avenue, District 1, Ho Chi Minh City, Vietnam</textarea>
+              <label class="admin-label">Địa chỉ Trụ sở</label>
+              <textarea class="admin-input" rows="4">123 Đại lộ Cao Cấp, Quận 1, Thành phố Hồ Chí Minh, Việt Nam</textarea>
             </div>
 
-            <button type="submit" class="btn-admin-save">SAVE CONFIGURATION</button>
+            <button type="submit" class="btn-admin-save">LƯU CẤU HÌNH</button>
             <p id="settings-notice" style="margin-top: 15px; font-size: 13px; font-weight: 700; color: #1E7E34;"></p>
           </form>
         </div>
 
-        <!-- Footer -->
-        <footer class="footer-admin">
-          <span>© <span id="current-year">2024</span> AURELIA EDITORIAL GROUP</span>
-        </footer>
       </main>
     </div>
 
