@@ -3,113 +3,196 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aurelia | Contact</title>
+    <title>Liên hệ | AURELIA PRADA</title>
     <link rel="stylesheet" href="../assets/css/styles.css" />
     <style>
-      .contact-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: 1.5rem; }
-      .info-item { display: flex; gap: 0.8rem; align-items: flex-start; margin-bottom: 1.25rem; }
-      .info-badge { width: 44px; height: 44px; border-radius: 50%; background: #f8f9fa; display: grid; place-items: center; box-shadow: 0 3px 12px rgba(0,0,0,.08); }
-      .info-badge svg { width: 20px; height: 20px; color: #333; }
-      .card-extra { background-color: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,.08); border: 1px solid #f1f1f1; }
-      .contact-form .form-row { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
-      .contact-form .form-row-full { grid-column: 1 / -1; }
-      @media (max-width: 991px) {
-        .contact-grid { grid-template-columns: 1fr; }
-        .contact-form .form-row { grid-template-columns: 1fr; }
+      :root {
+        --aura-accent: #000;
+        --aura-muted: #888;
+        --aura-bg-soft: #fcfcfc;
+      }
+      body { background-color: #fff; }
+
+      /* Wrap everything in a container to fix the "crooked" look */
+      .contact-page-wrapper {
+        padding: 60px 0;
+      }
+
+      .contact-container {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        min-height: 700px;
+        background: #fff;
+        border: 1px solid #f0f0f0;
+      }
+
+      .contact-visual {
+        background: url('https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+        position: relative;
+        overflow: hidden;
+      }
+      .contact-visual::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.05); /* Very subtle overlay */
+      }
+
+      .contact-content {
+        padding: 60px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .contact-header { margin-bottom: 50px; }
+      .contact-header h1 { 
+        font-size: 3rem; 
+        font-weight: 800; 
+        text-transform: uppercase; 
+        letter-spacing: 4px; 
+        margin-bottom: 15px;
+        line-height: 1;
+      }
+      .contact-header p { 
+        font-size: 13px; 
+        color: var(--aura-muted); 
+        max-width: 400px; 
+        line-height: 1.8;
+      }
+
+      .aura-form { display: grid; gap: 25px; }
+      .input-field label { 
+        font-size: 10px; 
+        font-weight: 800; 
+        text-transform: uppercase; 
+        color: #999; 
+        letter-spacing: 1.5px;
+        display: block;
+        margin-bottom: 5px;
+      }
+      .input-field input, .input-field textarea {
+        width: 100%;
+        border: none;
+        border-bottom: 1.5px solid #eee;
+        padding: 10px 0;
+        font-size: 14px;
+        background: transparent;
+        transition: 0.3s;
+        outline: none;
+      }
+      .input-field input:focus, .input-field textarea:focus {
+        border-color: #000;
+      }
+
+      .btn-submit {
+        background: #000;
+        color: #fff;
+        border: none;
+        padding: 18px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 15px;
+      }
+      .btn-submit:hover { opacity: 0.8; }
+
+      .contact-info-footer {
+        margin-top: 60px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        border-top: 1px solid #f5f5f5;
+        padding-top: 30px;
+      }
+      .info-block h5 { 
+        font-size: 10px; 
+        font-weight: 800; 
+        text-transform: uppercase; 
+        color: #aaa; 
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+      }
+      .info-block p { font-size: 13px; line-height: 1.5; font-weight: 600; }
+
+      @media (max-width: 1024px) {
+        .contact-container { grid-template-columns: 1fr; }
+        .contact-visual { height: 350px; }
+        .contact-content { padding: 40px; }
+        .contact-header h1 { font-size: 2.5rem; }
       }
     </style>
   </head>
   <body>
-    <header class="top-nav">
-      <div class="container nav-inner">
-        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
-        <nav class="nav-links" data-nav-links>
-          <a href="../index.html" data-nav-link>Home</a>
-          <a href="shop.html" data-nav-link>Shop</a>
-          <a href="about.html" data-nav-link>About</a>
-          <a href="contact.html" data-nav-link>Contact</a>
-        </nav>
-        <a class="brand" href="../index.html">AURELIA</a>
-        <div class="nav-actions">
-          <a class="nav-icon" href="profile.html">U</a>
-          <a class="nav-icon" href="cart.html">B</a>
+    <header class="top-nav"></header>
+
+    <div class="container contact-page-wrapper">
+      <div class="contact-container">
+        <!-- Visual Side -->
+        <div class="contact-visual"></div>
+        
+        <!-- Content Side -->
+        <div class="contact-content">
+          <div class="contact-header">
+            <h1>Liên hệ</h1>
+            <p>AURELIA trân trọng mọi phản hồi từ khách hàng. Hãy kết nối với chúng tôi để nhận được sự hỗ trợ tận tâm nhất.</p>
+          </div>
+
+          <form id="contact-form" class="aura-form">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <div class="input-field">
+                <label>Họ</label>
+                <input type="text" placeholder="Nguyễn" required>
+              </div>
+              <div class="input-field">
+                <label>Tên</label>
+                <input type="text" placeholder="Anh" required>
+              </div>
+            </div>
+            
+            <div class="input-field">
+              <label>Địa chỉ Email</label>
+              <input type="email" placeholder="example@mail.com" required>
+            </div>
+
+            <div class="input-field">
+              <label>Bạn cần hỗ trợ điều gì?</label>
+              <textarea rows="3" placeholder="Lời nhắn của bạn..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">Gửi thông điệp</button>
+            <p id="form-feedback" style="display:none; text-align:center; color:#27ae60; font-weight:800; font-size:11px; margin-top:15px; text-transform:uppercase;"></p>
+          </form>
+
+          <footer class="contact-info-footer">
+            <div class="info-block">
+              <h5>Địa chỉ Flagship</h5>
+              <p>123 Fashion Avenue<br>Quận Hoàn Kiếm, Hà Nội</p>
+            </div>
+            <div class="info-block">
+              <h5>Liên lạc nhanh</h5>
+              <p>0246 662 3434<br>hello@aurelia.com</p>
+            </div>
+          </footer>
         </div>
       </div>
-    </header>
+    </div>
 
-    <main class="section">
-      <div class="container contact-grid">
-        <section class="card-extra">
-          <h1 class="font-serif fw-bold mb-4">Get in Touch</h1>
-          <p class="text-muted mb-4">Our customer service team is available Monday through Friday, 9am to 5pm EST. We are happy to help with any style inquiry or order question.</p>
+    <footer class="site-footer"></footer>
 
-          <div class="info-item">
-            <div class="info-badge" aria-hidden="true">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7A8.5 8.5 0 014 14.3a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 018.5-8.5 8.5 8.5 0 018.4 8.5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12a3 3 0 100-6 3 3 0 000 6z"/></svg>
-            </div>
-            <div>
-              <h5 class="font-serif fw-bold mb-1">Our Studio</h5>
-              <p class="text-muted mb-0">123 Fashion Avenue, New York, NY 10001</p>
-            </div>
-          </div>
-
-          <div class="info-item">
-            <div class="info-badge" aria-hidden="true">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h2l3.6 7.59-1.35 2.45A1 1 0 007 17h12v-2H8.42a.5.5 0 01-.45-.28L7.1 13h7.45a1 1 0 00.92-.62l2.4-5.25H3.21"/></svg>
-            </div>
-            <div>
-              <h5 class="font-serif fw-bold mb-1">Phone</h5>
-              <p class="text-muted mb-0">+1 (555) 123-4567</p>
-            </div>
-          </div>
-
-          <div class="info-item">
-            <div class="info-badge" aria-hidden="true">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 0v8a2 2 0 002 2h14a2 2 0 002-2V8m-18 0L12 13l9-5"/></svg>
-            </div>
-            <div>
-              <h5 class="font-serif fw-bold mb-1">Email</h5>
-              <p class="text-muted mb-0">hello@aurelia.com</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="card-extra">
-          <h3 class="font-serif fw-bold mb-4">Send a Message</h3>
-          <form id="contact-form" class="contact-form" novalidate>
-            <div class="form-row">
-              <div><label class="form-label small fw-medium text-muted">First Name</label><input class="input" type="text" name="firstName" placeholder="Jane" required></div>
-              <div><label class="form-label small fw-medium text-muted">Last Name</label><input class="input" type="text" name="lastName" placeholder="Doe" required></div>
-              <div class="form-row-full"><label class="form-label small fw-medium text-muted">Email Address</label><input class="input" type="email" name="email" placeholder="jane@example.com" required></div>
-              <div class="form-row-full"><label class="form-label small fw-medium text-muted">Subject</label><input class="input" type="text" name="subject" placeholder="How can we help?" required></div>
-              <div class="form-row-full"><label class="form-label small fw-medium text-muted">Message</label><textarea class="input" name="message" rows="5" placeholder="Your message here..." required></textarea></div>
-            </div>
-            <button type="submit" class="btn btn-dark rounded-pill px-5 mt-3">Send Message</button>
-            <p id="form-feedback" class="text-muted mt-3" style="display:none;"></p>
-          </form>
-        </section>
-      </div>
-    </main>
-
-    <footer class="site-footer"><div class="container footer-note">&copy; <span id="current-year"></span> Aurelia.</div></footer>
-    <script>
-      const contactForm = document.querySelector('#contact-form');
-      const formFeedback = document.querySelector('#form-feedback');
-
-      contactForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        if (!contactForm.checkValidity()) {
-          contactForm.reportValidity();
-          return;
-        }
-
-        formFeedback.style.display = 'block';
-        formFeedback.style.color = '#0f5132';
-        formFeedback.textContent = 'Cảm ơn bạn! Tin nhắn đã được gửi thành công. Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.';
-        contactForm.reset();
+    <script type="module">
+      const form = document.getElementById('contact-form');
+      const feedback = document.getElementById('form-feedback');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        feedback.textContent = '✓ Gửi thành công';
+        feedback.style.display = 'block';
+        form.reset();
+        setTimeout(() => { feedback.style.display = 'none'; }, 4000);
       });
     </script>
     <script type="module" src="../assets/js/common.js"></script>
   </body>
 </html>
-

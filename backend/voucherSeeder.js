@@ -33,6 +33,15 @@ const vouchers = [
     minOrderValue: 500000,
     expirationDate: new Date('2026-12-31'),
     isActive: true
+  },
+  {
+    code: 'ATOMIC',
+    description: 'Giảm giá cực mạnh - 50%',
+    discountType: 'percent',
+    discountAmount: 50,
+    minOrderValue: 1000000,
+    expirationDate: new Date('2026-12-31'),
+    isActive: true
   }
 ];
 
