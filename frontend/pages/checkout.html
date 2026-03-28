@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thanh Toán - Aurelia Prada</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <style>
+      .checkout-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+      .checkout-section {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        margin-bottom: 30px;
+      }
+      .checkout-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 24px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 12px;
+      }
+      .form-group {
+        margin-bottom: 16px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border-color 0.2s;
+      }
+      .form-group input:focus {
+        border-color: #1a1a1a;
+        outline: none;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      
+      /* Payment Methods */
+      .payment-methods {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .payment-option {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 16px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .payment-option:hover {
+        border-color: #999;
+      }
+      .payment-option.active {
+        border-color: #1a1a1a;
+        background: #fafafa;
+      }
+      .payment-option input[type="radio"] {
+        accent-color: #1a1a1a;
+        width: 18px;
+        height: 18px;
+      }
+      .payment-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f0f0f0;
+      }
+      
+      /* Mock Credit Card Form */
+      .cc-form {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px dashed #ddd;
+        display: none;
+      }
+      .payment-option.active + .cc-form {
+        display: block;
+      }
+
+      /* Order Summary */
+      .summary-item {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 16px;
+        align-items: center;
+      }
+      .summary-img {
+        width: 60px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+      .summary-info h4 {
+        margin: 0 0 4px;
+        font-size: 14px;
+      }
+      .summary-info p {
+        margin: 0;
+        font-size: 13px;
+        color: #777;
+      }
+      .summary-price {
+        margin-left: auto;
+        font-weight: 500;
+        font-size: 14px;
+      }
+      .summary-totals {
+        border-top: 1px solid #eee;
+        padding-top: 16px;
+        margin-top: 16px;
+      }
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 14px;
+      }
+      .summary-row.total {
+        font-size: 18px;
+        font-weight: bold;
+        border-top: 1px solid #eee;
+        padding-top: 12px;
+      }
+      
+      @media (max-width: 768px) {
+        .checkout-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top-nav">
+      <div class="container nav-inner">
+        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
+        <nav class="nav-links" data-nav-links>
+          <a href="../index.html" data-nav-link>Home</a>
+          <a href="shop.html" data-nav-link>Shop</a>
+          <a href="about.html" data-nav-link>About</a>
+          <a href="contact.html" data-nav-link>Contact</a>
+        </nav>
+        <a class="brand" href="../index.html">AURELIA</a>
+        <div class="nav-actions">
+          <a class="nav-icon" href="profile.html">
+             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </a>
+          <a class="nav-icon" href="cart.html">
+             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+             <span class="cart-badge" id="nav-cart-badge">0</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="section bg-light py-5">
+      <div class="container checkout-grid">
+        
+        <!-- Left Column: Forms -->
+        <div class="checkout-forms">
+          <form id="checkout-form">
+            <!-- Shipping Address -->
+            <section class="checkout-section">
+              <h2 class="checkout-title">Thông tin giao hàng</h2>
+              
+              <div class="form-group">
+                <label for="shipping-name">Họ và tên</label>
+                <input type="text" id="shipping-name" required placeholder="Nhập họ tên người nhận">
+              </div>
+              
+              <div class="form-group">
+                <label for="shipping-phone">Số điện thoại</label>
+                <input type="tel" id="shipping-phone" required placeholder="Ví dụ: 0912345678">
+              </div>
+              
+              <div class="form-group">
+                <label for="shipping-street">Địa chỉ cụ thể (Số nhà, Tên đường)</label>
+                <input type="text" id="shipping-street" required placeholder="Nhập địa chỉ nhận hàng">
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="shipping-city">Tỉnh / Thành phố</label>
+                  <input type="text" id="shipping-city" required placeholder="Hồ Chí Minh">
+                </div>
+                <div class="form-group">
+                  <label for="shipping-state">Quận / Huyện</label>
+                  <input type="text" id="shipping-state" required placeholder="Quận 1">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="shipping-zip">Mã bưu điện (Zip Code)</label>
+                <input type="text" id="shipping-zip" required placeholder="700000" value="700000">
+              </div>
+            </section>
+            
+            <!-- Payment Methods -->
+            <section class="checkout-section">
+              <h2 class="checkout-title">Phương thức thanh toán</h2>
+              
+              <div class="payment-methods">
+                <!-- COD -->
+                <label class="payment-option active" id="option-cod">
+                  <input type="radio" name="paymentMethod" value="COD" checked>
+                  <div class="payment-icon">🚚</div>
+                  <div style="flex:1">
+                    <strong>Thanh toán khi nhận hàng (COD)</strong>
+                    <p style="margin:4px 0 0; font-size:13px; color:#666;">Trả tiền mặt trực tiếp cho người giao hàng.</p>
+                  </div>
+                </label>
+
+                <!-- Mock Credit Card -->
+                <label class="payment-option" id="option-card">
+                  <input type="radio" name="paymentMethod" value="CreditCard">
+                  <div class="payment-icon">💳</div>
+                  <div style="flex:1">
+                    <strong>Thẻ Tín dụng / Ghi nợ</strong>
+                    <p style="margin:4px 0 0; font-size:13px; color:#666;">Visa, Mastercard, JCB.</p>
+                  </div>
+                </label>
+                <!-- Mock CC Form (Hidden initially) -->
+                <div class="cc-form" id="mock-cc-form" style="display:none; padding:16px; border:1px solid #ddd; border-top:none; border-radius:0 0 8px 8px; margin-top:-12px; background:#fafafa;">
+                  <div class="form-group">
+                    <label>Số thẻ</label>
+                    <input type="text" placeholder="0000 0000 0000 0000" maxlength="19">
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Hết hạn (MM/YY)</label>
+                      <input type="text" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                      <label>CVV</label>
+                      <input type="text" placeholder="123" maxlength="3">
+                    </div>
+                  </div>
+                  <p style="font-size:12px; color:#888; margin:0;">* Đây chỉ là giao diện mô phỏng (Mock UI). Hệ thống không lưu trữ thông tin thẻ thật.</p>
+                </div>
+                
+                <!-- Mock MoMo -->
+                <label class="payment-option" id="option-momo">
+                  <input type="radio" name="paymentMethod" value="MoMo">
+                  <div class="payment-icon" style="background:#A50064; color:#fff; font-weight:bold; font-size:10px;">MoMo</div>
+                  <div style="flex:1">
+                    <strong>Thanh toán qua Ví MoMo</strong>
+                    <p style="margin:4px 0 0; font-size:13px; color:#666;">Quét mã QR qua ứng dụng MoMo.</p>
+                  </div>
+                </label>
+              </div>
+
+            </section>
+            
+            <button type="submit" id="place-order-btn" class="btn btn-dark" style="width:100%; padding:16px; font-size:16px;">XÁC NHẬN ĐẶT HÀNG</button>
+          </form>
+        </div>
+
+        <!-- Right Column: Order Summary -->
+        <aside class="checkout-summary">
+          <div class="checkout-section" style="position: sticky; top: 120px;">
+            <h2 class="checkout-title">Đơn hàng của bạn</h2>
+            
+            <div id="checkout-items">
+              <!-- Rendered via JS -->
+              <p class="text-center text-muted">Đang tải...</p>
+            </div>
+
+            <!-- Voucher Input -->
+            <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #eee;">
+              <label style="font-size: 13px; font-weight: 600; color: #666; display: block; margin-bottom: 8px;">Mã giảm giá</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="voucher-input" placeholder="Nhập mã voucher..." style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; text-transform: uppercase;">
+                <button type="button" id="apply-voucher-btn" class="btn btn-dark" style="padding: 10px 20px; font-size: 13px; border-radius: 4px;">ÁP DỤNG</button>
+              </div>
+              <div id="voucher-message" style="font-size: 12px; margin-top: 6px; display: none;"></div>
+            </div>
+            
+            <div class="summary-totals">
+              <div class="summary-row">
+                <span>Tạm tính</span>
+                <strong id="summary-subtotal">0đ</strong>
+              </div>
+              <div class="summary-row" id="summary-discount-row" style="display: none; color: #2ecc71;">
+                <span>Giảm giá (<span id="discount-label">0%</span>)</span>
+                <strong id="summary-discount">-0đ</strong>
+              </div>
+              <div class="summary-row">
+                <span>Phí vận chuyển</span>
+                <strong id="summary-shipping">30,000đ</strong>
+              </div>
+              <div class="summary-row">
+                <span>Thuế (8%)</span>
+                <strong id="summary-tax">0đ</strong>
+              </div>
+              <div class="summary-row total">
+                <span>Tổng cộng</span>
+                <strong id="summary-total">0đ</strong>
+              </div>
+            </div>
+            
+          </div>
+        </aside>
+
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="container footer-note">&copy; <span id="current-year"></span> Aurelia.</div></footer>
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module" src="../assets/js/checkout.js"></script>
+    <script>
+      // Voucher Logic
+      let appliedVoucher = null;
+
+      document.getElementById('apply-voucher-btn').addEventListener('click', async () => {
+        const codeInput = document.getElementById('voucher-input');
+        const code = codeInput.value.trim().toUpperCase();
+        const msgDiv = document.getElementById('voucher-message');
+        
+        if (!code) return;
+
+        try {
+          const response = await fetch(`/api/vouchers/code/${code}`);
+          const data = await response.json();
+
+          if (!response.ok) {
+            showVoucherMsg(data.message || 'Mã không hợp lệ', 'error');
+            resetVoucher();
+            return;
+          }
+
+          const subtotalText = document.getElementById('summary-subtotal').innerText;
+          const subtotal = parseInt(subtotalText.replace(/[^\d]/g, '')) || 0;
+
+          if (data.minOrderValue && subtotal < data.minOrderValue) {
+            showVoucherMsg(`Đơn hàng tối thiểu từ ${data.minOrderValue.toLocaleString()}đ để dùng mã này.`, 'error');
+            resetVoucher();
+            return;
+          }
+
+          appliedVoucher = data;
+          showVoucherMsg(`Đã áp dụng mã: ${data.code}`, 'success');
+          updateSummary();
+        } catch (err) {
+          showVoucherMsg('Lỗi kết nối máy chủ.', 'error');
+        }
+      });
+
+      function showVoucherMsg(text, type) {
+        const msgDiv = document.getElementById('voucher-message');
+        msgDiv.innerText = text;
+        msgDiv.style.display = 'block';
+        msgDiv.style.color = type === 'success' ? '#2ecc71' : '#e74c3c';
+      }
+
+      function resetVoucher() {
+        appliedVoucher = null;
+        document.getElementById('summary-discount-row').style.display = 'none';
+        updateSummary();
+      }
+
+      function updateSummary() {
+        const subtotalText = document.getElementById('summary-subtotal').innerText;
+        const subtotal = parseInt(subtotalText.replace(/[^\d]/g, '')) || 0;
+        const shipping = 30000;
+        const taxRate = 0.08;
+        
+        let discount = 0;
+        if (appliedVoucher) {
+          if (appliedVoucher.discountType === 'percent') {
+            discount = Math.floor(subtotal * (appliedVoucher.discountAmount / 100));
+            document.getElementById('discount-label').innerText = `${appliedVoucher.discountAmount}%`;
+          } else {
+            discount = appliedVoucher.discountAmount;
+            document.getElementById('discount-label').innerText = 'Cố định';
+          }
+          
+          document.getElementById('summary-discount-row').style.display = 'flex';
+          document.getElementById('summary-discount').innerText = `-${discount.toLocaleString()}đ`;
+        }
+
+        const tax = Math.floor((subtotal - discount) * taxRate);
+        const total = subtotal - discount + shipping + tax;
+
+        document.getElementById('summary-tax').innerText = `${tax.toLocaleString()}đ`;
+        document.getElementById('summary-total').innerText = `${total.toLocaleString()}đ`;
+        
+        window.checkoutDiscount = discount;
+        window.checkoutVoucherCode = appliedVoucher ? appliedVoucher.code : null;
+      }
+
+      setTimeout(updateSummary, 1000); 
+    </script>
+  </body>
+</html>
