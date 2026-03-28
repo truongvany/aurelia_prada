@@ -64,6 +64,7 @@ function buildUserShell() {
   const favHref = inPagesFolder ? 'favorites.html' : 'pages/favorites.html';
   const loginHref = inPagesFolder ? 'login.html' : 'pages/login.html';
   const registerHref = inPagesFolder ? 'register.html' : 'pages/register.html';
+  const offersHref = inPagesFolder ? 'offers.html' : 'pages/offers.html';
   const logoSrc = inPagesFolder ? '../assets/images/logo/logo.png' : 'assets/images/logo/logo.png';
 
   const womenHref = `${shopHref}?gender=women`;
@@ -205,7 +206,7 @@ function buildUserShell() {
               </div>
             </div>
 
-            <a href="${shopHref}?promo=true" class="aura-nav-link-new" data-nav-link>ƯU ĐÃI</a>
+            <a href="${offersHref}" class="aura-nav-link-new" data-nav-link>ƯU ĐÃI</a>
             <a href="${shopHref}" class="aura-nav-link-new" data-nav-link>CỬA HÀNG</a>
             <a href="#" class="aura-nav-link-new" data-nav-link>TRA CỨU ĐƠN HÀNG</a>
           </nav>

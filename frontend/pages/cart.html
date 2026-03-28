@@ -4,89 +4,370 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giỏ hàng của bạn | Aurelia Prada</title>
+    <meta name="description" content="Xem và quản lý giỏ hàng của bạn tại Aurelia Prada - thời trang cao cấp.">
     <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        /* ── Cart Shell ── */
+        .ivy-cart-shell { padding: 40px 0 80px; min-height: 70vh; }
+
+        /* Progress */
+        .ivy-checkout-progress {
+            display: flex; align-items: center; justify-content: center;
+            gap: 0; margin: 0 auto 48px; max-width: 560px; padding: 0 20px;
+        }
+        .ivy-checkout-progress .step {
+            display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 0 0 auto;
+        }
+        .ivy-checkout-progress .step .dot {
+            width: 14px; height: 14px; border-radius: 50%;
+            background: #ddd; border: 2px solid #ddd; transition: all .3s;
+        }
+        .ivy-checkout-progress .step.active .dot { background: #1a1a1a; border-color: #1a1a1a; }
+        .ivy-checkout-progress .step.done .dot { background: #2ecc71; border-color: #2ecc71; }
+        .ivy-checkout-progress .step .lbl {
+            font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
+            color: #aaa; white-space: nowrap; font-weight: 600;
+        }
+        .ivy-checkout-progress .step.active .lbl,
+        .ivy-checkout-progress .step.done .lbl { color: #1a1a1a; }
+        .ivy-checkout-progress .line {
+            flex: 1; height: 1px; background: #e0e0e0; min-width: 40px; margin-bottom: 20px;
+        }
+
+        /* Grid */
+        .ivy-cart-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 40px;
+            align-items: start;
+        }
+        @media(max-width:900px){ .ivy-cart-grid { grid-template-columns: 1fr; } }
+
+        /* Title */
+        .ivy-cart-title-main {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px; font-weight: 700; margin-bottom: 28px;
+            display: flex; align-items: center; gap: 12px;
+        }
+
+        /* Table header */
+        .cart-table-header {
+            display: grid;
+            grid-template-columns: 1fr 160px 140px 140px;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 2px solid #1a1a1a;
+            font-size: 11px; letter-spacing: 1.5px; font-weight: 700;
+            color: #555; text-transform: uppercase;
+        }
+        .col-disc, .col-qty, .col-total { text-align: center; }
+
+        /* Cart Row */
+        .cart-item-row {
+            display: grid;
+            grid-template-columns: 1fr 160px 140px 140px;
+            gap: 10px;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background .2s;
+        }
+        .cart-item-row:hover { background: #fafafa; }
+        .cart-item-media { display: flex; align-items: center; gap: 14px; }
+        .cart-item-img { width: 72px; height: 90px; object-fit: cover; border-radius: 2px; flex-shrink: 0; background: #f5f5f5; }
+        .cart-item-info h4 { font-size: 14px; font-weight: 600; margin: 0 0 4px; color: #1a1a1a; }
+        .cart-item-info p { font-size: 12px; color: #888; margin: 0; }
+        .cart-item-disc { text-align: center; font-size: 13px; color: #e74c3c; font-weight: 600; }
+        .cart-item-disc .percent { display: block; font-size: 11px; color: #aaa; font-weight: 400; }
+        .cart-item-qty { display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .qty-btn {
+            width: 28px; height: 28px; border: 1px solid #ddd; background: #fff;
+            cursor: pointer; font-size: 16px; border-radius: 2px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .2s; line-height: 1;
+        }
+        .qty-btn:hover { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
+        .qty-val { font-weight: 700; font-size: 14px; min-width: 24px; text-align: center; }
+        .cart-item-total {
+            text-align: center; font-size: 14px; font-weight: 700; color: #1a1a1a;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .cart-btn-del {
+            background: none; border: none; cursor: pointer; color: #ccc;
+            transition: color .2s; padding: 4px;
+        }
+        .cart-btn-del:hover { color: #e74c3c; }
+
+        /* Empty state */
+        .empty-cart-state {
+            text-align: center; padding: 80px 20px;
+            border: 2px dashed #eee; border-radius: 4px; margin-top: 10px;
+        }
+        .empty-cart-state svg { color: #ddd; margin-bottom: 20px; }
+        .empty-cart-state h3 { font-family: 'Playfair Display', serif; font-size: 22px; color: #888; margin-bottom: 10px; }
+        .empty-cart-state p { color: #aaa; font-size: 14px; }
+
+        /* Skeleton */
+        .cart-skeleton { padding: 20px 0; border-bottom: 1px solid #f0f0f0; }
+        .skeleton-block { background: linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 4px; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+        /* Sidebar */
+        .ivy-cart-sidebar { position: sticky; top: 100px; }
+        .summary-card {
+            background: #fff; border: 1px solid #eee;
+            border-radius: 4px; padding: 28px;
+        }
+        .summary-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
+        .summary-body { margin-bottom: 20px; }
+        .summary-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; font-size: 14px; color: #555;
+        }
+        .summary-row.highlight { border-top: 1px solid #eee; margin-top: 8px; padding-top: 18px; font-weight: 700; color: #1a1a1a; font-size: 16px; }
+        .summary-row .discount-val { color: #e74c3c; font-weight: 600; }
+        .summary-row.voucher-applied { color: #27ae60; background: #f0fff4; margin: 4px -4px; padding: 10px 4px; border-radius: 2px; }
+
+        /* Voucher Input */
+        .voucher-section { margin-bottom: 20px; }
+        .voucher-label { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #555; margin-bottom: 8px; display: block; }
+        .voucher-input-group { display: flex; gap: 8px; }
+        .voucher-input-group input {
+            flex: 1; padding: 10px 14px; border: 1px solid #ddd;
+            border-radius: 2px; font-size: 13px; font-family: 'Space Mono', monospace;
+            text-transform: uppercase; letter-spacing: 1px;
+            transition: border-color .2s; outline: none;
+        }
+        .voucher-input-group input:focus { border-color: #1a1a1a; }
+        .voucher-input-group input.is-valid { border-color: #27ae60; }
+        .voucher-input-group input.is-invalid { border-color: #e74c3c; }
+        .btn-apply-voucher {
+            padding: 10px 16px; background: #1a1a1a; color: #fff;
+            border: none; border-radius: 2px; font-size: 12px; font-weight: 700;
+            cursor: pointer; letter-spacing: 1px; transition: background .2s; white-space: nowrap;
+        }
+        .btn-apply-voucher:hover { background: #333; }
+        .btn-apply-voucher:disabled { background: #ccc; cursor: not-allowed; }
+        .voucher-feedback { font-size: 12px; margin-top: 6px; min-height: 18px; }
+        .voucher-feedback.success { color: #27ae60; }
+        .voucher-feedback.error { color: #e74c3c; }
+        .voucher-remove {
+            background: none; border: none; cursor: pointer; font-size: 12px;
+            color: #e74c3c; text-decoration: underline; padding: 0;
+        }
+
+        /* Notices */
+        .summary-notices { border-top: 1px solid #f0f0f0; padding-top: 16px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .notice-item { display: flex; align-items: flex-start; gap: 8px; font-size: 11px; color: #888; line-height: 1.5; }
+        .notice-item svg { flex-shrink: 0; margin-top: 1px; }
+
+        /* Checkout button */
+        .ivy-btn-black {
+            display: block; width: 100%; background: #1a1a1a; color: #fff;
+            border: none; padding: 16px; font-size: 13px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+            border-radius: 2px; transition: background .3s;
+        }
+        .ivy-btn-black:hover { background: #333; }
+        .ivy-btn-black:disabled { background: #ccc; cursor: not-allowed; }
+        .ivy-btn-black.loading { position: relative; color: transparent; }
+        .ivy-btn-black.loading::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            width: 18px; height: 18px; margin: -9px 0 0 -9px;
+            border: 2px solid rgba(255,255,255,.4); border-top-color: #fff;
+            border-radius: 50%; animation: spin .7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Checkout Modal */
+        .checkout-modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,.5);
+            z-index: 9000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity .3s;
+        }
+        .checkout-modal-overlay.open { opacity: 1; pointer-events: auto; }
+        .checkout-modal {
+            background: #fff; border-radius: 4px; width: 90%; max-width: 560px;
+            max-height: 90vh; overflow-y: auto; padding: 40px;
+            transform: translateY(20px); transition: transform .3s;
+        }
+        .checkout-modal-overlay.open .checkout-modal { transform: translateY(0); }
+        .checkout-modal h2 { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 8px; }
+        .checkout-modal .modal-subtitle { font-size: 13px; color: #888; margin-bottom: 28px; }
+        .co-form-group { margin-bottom: 18px; }
+        .co-form-group label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #555; margin-bottom: 6px; }
+        .co-form-group input, .co-form-group select {
+            width: 100%; padding: 11px 14px; border: 1px solid #ddd; border-radius: 2px;
+            font-size: 14px; outline: none; transition: border-color .2s; font-family: inherit;
+            box-sizing: border-box;
+        }
+        .co-form-group input:focus, .co-form-group select:focus { border-color: #1a1a1a; }
+        .co-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .co-divider { border: none; border-top: 1px solid #f0f0f0; margin: 24px 0; }
+        .co-order-summary { background: #fafafa; border-radius: 4px; padding: 16px 20px; margin-bottom: 22px; }
+        .co-order-summary-row { display: flex; justify-content: space-between; font-size: 13px; color: #555; padding: 5px 0; }
+        .co-order-summary-row.total { font-size: 16px; font-weight: 700; color: #1a1a1a; border-top: 1px solid #eee; margin-top: 8px; padding-top: 12px; }
+        .co-order-summary-row .co-discount { color: #e74c3c; }
+        .co-payment-methods { display: flex; gap: 10px; flex-wrap: wrap; }
+        .co-payment-opt {
+            flex: 1; min-width: 100px; border: 2px solid #eee; border-radius: 4px;
+            padding: 12px 14px; cursor: pointer; transition: all .2s;
+            display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600;
+        }
+        .co-payment-opt:hover { border-color: #1a1a1a; }
+        .co-payment-opt.selected { border-color: #1a1a1a; background: #fafafa; }
+        .co-payment-opt input[type="radio"] { accent-color: #1a1a1a; }
+        .co-modal-actions { display: flex; gap: 12px; margin-top: 24px; }
+        .co-btn-cancel {
+            flex: 0 0 auto; padding: 14px 24px; border: 1px solid #ddd; background: #fff;
+            border-radius: 2px; font-size: 13px; font-weight: 600; cursor: pointer; color: #555;
+            transition: background .2s;
+        }
+        .co-btn-cancel:hover { background: #f5f5f5; }
+
+        /* Success Modal */
+        .success-modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,.6);
+            z-index: 9999; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity .3s;
+        }
+        .success-modal-overlay.open { opacity: 1; pointer-events: auto; }
+        .success-modal {
+            background: #fff; border-radius: 4px; width: 90%; max-width: 460px;
+            padding: 50px 40px; text-align: center;
+            transform: scale(.9); transition: transform .3s;
+        }
+        .success-modal-overlay.open .success-modal { transform: scale(1); }
+        .success-icon {
+            width: 70px; height: 70px; border-radius: 50%; background: #f0fff4;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 24px; font-size: 32px;
+        }
+        .success-modal h2 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 12px; }
+        .success-modal p { color: #888; font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
+        .success-modal .order-id-badge {
+            display: inline-block; background: #f5f5f5; border-radius: 2px;
+            padding: 6px 16px; font-family: 'Space Mono', monospace;
+            font-size: 13px; font-weight: 700; margin: 10px 0 24px; letter-spacing: 1px;
+        }
+
+        /* Continue btn */
+        .cart-footer-actions { margin-top: 24px; }
+        .ivy-btn-outline {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 11px 24px; border: 1.5px solid #1a1a1a; color: #1a1a1a;
+            background: transparent; border-radius: 2px; font-size: 11px;
+            font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+            text-decoration: none; cursor: pointer; transition: all .2s;
+        }
+        .ivy-btn-outline:hover { background: #1a1a1a; color: #fff; }
+    </style>
 </head>
-<body class="bg-white">
+<body>
     <header class="top-nav"></header>
 
     <main class="ivy-cart-shell">
-        <div class="container" style="max-width: 1200px;">
+        <div class="container" style="max-width:1200px;">
             <!-- Progress Tracker -->
             <div class="ivy-checkout-progress">
-                 <div class="step active">
+                <div class="step active" id="step-cart">
                     <span class="dot"></span>
                     <span class="lbl">Giỏ hàng</span>
-                 </div>
-                 <div class="line"></div>
-                 <div class="step">
+                </div>
+                <div class="line"></div>
+                <div class="step" id="step-info">
                     <span class="dot"></span>
                     <span class="lbl">Đặt hàng</span>
-                 </div>
-                 <div class="line"></div>
-                 <div class="step">
+                </div>
+                <div class="line"></div>
+                <div class="step" id="step-payment">
                     <span class="dot"></span>
                     <span class="lbl">Thanh toán</span>
-                 </div>
-                 <div class="line"></div>
-                 <div class="step">
+                </div>
+                <div class="line"></div>
+                <div class="step" id="step-done">
                     <span class="dot"></span>
-                    <span class="lbl">Hoàn thành đơn</span>
-                 </div>
+                    <span class="lbl">Hoàn thành</span>
+                </div>
             </div>
 
             <div class="ivy-cart-grid">
+                <!-- Left: Items -->
                 <div class="ivy-cart-main">
-                    <h2 class="ivy-cart-title-main">Giỏ hàng của bạn <span id="cartCountLabel" class="text-danger">0 Sản Phẩm</span></h2>
-                    
+                    <h2 class="ivy-cart-title-main">
+                        Giỏ hàng của bạn
+                        <span id="cartCountLabel" class="text-danger" style="font-size:16px;font-weight:600;">0 Sản Phẩm</span>
+                    </h2>
+
                     <div class="cart-table-header">
-                        <span class="col-name">TÊN SẢN PHẨM</span>
+                        <span>TÊN SẢN PHẨM</span>
                         <span class="col-disc">CHIẾT KHẤU</span>
                         <span class="col-qty">SỐ LƯỢNG</span>
-                        <span class="col-total">TỔNG TIỀN</span>
+                        <span class="col-total">THÀNH TIỀN</span>
                     </div>
 
-                    <div id="cartItemsContainer" class="cart-items-list" style="min-height: 200px;">
-                        <!-- Dynamic items -->
-                        <div id="emptyCartMessage" style="display:none; padding: 40px 0; text-align: left;">
-                            <p class="text-muted" style="margin-bottom: 0;">Giỏ hàng đang trống.</p>
+                    <div id="cartItemsContainer" style="min-height:200px;">
+                        <!-- Skeleton loader -->
+                        <div id="cartSkeleton">
+                            <div class="cart-skeleton">
+                                <div class="skeleton-block" style="height:72px;width:100%;"></div>
+                            </div>
+                            <div class="cart-skeleton">
+                                <div class="skeleton-block" style="height:72px;width:100%;"></div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="cart-footer-actions" style="margin-top: 30px;">
-                        <a href="shop.html" class="ivy-btn-outline" style="padding: 12px 30px; border-radius: 4px; border-color:#222; color:#222; background:transparent;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align: middle;"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                            <span style="font-weight: 700; letter-spacing: 1px; font-size: 11px; vertical-align: middle;">TIẾP TỤC MUA HÀNG</span>
+                    <div class="cart-footer-actions">
+                        <a href="shop.html" class="ivy-btn-outline" id="continueShoppingBtn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            TIẾP TỤC MUA HÀNG
                         </a>
                     </div>
                 </div>
 
+                <!-- Right: Summary -->
                 <aside class="ivy-cart-sidebar">
                     <div class="summary-card">
-                        <h3 class="summary-title">Tổng tiền giỏ hàng</h3>
-                        
+                        <h3 class="summary-title">Tổng giỏ hàng</h3>
+
+                        <!-- Voucher -->
+                        <div class="voucher-section">
+                            <span class="voucher-label">Mã giảm giá</span>
+                            <div class="voucher-input-group">
+                                <input type="text" id="voucherInput" placeholder="Nhập mã voucher..." maxlength="30" autocomplete="off">
+                                <button class="btn-apply-voucher" id="applyVoucherBtn">ÁP DỤNG</button>
+                            </div>
+                            <div class="voucher-feedback" id="voucherFeedback"></div>
+                        </div>
+
                         <div class="summary-body">
                             <div class="summary-row">
                                 <span>Tổng sản phẩm</span>
-                                <span id="summaryCount">0</span>
+                                <span id="summaryCount">0 sản phẩm</span>
                             </div>
                             <div class="summary-row">
                                 <span>Tổng tiền hàng</span>
                                 <span id="summaryRawTotal">0đ</span>
                             </div>
-                            <div class="summary-row highlight">
-                                <span>Thành tiền</span>
-                                <span id="summaryFinalTotal" class="text-danger" style="font-weight: 800;">0đ</span>
+                            <div class="summary-row" id="voucherRow" style="display:none;">
+                                <span>Giảm giá voucher <button class="voucher-remove" id="removeVoucherBtn">✕ Bỏ</button></span>
+                                <span class="discount-val" id="summaryDiscount">-0đ</span>
                             </div>
                             <div class="summary-row">
-                                <span>Tạm tính</span>
-                                <span id="summarySubtotal">0đ</span>
+                                <span>Phí vận chuyển</span>
+                                <span id="summaryShipping" style="color:#27ae60;font-weight:600;">Miễn phí</span>
+                            </div>
+                            <div class="summary-row highlight">
+                                <span>Thành tiền</span>
+                                <span id="summaryFinalTotal" class="text-danger" style="font-weight:800;">0đ</span>
                             </div>
                         </div>
 
                         <div class="summary-notices">
                             <div class="notice-item">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                                <span>Sản phẩm nằm trong chương trình KM giảm giá trên 50% không hỗ trợ đổi trả.</span>
+                                <span>Sản phẩm KM giảm giá trên 50% không hỗ trợ đổi trả.</span>
                             </div>
                             <div class="notice-item">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
@@ -94,12 +375,108 @@
                             </div>
                         </div>
 
-                        <button id="checkoutBtn" class="ivy-btn-black full-width" style="margin-top: 15px; padding: 15px;">ĐẶT HÀNG</button>
+                        <button id="checkoutBtn" class="ivy-btn-black" style="margin-top:4px;" disabled>ĐẶT HÀNG</button>
                     </div>
                 </aside>
             </div>
         </div>
     </main>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal-overlay" id="checkoutModalOverlay">
+        <div class="checkout-modal" id="checkoutModal">
+            <h2>Thông tin đặt hàng</h2>
+            <p class="modal-subtitle">Vui lòng điền đầy đủ thông tin để hoàn tất đơn hàng.</p>
+
+            <!-- Order Summary inside modal -->
+            <div class="co-order-summary" id="modalOrderSummary">
+                <!-- Populated by JS -->
+            </div>
+
+            <hr class="co-divider">
+
+            <!-- Shipping Info -->
+            <div class="co-form-row">
+                <div class="co-form-group">
+                    <label for="co-name">Họ và tên *</label>
+                    <input type="text" id="co-name" placeholder="Nguyễn Văn A" required>
+                </div>
+                <div class="co-form-group">
+                    <label for="co-phone">Số điện thoại *</label>
+                    <input type="tel" id="co-phone" placeholder="0901 234 567" required>
+                </div>
+            </div>
+            <div class="co-form-group">
+                <label for="co-street">Địa chỉ (Số nhà, đường) *</label>
+                <input type="text" id="co-street" placeholder="123 Đường Lê Lợi" required>
+            </div>
+            <div class="co-form-row">
+                <div class="co-form-group">
+                    <label for="co-city">Thành phố / Tỉnh *</label>
+                    <input type="text" id="co-city" placeholder="TP. Hồ Chí Minh" required>
+                </div>
+                <div class="co-form-group">
+                    <label for="co-state">Quận / Huyện *</label>
+                    <input type="text" id="co-state" placeholder="Quận 1" required>
+                </div>
+            </div>
+            <div class="co-form-row">
+                <div class="co-form-group">
+                    <label for="co-zip">Mã bưu điện</label>
+                    <input type="text" id="co-zip" placeholder="70000">
+                </div>
+                <div class="co-form-group">
+                    <label for="co-country">Quốc gia</label>
+                    <input type="text" id="co-country" value="Việt Nam">
+                </div>
+            </div>
+            <div class="co-form-group">
+                <label for="co-note">Ghi chú đơn hàng</label>
+                <input type="text" id="co-note" placeholder="Giao giờ hành chính, gọi trước khi giao...">
+            </div>
+
+            <hr class="co-divider">
+
+            <!-- Payment Method -->
+            <div class="co-form-group">
+                <label>Phương thức thanh toán *</label>
+                <div class="co-payment-methods">
+                    <label class="co-payment-opt selected" id="pm-cod">
+                        <input type="radio" name="paymentMethod" value="COD" checked>
+                        💵 Tiền mặt (COD)
+                    </label>
+                    <label class="co-payment-opt" id="pm-bank">
+                        <input type="radio" name="paymentMethod" value="Banking">
+                        🏦 Chuyển khoản
+                    </label>
+                    <label class="co-payment-opt" id="pm-momo">
+                        <input type="radio" name="paymentMethod" value="MoMo">
+                        💜 MoMo
+                    </label>
+                </div>
+            </div>
+
+            <div class="co-modal-actions">
+                <button class="co-btn-cancel" id="cancelCheckoutBtn">← Quay lại</button>
+                <button class="ivy-btn-black" id="placeOrderBtn" style="flex:1;">XÁC NHẬN ĐẶT HÀNG</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal-overlay" id="successModalOverlay">
+        <div class="success-modal">
+            <div class="success-icon">✅</div>
+            <h2>Đặt hàng thành công!</h2>
+            <p>Cảm ơn bạn đã tin tưởng <strong>Aurelia Prada</strong>.<br>Đơn hàng của bạn đang được xử lý.</p>
+            <p>Mã đơn hàng của bạn:</p>
+            <div class="order-id-badge" id="successOrderId">#AP-000000</div>
+            <br>
+            <button class="ivy-btn-black" id="goToProfileBtn" style="max-width:280px;margin:0 auto;">XEM ĐƠN HÀNG CỦA TÔI</button>
+            <br><br>
+            <a href="shop.html" style="font-size:13px;color:#888;text-decoration:underline;">Tiếp tục mua sắm</a>
+        </div>
+    </div>
 
     <footer class="site-footer"></footer>
 
