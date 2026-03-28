@@ -116,9 +116,42 @@ function buildUserShell() {
             <div class="aura-nav-item-new mega-dropdown">
               <a href="${womenHref}" class="aura-nav-link-new" data-nav-link>THỜI TRANG</a>
               <div class="aura-mega-menu">
-                <div class="container aura-mega-grid" id="mega-menu-categories">
-                   <!-- Dynamically populated -->
-                   <div class="mega-column"><h5>ĐANG TẢI...</h5></div>
+                <div class="aura-mega-main">
+                  <div class="aura-mega-content">
+                    <div class="aura-mega-left">
+                      <div class="container-fluid aura-mega-grid" id="mega-menu-categories">
+                         <!-- Dynamically populated -->
+                         <div class="mega-column"><h5>ĐANG TẢI...</h5></div>
+                      </div>
+                    </div>
+                    <div class="aura-mega-right">
+                        <div class="mega-promo-card">
+                            <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e12?auto=format&fit=crop&w=400&q=80" alt="New Arrival">
+                            <div class="mega-promo-overlay">
+                                <span>COLLECTION 2026</span>
+                                <h4>XUÂN HÈ MỚI NHẤT</h4>
+                            </div>
+                        </div>
+                        <div class="mega-promo-card">
+                            <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=400&q=80" alt="Sale">
+                            <div class="mega-promo-overlay">
+                                <span>LIMITED OFFER</span>
+                                <h4>QUÀ TẶNG THÀNH VIÊN</h4>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Bottom Bar -->
+                <div class="aura-mega-footer">
+                    <div class="container-fluid" style="display:flex; align-items:center; gap:40px;">
+                        <span>GỢI Ý TÌM KIẾM:</span>
+                        <div class="aura-mega-foot-links">
+                            <a href="${shopHref}?q=minimalist">Minimalist Muse</a>
+                            <a href="${shopHref}?q=urban">Urban Chic</a>
+                            <a href="${shopHref}?q=classic">Classic Elegance</a>
+                        </div>
+                    </div>
                 </div>
               </div>
             </div>
@@ -126,18 +159,26 @@ function buildUserShell() {
             <div class="aura-nav-item-new mega-dropdown">
               <a href="#" class="aura-nav-link-new" data-nav-link>BỘ SƯU TẬP</a>
               <div class="aura-mega-menu">
-                <div class="container aura-mega-grid">
-                  <div class="mega-column">
-                    <h5>THEO MÙA</h5>
-                    <a href="#">Xuân Hè 2026</a>
-                    <a href="#">Thu Đông 2025</a>
-                    <a href="#">Pre-Fall Collection</a>
-                  </div>
-                  <div class="mega-column">
-                    <h5>CONCEPT</h5>
-                    <a href="#">Minimalist Muse</a>
-                    <a href="#">Urban Chic</a>
-                    <a href="#">Classic Elegance</a>
+                <div class="aura-mega-main">
+                  <div class="aura-mega-content">
+                    <div class="aura-mega-left">
+                        <div class="container-fluid aura-mega-grid">
+                            <div class="mega-column">
+                                <h5>THEO MÙA</h5>
+                                <a href="#">Xuân Hè 2026</a>
+                                <a href="#">Thu Đông 2025</a>
+                                <a href="#">Pre-Fall Collection</a>
+                                <a href="#">Holiday Capsule</a>
+                            </div>
+                            <div class="mega-column">
+                                <h5>CONCEPT</h5>
+                                <a href="#">Minimalist Muse</a>
+                                <a href="#">Urban Chic</a>
+                                <a href="#">Classic Elegance</a>
+                                <a href="#">Evening Glamour</a>
+                            </div>
+                        </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -146,12 +187,19 @@ function buildUserShell() {
             <div class="aura-nav-item-new mega-dropdown">
               <a href="${shopHref}?category=accessories" class="aura-nav-link-new" data-nav-link>PHỤ KIỆN</a>
               <div class="aura-mega-menu">
-                <div class="container aura-mega-grid">
-                  <div class="mega-column">
-                    <h5>HÀNG MỚI VỀ</h5>
-                    <a href="#">Trang sức cao cấp</a>
-                    <a href="#">Khăn lụa</a>
-                    <a href="#">Mũ thời trang</a>
+                <div class="aura-mega-main">
+                  <div class="aura-mega-content">
+                    <div class="aura-mega-left">
+                        <div class="container-fluid aura-mega-grid">
+                            <div class="mega-column">
+                                <h5>HÀNG MỚI VỀ</h5>
+                                <a href="#">Trang sức cao cấp</a>
+                                <a href="#">Khăn lụa</a>
+                                <a href="#">Mũ thời trang</a>
+                                <a href="#">Kính mát Heritage</a>
+                            </div>
+                        </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -370,10 +418,20 @@ async function initMegaMenu() {
     const inPagesFolder = pathname.includes('/pages/');
     const shopHref = inPagesFolder ? 'shop.html' : 'pages/shop.html';
 
-    // Grouping by "group" field from Database
+    // Grouping by "group" field from Database accurately
     const groups = ['ÁO', 'ÁO KHOÁC', 'QUẦN & VÁY', 'PHỤ KIỆN'];
+    
+    // First column: Static links (TẤT CẢ SẢN PHẨM)
+    let html = `
+      <div class="mega-column">
+        <h5>TẤT CẢ SẢN PHẨM</h5>
+        <a href="${shopHref}?isNew=true">Sản phẩm mới</a>
+        <a href="${shopHref}?isBestSeller=true">Bán chạy nhất</a>
+        <a href="${shopHref}?promo=true">Siêu Ưu đãi</a>
+        <a href="${shopHref}">Khám phá toàn bộ</a>
+      </div>
+    `;
 
-    let html = '';
     groups.forEach(groupName => {
         const groupCats = categories.filter(c => c.group === groupName);
         if (groupCats.length === 0) return;
