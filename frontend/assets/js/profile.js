@@ -37,6 +37,13 @@ async function initProfile() {
         if (tabBtn) tabBtn.click();
     }
     
+
+    // Auto-switch to tab if hash exists (e.g., #orders)
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      const tabBtn = document.querySelector(`[data-profile-tab="${hash}"]`);
+      if (tabBtn) tabBtn.click();
+    }
   } catch (error) {
     if (errorAlert) {
       errorAlert.textContent = 'Phiên đăng nhập đã hết hạn. Đang chuyển hướng...';
@@ -173,6 +180,217 @@ function renderSettingsForm(user) {
   if (sidebarName) sidebarName.textContent = user.name || 'User';
 }
 
+// ─── Order Detail Modal ──────────────────────────────────────
+function injectProfileOrderModal() {
+  if (document.getElementById('pom-overlay')) return;
+
+  const style = document.createElement('style');
+  style.textContent = `
+    #pom-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      z-index: 9999; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    #pom-overlay.open { opacity: 1; pointer-events: auto; }
+    #pom-modal {
+      background: #fff; width: 92%; max-width: 680px; max-height: 88vh;
+      overflow-y: auto; box-shadow: 0 32px 80px rgba(0,0,0,.2);
+      transform: translateY(20px); transition: transform .3s;
+    }
+    #pom-overlay.open #pom-modal { transform: translateY(0); }
+
+    .pom-header {
+      padding: 22px 26px 16px;
+      border-bottom: 2px solid #1a1a1a;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .pom-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 700; margin: 0 0 6px;
+    }
+    .pom-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 2px; font-size: 11px;
+      font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+    }
+    .pom-badge.delivered { background: #e8f8f0; color: #27ae60; }
+    .pom-badge.processing { background: #fff8e1; color: #f39c12; }
+    .pom-badge.shipped { background: #e8f0ff; color: #2980b9; }
+    .pom-badge.cancelled { background: #fde8e8; color: #e74c3c; }
+    .pom-close {
+      background: none; border: none; cursor: pointer; font-size: 24px;
+      color: #bbb; line-height: 1; padding: 0; flex-shrink: 0;
+    }
+    .pom-close:hover { color: #e74c3c; }
+
+    .pom-body { padding: 22px 26px; }
+    .pom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
+    .pom-info-card {
+      padding: 14px 16px;
+      border: 1px solid #eee; border-radius: 2px; background: #fafafa;
+    }
+    .pom-info-card h4 {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
+      font-weight: 700; color: #aaa; margin: 0 0 10px;
+    }
+    .pom-info-row {
+      font-size: 13px; color: #333; margin: 5px 0; display: flex; gap: 6px;
+    }
+    .pom-info-row span:first-child { color: #888; min-width: 90px; font-size: 12px; }
+
+    .pom-items-heading {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px; color: #555; margin-bottom: 12px;
+    }
+    .pom-item {
+      display: grid; grid-template-columns: 60px 1fr auto;
+      gap: 14px; align-items: center;
+      padding: 12px 0; border-bottom: 1px solid #f5f5f5;
+    }
+    .pom-item:last-child { border-bottom: none; }
+    .pom-item img {
+      width: 60px; height: 75px; object-fit: cover;
+      border-radius: 2px; background: #f0f0f0;
+    }
+    .pom-item-name { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+    .pom-item-meta { font-size: 11px; color: #999; }
+    .pom-item-total { font-size: 14px; font-weight: 700; white-space: nowrap; }
+
+    .pom-totals {
+      margin-top: 16px; padding-top: 14px;
+      border-top: 1px dashed #eee;
+    }
+    .pom-total-row {
+      display: flex; justify-content: space-between;
+      font-size: 13px; color: #666; padding: 5px 0;
+    }
+    .pom-total-row.grand {
+      font-size: 16px; font-weight: 800; color: #1a1a1a;
+      border-top: 1px solid #1a1a1a; margin-top: 8px; padding-top: 14px;
+    }
+    .pom-total-row.grand span:last-child { color: #e74c3c; }
+    .pom-total-row .pom-discount { color: #27ae60; font-weight: 600; }
+    .pom-total-row .pom-voucher { font-size: 11px; font-weight: 700; background: #f0fff4; padding: 2px 8px; border-radius: 2px; color: #27ae60; }
+
+    .pom-footer {
+      padding: 14px 26px 20px;
+      border-top: 1px solid #f0f0f0;
+      display: flex; justify-content: flex-end; gap: 10px;
+    }
+    .pom-btn-close {
+      padding: 11px 28px; background: #1a1a1a; color: #fff;
+      border: none; border-radius: 2px; font-size: 12px; font-weight: 700;
+      letter-spacing: 1.5px; cursor: pointer; text-transform: uppercase;
+      transition: background .2s;
+    }
+    .pom-btn-close:hover { background: #333; }
+  `;
+  document.head.appendChild(style);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'pom-overlay';
+  overlay.innerHTML = '<div id="pom-modal"></div>';
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closePom(); });
+}
+
+function closePom() {
+  const ov = document.getElementById('pom-overlay');
+  if (ov) { ov.classList.remove('open'); document.body.style.overflow = ''; }
+}
+
+function openOrderDetailModal(order) {
+  injectProfileOrderModal();
+  const overlay = document.getElementById('pom-overlay');
+  const modal = document.getElementById('pom-modal');
+
+  const statusMap = {
+    Delivered: ['Đã giao xong', 'delivered'],
+    Processing: ['Đang xử lý', 'processing'],
+    Shipped: ['Được giao đi', 'shipped'],
+    Cancelled: ['Đã hủy', 'cancelled'],
+  };
+  const [statusLabel, statusCls] = statusMap[order.status] || [order.status, 'processing'];
+  const addr = order.shippingAddress || {};
+  const discount = order.discountPrice || 0;
+  const shippingFree = (order.shippingPrice || 0) === 0;
+
+  modal.innerHTML = `
+    <div class="pom-header">
+      <div>
+        <h2>Đơn hàng #${order._id.substring(0,8).toUpperCase()}</h2>
+        <div style="display:flex; gap:10px; align-items:center; margin-top:6px;">
+          <span style="font-size:12px; color:#aaa;">${new Date(order.createdAt).toLocaleString('vi-VN')}</span>
+          <span class="pom-badge ${statusCls}">${statusLabel}</span>
+        </div>
+      </div>
+      <button class="pom-close" id="pom-close-x">×</button>
+    </div>
+
+    <div class="pom-body">
+      <div class="pom-grid">
+        <div class="pom-info-card">
+          <h4>Địa chỉ giao hàng</h4>
+          <div class="pom-info-row"><span>Số nhà:</span> ${addr.street || '—'}</div>
+          <div class="pom-info-row"><span>Quận/Huyện:</span> ${addr.state || '—'}</div>
+          <div class="pom-info-row"><span>Thành phố:</span> ${addr.city || '—'}</div>
+          <div class="pom-info-row"><span>Quốc gia:</span> ${addr.country || 'Việt Nam'}</div>
+        </div>
+        <div class="pom-info-card">
+          <h4>Thanh toán &amp; Vận chuyển</h4>
+          <div class="pom-info-row"><span>Phương thức:</span> ${order.paymentMethod || '—'}</div>
+          <div class="pom-info-row"><span>Trạng thái TT:</span> ${order.isPaid ? '✅ Đã thanh toán' : '⏳ Chưa thanh toán'}</div>
+          <div class="pom-info-row"><span>Phí ship:</span> ${shippingFree ? '<span style="color:#27ae60;font-weight:600;">Được miễn phí</span>' : formatVnd(order.shippingPrice)}</div>
+          ${order.voucherCode ? `<div class="pom-info-row"><span>Voucher:</span> <b style="color:#27ae60;">${order.voucherCode}</b></div>` : ''}
+        </div>
+      </div>
+
+      <div class="pom-items-heading">Sản phẩm đã đặt (${order.orderItems.length} mặt hàng)</div>
+      ${order.orderItems.map(item => `
+        <div class="pom-item">
+          <img src="${item.image || ''}" alt="${item.name}" onerror="this.style.background='#f0f0f0'">
+          <div>
+            <div class="pom-item-name">${item.name}</div>
+            <div class="pom-item-meta">${formatVnd(item.price)} / chiếc &nbsp;·&nbsp; Số lượng: ${item.qty}</div>
+          </div>
+          <div class="pom-item-total">${formatVnd(item.price * item.qty)}</div>
+        </div>
+      `).join('')}
+
+      <div class="pom-totals">
+        <div class="pom-total-row">
+          <span>Tạm tính</span>
+          <span>${formatVnd(order.itemsPrice || 0)}</span>
+        </div>
+        ${discount > 0 ? `
+        <div class="pom-total-row">
+          <span>Giảm giá ${order.voucherCode ? '<span class="pom-voucher">' + order.voucherCode + '</span>' : ''}</span>
+          <span class="pom-discount">-${formatVnd(discount)}</span>
+        </div>` : ''}
+        <div class="pom-total-row">
+          <span>Phí vận chuyển</span>
+          <span>${shippingFree ? '<span style="color:#27ae60;">Miễn phí</span>' : formatVnd(order.shippingPrice || 0)}</span>
+        </div>
+        <div class="pom-total-row grand">
+          <span>TỔNG THANH TOÁN</span>
+          <span>${formatVnd(order.totalPrice)}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pom-footer">
+      <a href="payment.html?orderId=${order._id}" class="pom-btn-close" style="text-decoration:none; background:#eee; color:#1a1a1a; margin-right:auto;">Theo dõi đơn hàng</a>
+      <button class="pom-btn-close" id="pom-close-btn">ĐÓNG</button>
+    </div>
+  `;
+
+  modal.querySelector('#pom-close-x').addEventListener('click', closePom);
+  modal.querySelector('#pom-close-btn').addEventListener('click', closePom);
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
 async function loadOrders() {
   const container = document.getElementById('ordersContainer');
   if (!container) return;
@@ -198,51 +416,32 @@ async function loadOrders() {
       return;
     }
 
-    container.innerHTML = orders
-      .map(order => `
-        <tr>
-          <td>${order._id.substring(0, 8)}</td>
-          <td>${new Date(order.createdAt).toLocaleDateString()}</td>
-          <td><span class="status-pill ${order.status === 'Delivered' ? 'status-delivered' : 'status-processing'}">${order.status}</span></td>
-          <td class="text-end">${formatVnd(order.totalPrice)}</td>
-          <td class="text-end"><button class="btn btn-light-custom btn-sm" data-order-id="${order._id}">Xem chi tiết</button></td>
-        </tr>
-        <tr class="order-details-row" id="order-details-${order._id}" style="display:none; background:#fbfaf8;">
-          <td colspan="5" style="padding: 14px 12px;">
-            <strong>Địa chỉ:</strong> ${order.shippingAddress?.street || '-'}, ${order.shippingAddress?.city || '-'}, ${order.shippingAddress?.state || '-'}, ${order.shippingAddress?.zipCode || '-'}, ${order.shippingAddress?.country || '-'}<br>
-            <strong>Thanh toán:</strong> ${order.paymentMethod || '-'}<br>
-            <strong>Thuế:</strong> ${formatVnd(order.taxPrice || 0)} • <strong>VC:</strong> ${formatVnd(order.shippingPrice || 0)}<br>
-            <div style="margin-top:8px;">
-              <table style="width:100%; border-collapse: collapse; font-size: 13px;">
-                <thead>
-                  <tr><th style="text-align:left; border-bottom:1px solid #eee; padding:6px;">Sản phẩm</th><th style="text-align:right; border-bottom:1px solid #eee; padding:6px;">SL</th><th style="text-align:right; border-bottom:1px solid #eee; padding:6px;">Giá</th><th style="text-align:right; border-bottom:1px solid #eee; padding:6px;">Tạm tính</th></tr>
-                </thead>
-                <tbody>
-                  ${order.orderItems.map(item => `
-                    <tr>
-                      <td style="padding:6px;">${item.name}</td>
-                      <td style="text-align:right; padding:6px;">${item.qty}</td>
-                      <td style="text-align:right; padding:6px;">${formatVnd(item.price)}</td>
-                      <td style="text-align:right; padding:6px;">${formatVnd(item.qty * item.price)}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
-          </td>
-        </tr>
-      `)
-      .join('');
+    const statusTrans = {
+      Delivered: 'Đã giao', Processing: 'Đang xử lý',
+      Shipped: 'Đang giao', Cancelled: 'Đã hủy',
+    };
 
-    document.querySelectorAll('button[data-order-id]').forEach(btn => {
+    container.innerHTML = orders.map(order => `
+      <tr>
+        <td><strong>#${order._id.substring(0, 8).toUpperCase()}</strong></td>
+        <td>${new Date(order.createdAt).toLocaleDateString('vi-VN')}</td>
+        <td><span class="status-pill ${order.status === 'Delivered' ? 'status-delivered' : order.status === 'Cancelled' ? 'status-cancelled' : 'status-processing'}">${statusTrans[order.status] || order.status}</span></td>
+        <td class="text-end">${formatVnd(order.totalPrice)}</td>
+        <td class="text-end">
+          <button class="pom-open-btn" data-order='${JSON.stringify(order).replace(/'/g, '&apos;')}' style="background:#1a1a1a; color:#fff; border:none; padding:8px 18px; font-size:10px; font-weight:700; letter-spacing:1px; cursor:pointer; border-radius:2px; text-transform:uppercase;">
+            CHI TIẾT
+          </button>
+        </td>
+      </tr>
+    `).join('');
+
+    container.querySelectorAll('.pom-open-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const orderId = btn.getAttribute('data-order-id');
-        const row = document.getElementById(`order-details-${orderId}`);
-        if (row) {
-          row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
-        }
+        const order = JSON.parse(btn.getAttribute('data-order'));
+        openOrderDetailModal(order);
       });
     });
+
   } catch (err) {
     container.innerHTML = '<tr><td colspan="5" style="color:red">Không thể tải danh sách đơn hàng.</td></tr>';
   }

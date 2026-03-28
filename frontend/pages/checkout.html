@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thanh Toán - Aurelia Prada</title>
+    <meta name="description" content="Hoàn tất đơn hàng của bạn tại Aurelia Prada.">
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <style>
+      /* ─── Layout ─────────────────────── */
+      .co-shell { padding: 48px 0 100px; min-height: 70vh; }
+
+      .co-progress {
+        display: flex; align-items: center; justify-content: center;
+        max-width: 520px; margin: 0 auto 52px; padding: 0 20px;
+      }
+      .co-progress .step { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+      .co-progress .step .dot {
+        width: 14px; height: 14px; border-radius: 50%;
+        background: #ddd; border: 2px solid #ddd; transition: all .3s;
+      }
+      .co-progress .step.done .dot { background: #2ecc71; border-color: #2ecc71; }
+      .co-progress .step.active .dot { background: #1a1a1a; border-color: #1a1a1a; }
+      .co-progress .step .lbl {
+        font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
+        color: #aaa; white-space: nowrap; font-weight: 600;
+      }
+      .co-progress .step.done .lbl,
+      .co-progress .step.active .lbl { color: #1a1a1a; }
+      .co-progress .line { flex: 1; height: 1px; background: #e0e0e0; min-width: 30px; margin-bottom: 20px; }
+
+      .co-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+      @media(max-width:900px) { .co-grid { grid-template-columns: 1fr; } }
+
+      /* ─── Cards ────────────────────────── */
+      .co-card {
+        background: #fff; border: 1px solid #eee;
+        border-radius: 4px; padding: 30px; margin-bottom: 24px;
+      }
+      .co-card-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 18px; font-weight: 700;
+        margin-bottom: 22px; padding-bottom: 14px;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex; align-items: center; gap: 10px;
+      }
+      .co-card-title .step-num {
+        width: 28px; height: 28px; border-radius: 50%; background: #1a1a1a;
+        color: #fff; font-size: 12px; font-weight: 700;
+        display: flex; align-items: center; justify-content: center;
+        font-family: sans-serif;
+      }
+
+      /* ─── Form ─────────────────────────── */
+      .form-group { margin-bottom: 16px; }
+      .form-group label {
+        display: block; font-size: 11px; font-weight: 700;
+        letter-spacing: 1px; text-transform: uppercase; color: #555; margin-bottom: 6px;
+      }
+      .form-group input, .form-group select, .form-group textarea {
+        width: 100%; padding: 11px 14px; border: 1px solid #ddd; border-radius: 2px;
+        font-size: 14px; outline: none; transition: border-color .2s;
+        font-family: inherit; box-sizing: border-box; color: #1a1a1a;
+      }
+      .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        border-color: #1a1a1a;
+      }
+      .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+      /* ─── Payment Options ──────────────── */
+      .payment-options { display: flex; flex-direction: column; gap: 10px; }
+      .payment-opt {
+        border: 2px solid #eee; border-radius: 4px; padding: 14px 16px;
+        cursor: pointer; transition: all .2s;
+        display: flex; align-items: center; gap: 12px; font-size: 13px;
+      }
+      .payment-opt:hover { border-color: #ccc; }
+      .payment-opt.selected { border-color: #1a1a1a; background: #fafafa; }
+      .payment-opt input[type="radio"] { accent-color: #1a1a1a; width: 16px; height: 16px; }
+      .payment-opt-icon { font-size: 20px; flex-shrink: 0; }
+      .payment-opt-body strong { display: block; font-size: 14px; font-weight: 700; }
+      .payment-opt-body span { font-size: 12px; color: #888; }
+
+      /* CC form */
+      .cc-fields {
+        margin-top: 14px; padding: 14px; background: #fafafa;
+        border-radius: 2px; border: 1px dashed #ddd; display: none;
+      }
+      .cc-fields.visible { display: block; }
+
+      /* ─── Sidebar ──────────────────────── */
+      .co-sidebar { position: sticky; top: 100px; }
+
+      /* Order Items */
+      .order-item-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+      .order-item { display: flex; gap: 12px; align-items: center; }
+      .order-item-img {
+        width: 60px; height: 76px; object-fit: cover; border-radius: 2px;
+        background: #f5f5f5; flex-shrink: 0;
+      }
+      .order-item-info { flex: 1; }
+      .order-item-info h5 { margin: 0 0 3px; font-size: 13px; font-weight: 600; color: #1a1a1a; }
+      .order-item-info p { margin: 0; font-size: 11px; color: #888; }
+      .order-item-price { font-size: 13px; font-weight: 700; white-space: nowrap; }
+
+      /* Voucher */
+      .voucher-section { margin: 16px 0; padding: 16px 0; border-top: 1px solid #f0f0f0; }
+      .voucher-section label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #555; display: block; margin-bottom: 8px; }
+      .voucher-row { display: flex; gap: 8px; }
+      .voucher-row input {
+        flex: 1; padding: 9px 12px; border: 1px solid #ddd; border-radius: 2px;
+        font-size: 13px; font-family: 'Space Mono', monospace; text-transform: uppercase;
+        letter-spacing: 1px; outline: none; transition: border-color .2s;
+      }
+      .voucher-row input:focus { border-color: #1a1a1a; }
+      .voucher-row input.ok { border-color: #27ae60; }
+      .voucher-row input.err { border-color: #e74c3c; }
+      .btn-voucher {
+        padding: 9px 14px; background: #1a1a1a; color: #fff;
+        border: none; border-radius: 2px; font-size: 11px;
+        font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: background .2s;
+      }
+      .btn-voucher:hover { background: #333; }
+      .btn-voucher:disabled { background: #ccc; cursor: not-allowed; }
+      .voucher-msg { font-size: 12px; margin-top: 6px; min-height: 16px; }
+      .voucher-msg.ok { color: #27ae60; }
+      .voucher-msg.err { color: #e74c3c; }
+
+      /* Totals */
+      .totals-table { border-top: 1px solid #f0f0f0; padding-top: 14px; }
+      .totals-row {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 7px 0; font-size: 13px; color: #555;
+      }
+      .totals-row.grand {
+        border-top: 1px solid #1a1a1a; margin-top: 8px; padding-top: 14px;
+        font-size: 17px; font-weight: 800; color: #1a1a1a;
+      }
+      .totals-row.grand span:last-child { color: #e74c3c; }
+      .totals-row .discount-val { color: #e74c3c; font-weight: 600; }
+      .totals-row .free-ship { color: #27ae60; font-weight: 600; }
+
+      /* Submit btn */
+      .btn-place-order {
+        width: 100%; padding: 16px; background: #1a1a1a; color: #fff;
+        border: none; border-radius: 2px; font-size: 13px; font-weight: 700;
+        letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+        transition: background .3s; margin-top: 20px;
+      }
+      .btn-place-order:hover { background: #333; }
+      .btn-place-order:disabled { background: #ccc; cursor: not-allowed; }
+      .btn-place-order.loading { position: relative; color: transparent; }
+      .btn-place-order.loading::after {
+        content: ''; position: absolute; top: 50%; left: 50%;
+        width: 20px; height: 20px; margin: -10px 0 0 -10px;
+        border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
+        border-radius: 50%; animation: spin .7s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* Back link */
+      .back-link {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 12px; color: #888; text-decoration: none;
+        margin-bottom: 28px; transition: color .2s;
+      }
+      .back-link:hover { color: #1a1a1a; }
+
+      /* Success overlay */
+      .success-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,.6);
+        z-index: 9999; display: flex; align-items: center; justify-content: center;
+        opacity: 0; pointer-events: none; transition: opacity .3s;
+      }
+      .success-overlay.open { opacity: 1; pointer-events: auto; }
+      .success-box {
+        background: #fff; border-radius: 4px; width: 90%; max-width: 460px;
+        padding: 54px 40px; text-align: center;
+        transform: scale(.9); transition: transform .3s;
+      }
+      .success-overlay.open .success-box { transform: scale(1); }
+      .success-icon { font-size: 52px; margin-bottom: 20px; }
+      .success-box h2 { font-family: 'Playfair Display', serif; font-size: 26px; margin-bottom: 10px; }
+      .success-box p { color: #777; font-size: 14px; line-height: 1.8; margin-bottom: 6px; }
+      .order-badge {
+        display: inline-block; background: #f5f5f5; border-radius: 2px;
+        padding: 7px 18px; font-family: 'Space Mono', monospace;
+        font-size: 14px; font-weight: 700; margin: 14px 0 26px; letter-spacing: 1px;
+      }
+
+      /* Loading state */
+      .skeleton { background: linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 4px; }
+      @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+      /* Notice */
+      .co-notice { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #999; margin-top: 14px; }
+      .co-notice svg { flex-shrink: 0; }
+    </style>
+  </head>
+  <body>
+    <header class="top-nav"></header>
+
+    <main class="co-shell">
+      <div class="container" style="max-width:1160px;">
+        <!-- Progress -->
+        <div class="co-progress">
+          <div class="step done" id="step-cart">
+            <span class="dot"></span>
+            <span class="lbl">Giỏ hàng</span>
+          </div>
+          <div class="line"></div>
+          <div class="step active" id="step-info">
+            <span class="dot"></span>
+            <span class="lbl">Đặt hàng</span>
+          </div>
+          <div class="line"></div>
+          <div class="step" id="step-payment">
+            <span class="dot"></span>
+            <span class="lbl">Thanh toán</span>
+          </div>
+          <div class="line"></div>
+          <div class="step" id="step-done">
+            <span class="dot"></span>
+            <span class="lbl">Hoàn thành</span>
+          </div>
+        </div>
+
+        <a href="cart.html" class="back-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Quay lại giỏ hàng
+        </a>
+
+        <div class="co-grid">
+          <!-- LEFT: Forms -->
+          <div class="co-forms">
+            <!-- Section 1: Shipping -->
+            <div class="co-card">
+              <h2 class="co-card-title">
+                <span class="step-num">1</span>
+                Thông tin giao hàng
+              </h2>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="co-name">Họ và tên *</label>
+                  <input type="text" id="co-name" placeholder="Nguyễn Văn A">
+                </div>
+                <div class="form-group">
+                  <label for="co-phone">Số điện thoại *</label>
+                  <input type="tel" id="co-phone" placeholder="0901 234 567">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="co-street">Số nhà, tên đường *</label>
+                <input type="text" id="co-street" placeholder="123 Đường Lê Lợi">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="co-city">Thành phố / Tỉnh *</label>
+                  <input type="text" id="co-city" placeholder="TP. Hồ Chí Minh">
+                </div>
+                <div class="form-group">
+                  <label for="co-state">Quận / Huyện *</label>
+                  <input type="text" id="co-state" placeholder="Quận 1">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="co-zip">Mã bưu điện</label>
+                  <input type="text" id="co-zip" placeholder="70000" value="70000">
+                </div>
+                <div class="form-group">
+                  <label for="co-country">Quốc gia</label>
+                  <input type="text" id="co-country" value="Việt Nam">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="co-note">Ghi chú đơn hàng</label>
+                <input type="text" id="co-note" placeholder="Giao giờ hành chính, gọi trước khi giao...">
+              </div>
+            </div>
+
+            <!-- Section 2: Payment -->
+            <div class="co-card">
+              <h2 class="co-card-title">
+                <span class="step-num">2</span>
+                Phương thức thanh toán
+              </h2>
+              <div class="payment-options">
+                <label class="payment-opt selected" id="pm-cod">
+                  <input type="radio" name="payment" value="COD" checked>
+                  <span class="payment-opt-icon">💵</span>
+                  <div class="payment-opt-body">
+                    <strong>Tiền mặt khi nhận hàng (COD)</strong>
+                    <span>Trả tiền trực tiếp cho người giao hàng.</span>
+                  </div>
+                </label>
+
+                <label class="payment-opt" id="pm-banking">
+                  <input type="radio" name="payment" value="Banking">
+                  <span class="payment-opt-icon">🏦</span>
+                  <div class="payment-opt-body">
+                    <strong>Chuyển khoản ngân hàng</strong>
+                    <span>Vietcombank, Techcombank, MB Bank...</span>
+                  </div>
+                </label>
+
+                <label class="payment-opt" id="pm-card">
+                  <input type="radio" name="payment" value="CreditCard">
+                  <span class="payment-opt-icon">💳</span>
+                  <div class="payment-opt-body">
+                    <strong>Thẻ tín dụng / ghi nợ</strong>
+                    <span>Visa, Mastercard, JCB</span>
+                  </div>
+                </label>
+                <!-- Mock CC fields -->
+                <div class="cc-fields" id="cc-fields">
+                  <div class="form-group">
+                    <label>Số thẻ</label>
+                    <input type="text" placeholder="0000 0000 0000 0000" maxlength="19">
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Hết hạn (MM/YY)</label>
+                      <input type="text" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                      <label>CVV</label>
+                      <input type="text" placeholder="123" maxlength="3">
+                    </div>
+                  </div>
+                  <p style="font-size:11px;color:#aaa;margin:0;">* Giao diện mô phỏng — không lưu thông tin thẻ thật.</p>
+                </div>
+
+                <label class="payment-opt" id="pm-momo">
+                  <input type="radio" name="payment" value="MoMo">
+                  <span class="payment-opt-icon">💜</span>
+                  <div class="payment-opt-body">
+                    <strong>Ví điện tử MoMo</strong>
+                    <span>Quét mã QR qua ứng dụng MoMo.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <button class="btn-place-order" id="placeOrderBtn">XÁC NHẬN ĐẶT HÀNG</button>
+          </div>
+
+          <!-- RIGHT: Summary -->
+          <aside class="co-sidebar">
+            <div class="co-card">
+              <h2 class="co-card-title" style="margin-bottom:16px;">
+                Đơn hàng của bạn
+                <span id="coItemCount" style="font-size:13px;font-weight:400;color:#888;margin-left:auto;font-family:sans-serif;"></span>
+              </h2>
+
+              <div class="order-item-list" id="coItemList">
+                <div class="skeleton" style="height:60px;border-radius:4px;"></div>
+                <div class="skeleton" style="height:60px;border-radius:4px;margin-top:8px;"></div>
+              </div>
+
+              <!-- Voucher -->
+              <div class="voucher-section">
+                <label>Mã giảm giá</label>
+                <div class="voucher-row">
+                  <input type="text" id="voucherInput" placeholder="Nhập mã voucher..." maxlength="30" autocomplete="off">
+                  <button class="btn-voucher" id="applyVoucherBtn">ÁP DỤNG</button>
+                </div>
+                <div class="voucher-msg" id="voucherMsg"></div>
+              </div>
+
+              <!-- Totals -->
+              <div class="totals-table">
+                <div class="totals-row">
+                  <span>Tạm tính</span>
+                  <span id="coSubtotal">—</span>
+                </div>
+                <div class="totals-row" id="coDiscountRow" style="display:none;">
+                  <span>Giảm giá <button id="removeVoucherBtn" style="background:none;border:none;cursor:pointer;color:#e74c3c;font-size:11px;text-decoration:underline;padding:0;">✕ Bỏ</button></span>
+                  <span class="discount-val" id="coDiscount">—</span>
+                </div>
+                <div class="totals-row">
+                  <span>Phí vận chuyển</span>
+                  <span id="coShipping" class="free-ship">Miễn phí</span>
+                </div>
+                <div class="totals-row grand">
+                  <span>Tổng thanh toán</span>
+                  <span id="coTotal">—</span>
+                </div>
+              </div>
+
+              <div class="co-notice">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Thông tin của bạn được bảo mật tuyệt đối.
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </main>
+
+
+    <footer class="site-footer"></footer>
+
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module" src="../assets/js/checkout.js"></script>
+  </body>
+</html>

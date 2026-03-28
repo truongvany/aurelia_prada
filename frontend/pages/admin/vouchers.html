@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Mã giảm giá | AURELIA Admin</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+  </head>
+  <body class="admin-body">
+    <div id="admin-app">
+      <main class="dashboard-main">
+        <div class="dashboard-title-row">
+          <div>
+            <h2>Quản lý Mã giảm giá</h2>
+            <p>Tạo và quản lý các chương trình ưu đãi cho khách hàng.</p>
+          </div>
+          <button class="btn-export" id="add-voucher-btn">TẠO VOUCHER MỚI</button>
+        </div>
+
+        <div class="table-card" style="margin-top: 24px;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>MÃ VOUCHER</th>
+                <th>MÔ TẢ</th>
+                <th>LOẠI GIẢM</th>
+                <th>GIÁ TRỊ</th>
+                <th>TỐI THIỂU</th>
+                <th>HẾT HẠN</th>
+                <th>TRẠNG THÁI</th>
+                <th>THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody id="admin-vouchers-body">
+              <!-- JS Injected -->
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <!-- Voucher Modal -->
+    <div id="voucher-modal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-title">Thêm Voucher mới</h2>
+          <button class="btn-close-modal" id="close-modal">&times;</button>
+        </div>
+        <form id="voucher-form">
+          <input type="hidden" id="edit-voucher-id" />
+          
+          <div class="admin-input-group">
+            <label class="admin-label">Mã Voucher (VD: SPRING2024)</label>
+            <input type="text" class="admin-input" id="v-code" required style="text-transform: uppercase;" />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="admin-input-group">
+              <label class="admin-label">Loại giảm giá</label>
+              <select class="admin-input" id="v-type">
+                <option value="percent">Phần trăm (%)</option>
+                <option value="fixed">Số tiền cố định (đ)</option>
+              </select>
+            </div>
+            <div class="admin-input-group">
+              <label class="admin-label">Giá trị giảm</label>
+              <input type="number" class="admin-input" id="v-amount" required min="1" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="admin-input-group">
+              <label class="admin-label">Đơn tối thiểu (đ)</label>
+              <input type="number" class="admin-input" id="v-min" value="0" />
+            </div>
+            <div class="admin-input-group">
+              <label class="admin-label">Ngày hết hạn</label>
+              <input type="date" class="admin-input" id="v-expiry" required />
+            </div>
+          </div>
+
+          <div class="admin-input-group">
+            <label class="admin-label">Mô tả ngắn</label>
+            <input type="text" class="admin-input" id="v-desc" required placeholder="VD: Giảm 10% cho đơn từ 500k" />
+          </div>
+
+          <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 25px;">
+            <div class="admin-input-group" style="margin-bottom: 0;">
+              <label class="admin-label">Lượt dùng tối đa</label>
+              <input type="number" class="admin-input" id="v-max" placeholder="Không giới hạn" />
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
+              <input type="checkbox" id="v-active" checked style="width: 20px; height: 20px; cursor: pointer;" />
+              <label for="v-active" style="font-size: 13px; font-weight: 700; cursor: pointer;">Kích hoạt ngay</label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-admin-save" style="width: 100%;">LƯU CẤU HÌNH</button>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="../../assets/js/common.js"></script>
+    <script type="module" src="../../assets/js/admin.js"></script>
+  </body>
+</html>

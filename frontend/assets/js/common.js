@@ -83,6 +83,8 @@ function buildUserShell() {
   const favHref = `${profileHref}?tab=wishlist`;
   const loginHref = inPagesFolder ? 'login.html' : 'pages/login.html';
   const registerHref = inPagesFolder ? 'register.html' : 'pages/register.html';
+  const offersHref = inPagesFolder ? 'offers.html' : 'pages/offers.html';
+  const salePageHref = inPagesFolder ? 'sale.html' : 'pages/sale.html';
   const logoSrc = inPagesFolder ? '../assets/images/logo/logo.png' : 'assets/images/logo/logo.png';
 
   const womenHref = `${shopHref}?gender=women`;
@@ -130,7 +132,7 @@ function buildUserShell() {
       <div class="aura-header-bottom">
         <div class="container">
           <nav class="aura-nav-links-new">
-            <a href="${shopHref}?sale=true" class="aura-nav-link-new sale-hl" data-nav-link>SALE ĐỒNG GIÁ</a>
+            <a href="${salePageHref}" class="aura-nav-link-new sale-hl" data-nav-link>SALE ĐỒNG GIÁ</a>
             
             <div class="aura-nav-item-new mega-dropdown">
               <a href="${womenHref}" class="aura-nav-link-new" data-nav-link>THỜI TRANG</a>
@@ -226,9 +228,9 @@ function buildUserShell() {
               </div>
             </div>
 
-            <a href="${shopHref}?promo=true" class="aura-nav-link-new" data-nav-link>ƯU ĐÃI</a>
-            <a href="${shopHref}" class="aura-nav-link-new" data-nav-link>CỬA HÀNG</a>
-            <a href="#" class="aura-nav-link-new" data-nav-link>TRA CỨU ĐƠN HÀNG</a>
+            <a href="${offersHref}" class="aura-nav-link-new" data-nav-link>ƯU ĐÃI</a>
+            <a href="${aboutHref}" class="aura-nav-link-new" data-nav-link>GIỚI THIỆU</a>
+            <a href="${contactHref}" class="aura-nav-link-new" data-nav-link>LIÊN HỆ</a>
           </nav>
         </div>
       </div>

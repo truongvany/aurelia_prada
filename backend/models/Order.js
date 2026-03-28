@@ -58,6 +58,13 @@ const orderSchema = new mongoose.Schema(
       required: true,
       default: 0.0,
     },
+    voucherCode: {
+      type: String,
+    },
+    discountPrice: {
+      type: Number,
+      default: 0,
+    },
     isPaid: {
       type: Boolean,
       required: true,
@@ -76,7 +83,7 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'],
+      enum: ['Processing', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'],
       default: 'Processing',
     },
   },
