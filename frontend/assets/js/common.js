@@ -367,7 +367,7 @@ function buildUserShell() {
             <p>© CÔNG TY TNHH AURELIA FASHION - Mã số doanh nghiệp: 0315165728</p>
           </div>
           <div class="bct-badge">
-            <img src="https://pub-83c51323386e4176a95383562629e46a.r2.dev/bct.png" alt="Đã thông báo Bộ Công Thương">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5Vo635FJfFpFdFbwT0Qj6L7ryLsb8RCgcpw&s" alt="Đã thông báo Bộ Công Thương">
           </div>
         </div>
       </div>
