@@ -1,50 +1,109 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aurelia | Cart</title>
-    <link rel="stylesheet" href="../assets/css/styles.css" />
-  </head>
-  <body>
-    <header class="top-nav">
-      <div class="container nav-inner">
-        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
-        <nav class="nav-links" data-nav-links>
-          <a href="../index.html" data-nav-link>Home</a>
-          <a href="shop.html" data-nav-link>Shop</a>
-          <a href="about.html" data-nav-link>About</a>
-          <a href="contact.html" data-nav-link>Contact</a>
-        </nav>
-        <a class="brand" href="../index.html">AURELIA</a>
-        <div class="nav-actions">
-          <a class="nav-icon" href="profile.html">U</a>
-          <a class="nav-icon" href="cart.html">B</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng của bạn | Aurelia Prada</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="bg-white">
+    <header class="top-nav"></header>
+
+    <main class="ivy-cart-shell">
+        <div class="container" style="max-width: 1200px;">
+            <!-- Progress Tracker -->
+            <div class="ivy-checkout-progress">
+                 <div class="step active">
+                    <span class="dot"></span>
+                    <span class="lbl">Giỏ hàng</span>
+                 </div>
+                 <div class="line"></div>
+                 <div class="step">
+                    <span class="dot"></span>
+                    <span class="lbl">Đặt hàng</span>
+                 </div>
+                 <div class="line"></div>
+                 <div class="step">
+                    <span class="dot"></span>
+                    <span class="lbl">Thanh toán</span>
+                 </div>
+                 <div class="line"></div>
+                 <div class="step">
+                    <span class="dot"></span>
+                    <span class="lbl">Hoàn thành đơn</span>
+                 </div>
+            </div>
+
+            <div class="ivy-cart-grid">
+                <div class="ivy-cart-main">
+                    <h2 class="ivy-cart-title-main">Giỏ hàng của bạn <span id="cartCountLabel" class="text-danger">0 Sản Phẩm</span></h2>
+                    
+                    <div class="cart-table-header">
+                        <span class="col-name">TÊN SẢN PHẨM</span>
+                        <span class="col-disc">CHIẾT KHẤU</span>
+                        <span class="col-qty">SỐ LƯỢNG</span>
+                        <span class="col-total">TỔNG TIỀN</span>
+                    </div>
+
+                    <div id="cartItemsContainer" class="cart-items-list" style="min-height: 200px;">
+                        <!-- Dynamic items -->
+                        <div id="emptyCartMessage" style="display:none; padding: 40px 0; text-align: left;">
+                            <p class="text-muted" style="margin-bottom: 0;">Giỏ hàng đang trống.</p>
+                        </div>
+                    </div>
+
+                    <div class="cart-footer-actions" style="margin-top: 30px;">
+                        <a href="shop.html" class="ivy-btn-outline" style="padding: 12px 30px; border-radius: 4px; border-color:#222; color:#222; background:transparent;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align: middle;"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            <span style="font-weight: 700; letter-spacing: 1px; font-size: 11px; vertical-align: middle;">TIẾP TỤC MUA HÀNG</span>
+                        </a>
+                    </div>
+                </div>
+
+                <aside class="ivy-cart-sidebar">
+                    <div class="summary-card">
+                        <h3 class="summary-title">Tổng tiền giỏ hàng</h3>
+                        
+                        <div class="summary-body">
+                            <div class="summary-row">
+                                <span>Tổng sản phẩm</span>
+                                <span id="summaryCount">0</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Tổng tiền hàng</span>
+                                <span id="summaryRawTotal">0đ</span>
+                            </div>
+                            <div class="summary-row highlight">
+                                <span>Thành tiền</span>
+                                <span id="summaryFinalTotal" class="text-danger" style="font-weight: 800;">0đ</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Tạm tính</span>
+                                <span id="summarySubtotal">0đ</span>
+                            </div>
+                        </div>
+
+                        <div class="summary-notices">
+                            <div class="notice-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                <span>Sản phẩm nằm trong chương trình KM giảm giá trên 50% không hỗ trợ đổi trả.</span>
+                            </div>
+                            <div class="notice-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                <span>Không thanh toán cho Shipper khi chưa nhận hàng!</span>
+                            </div>
+                        </div>
+
+                        <button id="checkoutBtn" class="ivy-btn-black full-width" style="margin-top: 15px; padding: 15px;">ĐẶT HÀNG</button>
+                    </div>
+                </aside>
+            </div>
         </div>
-      </div>
-    </header>
-
-    <main class="section">
-      <div class="container two-col" style="grid-template-columns:1.25fr .75fr;">
-        <section class="card panel">
-          <h1>Giỏ Hàng</h1>
-          <div id="cart-list"></div>
-        </section>
-
-        <aside class="card panel">
-          <h2 style="font-size:28px;">Đơn Hàng</h2>
-          <div class="summary-row"><span>Tổng phụ</span><strong id="subtotal">0đ</strong></div>
-          <div class="summary-row"><span>Thuế</span><strong id="tax">0đ</strong></div>
-          <div class="summary-row"><span>Tổng cộng</span><strong id="total">0đ</strong></div>
-          <a href="#" id="checkout-btn" class="btn btn-dark" style="display:block;text-align:center;margin-top:16px;">Thanh Toán</a>
-          <a href="shop.html" class="btn btn-outline" style="display:block;text-align:center;margin-top:10px;">Tiếp Tục Mua Sắm</a>
-        </aside>
-      </div>
     </main>
 
-    <footer class="site-footer"><div class="container footer-note">&copy; <span id="current-year"></span> Aurelia.</div></footer>
+    <footer class="site-footer"></footer>
+
     <script type="module" src="../assets/js/common.js"></script>
     <script type="module" src="../assets/js/cart.js"></script>
-  </body>
+</body>
 </html>
-

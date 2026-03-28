@@ -25,12 +25,40 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     address: {
-      street: String,
-      city: String,
-      state: String,
-      zipCode: String,
-      country: String,
+      type: String,
     },
+    dob: {
+      type: String,
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'other'],
+    },
+    wishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+    ],
+    viewedProducts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+    ],
+    loginHistory: [
+      {
+        device: String,
+        software: String,
+        loginType: String,
+        location: String,
+        ip: String,
+        timestamp: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

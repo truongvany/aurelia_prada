@@ -12,6 +12,10 @@ async function initProfile() {
     const user = await getUserProfile();
     renderUserInfo(user);
     renderSettingsForm(user);
+    renderLoginHistory(user.loginHistory);
+    renderAddresses(user);
+    renderViewedProducts(user.viewedProducts);
+    renderWishlist(user.wishlist);
     
     profileContent.style.display = 'block';
     if (loadingSpinner) loadingSpinner.style.display = 'none';
@@ -46,20 +50,117 @@ function renderUserInfo(user) {
   if (cityEl) cityEl.textContent = user.address?.city || '---';
 }
 
+function renderLoginHistory(history) {
+    const container = document.getElementById('loginHistoryContainer');
+    if (!container) return;
+    
+    if (!history || history.length === 0) {
+        container.innerHTML = '<tr><td colspan="6" class="text-center py-4">Chưa có lịch sử đăng nhập.</td></tr>';
+        return;
+    }
+    
+    container.innerHTML = [...history].reverse().map(log => `
+        <tr>
+            <td>${log.device || 'Unknown'}</td>
+            <td style="font-size: 12px; color: #666;">${log.software || '---'}</td>
+            <td>${log.loginType || 'Mặc định'}</td>
+            <td>${log.location || 'Vietnam'}</td>
+            <td>${log.ip}</td>
+            <td>${new Date(log.timestamp).toLocaleString()}</td>
+        </tr>
+    `).join('');
+}
+
+function renderAddresses(user) {
+    const container = document.getElementById('addressContainer');
+    if (!container) return;
+
+    if (!user.address || !user.address.street) {
+        container.innerHTML = `
+            <div class="ivy-empty-state" style="padding: 40px 0;">
+                <p style="color: #888; font-size: 13px;">Bạn chưa lưu địa chỉ nào.</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="ivy-address-card">
+            <div class="ivy-addr-top">
+                <div class="ivy-addr-name">${user.name} (Địa chỉ mặc định)</div>
+                <div class="ivy-addr-actions">
+                    <span class="ivy-addr-btn-edit">Sửa</span>
+                    <span class="ivy-addr-badge-def">Mặc định</span>
+                </div>
+            </div>
+            <div class="ivy-addr-row">
+                <strong>Điện thoại:</strong> ${user.phone || '---'}
+            </div>
+            <div class="ivy-addr-row">
+                <strong>Địa chỉ:</strong> ${user.address.street}, ${user.address.city || ''}
+            </div>
+        </div>
+    `;
+}
+
+async function renderViewedProducts(viewedProducts) {
+    const container = document.getElementById('viewedProductsContainer');
+    if (!container) return;
+
+    if (!viewedProducts || viewedProducts.length === 0) {
+        container.innerHTML = '<p class="text-muted">Danh sách sản phẩm bạn vừa xem sẽ xuất hiện tại đây.</p>';
+        return;
+    }
+
+    try {
+        const { createProductCard } = await import('./common.js');
+        container.innerHTML = viewedProducts.map(createProductCard).join('');
+    } catch (err) {
+        container.innerHTML = '<p class="text-muted">Không thể tải danh sách sản phẩm.</p>';
+    }
+}
+
+async function renderWishlist(wishlist) {
+    const container = document.getElementById('wishlistContainer');
+    if (!container) return;
+
+    if (!wishlist || wishlist.length === 0) {
+        container.innerHTML = '<p class="text-muted">Bạn chưa có sản phẩm yêu thích nào.</p>';
+        return;
+    }
+
+    try {
+        const { createProductCard } = await import('./common.js');
+        container.innerHTML = wishlist.map(createProductCard).join('');
+    } catch (err) {
+        container.innerHTML = '<p class="text-muted">Không thể tải danh sách sản phẩm yêu thích.</p>';
+    }
+}
+
 function renderSettingsForm(user) {
-  const nameInput = document.getElementById('settingName');
+  const nameParts = (user.name || '').split(' ');
+  const lastName = nameParts[0] || '';
+  const firstName = nameParts.slice(1).join(' ') || '';
+
+  const lastNameInput = document.getElementById('settingLastName');
+  const firstNameInput = document.getElementById('settingFirstName');
   const emailInput = document.getElementById('settingEmail');
   const phoneInput = document.getElementById('settingPhone');
-  const streetInput = document.getElementById('settingStreet');
-  const cityInput = document.getElementById('settingCity');
-  const countryInput = document.getElementById('settingCountry');
-
-  if (nameInput) nameInput.value = user.name || '';
+  const dobInput = document.getElementById('settingDob');
+  
+  if (lastNameInput) lastNameInput.value = lastName;
+  if (firstNameInput) firstNameInput.value = firstName;
   if (emailInput) emailInput.value = user.email || '';
   if (phoneInput) phoneInput.value = user.phone || '';
-  if (streetInput) streetInput.value = user.address?.street || '';
-  if (cityInput) cityInput.value = user.address?.city || '';
-  if (countryInput) countryInput.value = user.address?.country || '';
+  if (dobInput) dobInput.value = user.dob || '';
+
+  const genderRadios = document.querySelectorAll('input[name="gender"]');
+  genderRadios.forEach(radio => {
+    if (radio.value === user.gender) radio.checked = true;
+  });
+
+  const sidebarName = document.getElementById('userNameSidebar');
+  if (sidebarName) sidebarName.textContent = user.name || 'User';
 }
 
 async function loadOrders() {
@@ -69,11 +170,21 @@ async function loadOrders() {
   try {
     const orders = await getMyOrders();
     if (!orders || orders.length === 0) {
-      container.innerHTML = `
-        <tr>
-          <td colspan="5" class="orders-empty">Bạn chưa có đơn hàng nào. <a href="shop.html" class="btn btn-outline" style="margin-left: 12px;">Bắt Đầu Mua Sắm</a></td>
-        </tr>
-      `;
+      const panel = document.querySelector('[data-profile-panel="orders"]');
+      if (panel) {
+        panel.innerHTML = `
+          <h2 class="ivy-main-title">Quản lý đơn hàng</h2>
+          <div class="ivy-empty-state">
+              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#eee" stroke-width="1.5" style="margin-bottom: 20px;">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+              <p style="color: #888; margin-bottom: 25px; font-size: 14px;">Bạn chưa có đơn hàng nào trong lịch sử.</p>
+              <a href="shop.html" class="ivy-btn-black" style="display: inline-block; text-decoration: none;">BẮT ĐẦU MUA SẮM</a>
+          </div>
+        `;
+      }
       return;
     }
 
@@ -134,11 +245,46 @@ function setupTabs() {
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.getAttribute('data-profile-tab');
+      if (target === 'logout' || !target) return;
+
+      // Update active state on buttons
       buttons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      panels.forEach(p => p.hidden = p.getAttribute('data-profile-panel') !== target);
+      
+      // Toggle panels
+      panels.forEach(p => {
+        p.hidden = p.getAttribute('data-profile-panel') !== target;
+      });
+      
+      // Logic for specific tabs
+      if (target === 'orders') {
+        loadOrders();
+      } else if (target === 'wishlist') {
+        loadWishlist();
+      } else if (target === 'login-history') {
+         getUserProfile().then(user => renderLoginHistory(user.loginHistory));
+      } else if (target === 'viewed') {
+         getUserProfile().then(user => renderViewedProducts(user.viewedProducts));
+      } else if (target === 'wishlist') {
+         getUserProfile().then(user => renderWishlist(user.wishlist));
+      }
     });
   });
+}
+
+async function loadWishlist() {
+    const container = document.getElementById('wishlistContainer');
+    if (!container) return;
+    
+    try {
+        const { fetchProducts } = await import('./api.js');
+        const products = await fetchProducts();
+        const { createProductCard } = await import('./common.js');
+        
+        container.innerHTML = products.slice(0, 4).map(createProductCard).join('');
+    } catch (err) {
+        container.innerHTML = '<p class="text-muted">Không thể tải danh sách sản phẩm yêu thích.</p>';
+    }
 }
 
 function setupForm(user) {
@@ -150,14 +296,15 @@ function setupForm(user) {
     const saveBtn = form.querySelector('button[type="submit"]');
     const originalText = saveBtn.textContent;
 
+    const lastName = document.getElementById('settingLastName')?.value || '';
+    const firstName = document.getElementById('settingFirstName')?.value || '';
+    const gender = document.querySelector('input[name="gender"]:checked')?.value;
+    
     const updatedData = {
-      name: document.getElementById('settingName').value,
+      name: `${lastName} ${firstName}`.trim(),
       phone: document.getElementById('settingPhone').value,
-      address: {
-        street: document.getElementById('settingStreet')?.value || '',
-        city: document.getElementById('settingCity').value,
-        country: document.getElementById('settingCountry').value,
-      }
+      dob: document.getElementById('settingDob').value,
+      gender: gender,
     };
 
     try {
@@ -180,12 +327,28 @@ function setupForm(user) {
 }
 
 function setupLogout() {
-  const btn = document.getElementById('signOutBtn');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-        logoutUser();
-      }
+  const btn = document.getElementById('signOutBtnSide');
+  const modal = document.getElementById('logoutModal');
+  const confirmBtn = document.getElementById('confirmLogout');
+  const cancelBtn = document.getElementById('cancelLogout');
+
+  if (btn && modal) {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      modal.style.display = 'flex';
+    });
+    
+    cancelBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    
+    confirmBtn.addEventListener('click', () => {
+      logoutUser();
+    });
+
+    // Close on outside click
+    modal.addEventListener('click', (e) => {
+      if(e.target === modal) modal.style.display = 'none';
     });
   }
 }

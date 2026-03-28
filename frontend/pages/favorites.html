@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist | Aurelia Signature</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+    <header class="top-nav"></header>
+
+    <main class="sig-page-shell">
+        <div class="container">
+            <div class="sig-title-wrap">
+                <h1 class="sig-title">WISHLIST</h1>
+                <span class="sig-subtitle">Sản phẩm Yêu thích by Signature Design</span>
+            </div>
+
+            <div class="sig-fav-grid" id="favorites-grid">
+                <!-- Dynamically populated Masonry-style products -->
+                <p class="text-muted text-center py-5 full" style="grid-column: 1 / -1;">Bạn chưa có sản phẩm yêu thích nào...</p>
+            </div>
+            
+            <div class="mt-5 text-center">
+                <a href="shop.html" class="sig-btn-black">EXPLORE THE SHOP</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module">
+        import { createProductCard } from '../assets/js/common.js';
+        
+        async function loadFavorites() {
+            const grid = document.getElementById('favorites-grid');
+            try {
+                const { fetchProducts } = await import('../assets/js/api.js');
+                const products = await fetchProducts();
+                const favs = products.slice(0, 6); // Mock favs
+                
+                if (favs.length > 0) {
+                    grid.innerHTML = favs.map(p => `
+                        <article class="sig-fav-item">
+                            <img src="${p.image}" alt="${p.name}">
+                            <div class="overlay">
+                                <h3 class="font-serif">${p.name}</h3>
+                                <p class="small text-uppercase mt-2" style="letter-spacing:1px;">${p.price.toLocaleString()}đ</p>
+                                <a href="product-detail.html?id=${p._id}" class="mt-3 d-inline-block text-white" style="text-decoration: underline;">View details</a>
+                            </div>
+                        </article>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error('Favorites err:', err);
+            }
+        }
+        
+        loadFavorites();
+    </script>
+</body>
+</html>

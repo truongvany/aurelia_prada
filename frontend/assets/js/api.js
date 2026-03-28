@@ -48,11 +48,11 @@ export async function loginUser(email, password) {
   return data;
 }
 
-export async function registerUser(name, email, password, phone, address) {
+export async function registerUser(name, email, password, phone, address, dob, gender) {
   const res = await fetch(`${API_URL}/auth/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email, password, phone, address }),
+    body: JSON.stringify({ name, email, password, phone, address, dob, gender }),
   });
   if (!res.ok) {
     const errorData = await res.json();

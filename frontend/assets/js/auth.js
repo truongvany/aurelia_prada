@@ -35,9 +35,14 @@ function setupAuth() {
   if (registerForm) {
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('name').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const firstName = document.getElementById('firstName').value.trim();
       const email = document.getElementById('email').value.trim();
       const phone = document.getElementById('phone').value.trim();
+      const dob = document.getElementById('dob').value.trim();
+      const gender = document.getElementById('gender').value;
+      const fullAddress = document.getElementById('address').value.trim();
+
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
       const errorAlert = document.getElementById('errorAlert');
@@ -53,7 +58,15 @@ function setupAuth() {
 
       try {
         if (submitBtn) submitBtn.disabled = true;
-        await registerUser(name, email, password, phone, {}); 
+        await registerUser(
+            `${lastName} ${firstName}`.trim(), 
+            email, 
+            password, 
+            phone, 
+            fullAddress,
+            dob,
+            gender
+        ); 
         window.location.href = '../index.html';
       } catch (err) {
         if (errorAlert) {

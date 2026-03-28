@@ -11,35 +11,41 @@ export function createProductCard(product) {
   const salePercent = hasSale ? Math.round((1 - product.price / product.originalPrice) * 100) : null;
   const oldPrice = hasSale ? `<span class="aura-old-price">${formatVnd(product.originalPrice)}</span>` : '';
   
+  const badgeContent = product.isBestSeller ? `<div class="aura-badge-best">Best Seller</div>` : (product.isNew ? `<div class="aura-badge-new">NEW</div>` : '');
+  
   return `
     <article class="aura-product-card">
       <div class="aura-product-media">
-        ${hasSale ? `<div class="aura-sale-tag">-${salePercent}%</div>` : ''}
-        ${product.badge ? `<div class="aura-top-badge">${product.badge}</div>` : ''}
+        ${badgeContent}
+        ${hasSale ? `<div class="aura-sale-bubble">-${salePercent}%</div>` : ''}
         <a href="${detailHref}" class="aura-image-link">
           <img src="${product.image}" alt="${product.name}" loading="lazy" 
                onerror="this.closest('.aura-product-media').classList.add('img-error')">
-          <div class="aura-card-action">THÊM VÀO GIỎ</div>
         </a>
       </div>
       <div class="aura-product-info">
-        <div class="aura-brand">AURELIA <span class="aura-ref">#${String(productId).substring(0, 6).toUpperCase()}</span></div>
-        <h4 class="aura-product-title"><a href="${detailHref}">${product.name}</a></h4>
-        <div class="aura-price-row">
-            <strong class="aura-current-price">${formatVnd(product.price)}</strong>
-            ${oldPrice}
-        </div>
-        <div class="aura-card-footer">
-          <div class="aura-card-colors">
-            <span class="dot active" style="background:#242424;"></span>
-            <span class="dot" style="background:#E8D8D0;"></span>
-            <span class="dot" style="background:#C5A89E;"></span>
+        <div class="aura-card-meta">
+          <div class="aura-card-dots">
+            <span class="aura-dot has-check" style="background:#ddd;"></span>
+            <span class="aura-dot" style="background:#555;"></span>
+            <span class="aura-dot" style="background:#8b0000;"></span>
+            <span class="aura-dot" style="background:#ccac00;"></span>
           </div>
           <button class="aura-card-wishlist" aria-label="Add to wishlist">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
             </svg>
           </button>
+        </div>
+        <h4 class="aura-product-title-sm"><a href="${detailHref}">${product.name}</a></h4>
+        <div class="aura-card-buy-row">
+            <div class="aura-price-stack">
+                <strong class="aura-price-bold">${formatVnd(product.price)}</strong>
+                ${hasSale ? `<span class="aura-price-old-sm">${formatVnd(product.originalPrice)}</span>` : ''}
+            </div>
+            <button class="aura-mini-cart-btn ivy-cart-btn" data-product-id="${productId}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
+            </button>
         </div>
       </div>
     </article>
@@ -55,6 +61,7 @@ function buildUserShell() {
   const contactHref = inPagesFolder ? 'contact.html' : 'pages/contact.html';
   const profileHref = inPagesFolder ? 'profile.html' : 'pages/profile.html';
   const cartHref = inPagesFolder ? 'cart.html' : 'pages/cart.html';
+  const favHref = inPagesFolder ? 'favorites.html' : 'pages/favorites.html';
   const loginHref = inPagesFolder ? 'login.html' : 'pages/login.html';
   const registerHref = inPagesFolder ? 'register.html' : 'pages/register.html';
   const logoSrc = inPagesFolder ? '../assets/images/logo/logo.png' : 'assets/images/logo/logo.png';
@@ -82,7 +89,7 @@ function buildUserShell() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
               <span>CỬA HÀNG</span>
             </a>
-            <a class="aura-action-item" href="${profileHref}">
+            <a class="aura-action-item" href="${favHref}">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
               <span>SẢN PHẨM YÊU THÍCH</span>
             </a>
@@ -160,44 +167,86 @@ function buildUserShell() {
   `;
 
   const footer = `
-    <footer class="site-footer aura-footer">
-      <div class="container aura-footer-grid">
-        <section>
-          <h3>AURELIA</h3>
-          <p>Empowering women through minimalist, elegant and sustainable fashion for the modern muse.</p>
-          <div class="aura-socials">
-            <a href="#" aria-label="Instagram">IG</a>
-            <a href="#" aria-label="Facebook">FB</a>
-            <a href="#" aria-label="Twitter">TW</a>
+    <footer class="site-footer ivy-footer">
+      <div class="container ivy-footer-grid">
+        <!-- Column 1: Brand & Socials -->
+        <div class="ivy-footer-col brand-col">
+          <div class="ivy-footer-logo-wrap">
+            <img src="${logoSrc}" alt="AURELIA" class="footer-logo">
+            <div class="cert-badges">
+                <img src="https://pub-83c51323386e4176a95383562629e46a.r2.dev/dmca.png" alt="DMCA" style="height:20px;">
+                <img src="https://pub-83c51323386e4176a95383562629e46a.r2.dev/bct.png" alt="BCT" style="height:20px;">
+            </div>
           </div>
-        </section>
-        <section>
-          <h5>Shop</h5>
-          <a href="${shopHref}">New Arrivals</a>
-          <a href="${shopHref}">Dresses</a>
-          <a href="${shopHref}">Accessories</a>
-          <a href="${shopHref}">Sale</a>
-        </section>
-        <section>
-          <h5>Help</h5>
-          <a href="${contactHref}">Contact Us</a>
-          <a href="#">FAQ</a>
-          <a href="#">Shipping & Returns</a>
-          <a href="#">Size Guide</a>
-        </section>
-        <section>
-          <h5>Newsletter</h5>
-          <p>Subscribe to receive updates and exclusive drops.</p>
-          <form class="aura-news-form" onsubmit="return false;">
-            <input type="email" placeholder="Enter your email" aria-label="Email" />
-            <button type="button">Join</button>
-          </form>
-          <p class="aura-auth-links"><a href="${loginHref}">Login</a> · <a href="${registerHref}">Register</a></p>
-        </section>
+          <div class="ivy-footer-socials">
+            <a href="#" class="social-icon fb"></a>
+            <a href="#" class="social-icon gg"></a>
+            <a href="#" class="social-icon ig"></a>
+            <a href="#" class="social-icon zl"></a>
+            <a href="#" class="social-icon yt"></a>
+          </div>
+          <div class="ivy-footer-hotline">
+            HOTLINE: 0246 662 3434
+          </div>
+        </div>
+
+        <!-- Column 2: Intro -->
+        <div class="ivy-footer-col">
+          <h5>Giới thiệu</h5>
+          <ul>
+            <li><a href="#">Về AURELIA</a></li>
+            <li><a href="#">Tuyển dụng</a></li>
+            <li><a href="#">Hệ thống cửa hàng</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Customer Service -->
+        <div class="ivy-footer-col">
+          <h5>Dịch vụ khách hàng</h5>
+          <ul>
+            <li><a href="#">Chính sách điều khoản</a></li>
+            <li><a href="#">Hướng dẫn mua hàng</a></li>
+            <li><a href="#">Chính sách thanh toán</a></li>
+            <li><a href="#">Chính sách đổi trả</a></li>
+            <li><a href="#">Chính sách bảo hành</a></li>
+            <li><a href="#">Chính sách giao nhận</a></li>
+            <li><a href="#">Thẻ thành viên</a></li>
+            <li><a href="#">Q&A</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact -->
+        <div class="ivy-footer-col">
+          <h5>Liên hệ</h5>
+          <ul>
+            <li><a href="#">Hotline</a></li>
+            <li><a href="#">Email</a></li>
+            <li><a href="#">Live Chat</a></li>
+            <li><a href="#">Messenger</a></li>
+            <li><a href="#">Liên hệ</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 5: Subscribe & App -->
+        <div class="ivy-footer-col side-col">
+          <div class="newsletter-box">
+            <h6>Nhận thông tin các chương trình của AURELIA</h6>
+            <form class="newsletter-form-minimal">
+                <input type="email" placeholder="Nhập địa chỉ email">
+                <button type="button">Đăng ký</button>
+            </form>
+          </div>
+          <div class="app-download-wrap">
+            <h5>Download App</h5>
+            <div class="app-links">
+                <a href="#"><img src="https://pub-83c51323386e4176a95383562629e46a.r2.dev/appstore.png" alt="App Store"></a>
+                <a href="#"><img src="https://pub-83c51323386e4176a95383562629e46a.r2.dev/googleplay.png" alt="Google Play"></a>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="container aura-footer-bottom">
-        <span>&copy; <span id="current-year"></span> Aurelia. All rights reserved.</span>
-        <span><a href="#">Privacy</a> · <a href="#">Terms</a></span>
+      <div class="container ivy-footer-bottom">
+        <p>©AURELIA All rights reserved</p>
       </div>
     </footer>
   `;

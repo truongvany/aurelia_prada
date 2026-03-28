@@ -1,262 +1,188 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng Nhập - Aurelia Prada</title>
-  <link rel="stylesheet" href="../assets/css/styles.css">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập | Aurelia Prada</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        .ivy-auth-shell {
+            padding: 100px 0;
+            background: #fff;
+        }
+        .ivy-auth-split {
+            display: grid;
+            grid-template-columns: 1fr 1px 1fr;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            align-items: start;
+        }
+        .ivy-auth-divider {
+            background: #eee;
+            height: 400px;
+            align-self: center;
+        }
+        
+        /* Left/Right shared */
+        .ivy-auth-col {
+            padding: 0 40px;
+            text-align: center;
+        }
+        .ivy-auth-col h2 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            font-family: 'Manrope', sans-serif;
+            text-transform: none;
+        }
+        .ivy-auth-col p {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
 
-    .auth-container {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
+        /* Form side */
+        .ivy-login-form {
+            max-width: 340px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .ivy-field-auth {
+            margin-bottom: 15px;
+        }
+        .ivy-field-auth input {
+            width: 100%;
+            padding: 14px 18px;
+            background: #f0f7ff;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            outline: none;
+        }
+        .ivy-auth-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            margin-bottom: 15px;
+            color: #666;
+        }
+        .ivy-auth-meta label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .ivy-auth-meta a {
+            color: #666;
+            text-decoration: none;
+        }
+        .ivy-auth-links-extra {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .ivy-auth-links-extra a {
+            font-size: 12px;
+            color: #333;
+            text-decoration: underline;
+            font-weight: 600;
+        }
 
-    .top-nav {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
+        .ivy-btn-auth-full {
+            width: 100%;
+            padding: 18px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 4px 18px 18px 4px;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .ivy-btn-auth-full:hover { opacity: 0.9; }
 
-    .auth-card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-      padding: 40px;
-      animation: slideUp 0.6s ease-out;
-      margin: 80px auto 40px;
-    }
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            display: none;
+            text-align: left;
+        }
+        .alert.show { display: block; }
+        .alert.error { background: #fee; color: #c33; border: 1px solid #fcc; }
 
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .auth-header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .auth-header h1 {
-      font-size: 28px;
-      color: #1a1a1a;
-      margin: 0 0 10px 0;
-    }
-
-    .auth-header p {
-      color: #666;
-      font-size: 14px;
-      margin: 0;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: #333;
-      font-weight: 500;
-      font-size: 14px;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      box-sizing: border-box;
-    }
-
-    .form-group input:focus {
-      outline: none;
-      border-color: #1a1a1a;
-      box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 12px;
-      background: #1a1a1a;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-bottom: 20px;
-    }
-
-    .submit-btn:hover {
-      background: #333;
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .submit-btn:active {
-      transform: translateY(0);
-    }
-
-    .submit-btn:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-      transform: none;
-      opacity: 0.6;
-    }
-
-    .auth-toggle {
-      text-align: center;
-      padding-top: 20px;
-      border-top: 1px solid #eee;
-    }
-
-    .auth-toggle p {
-      margin: 0;
-      color: #666;
-      font-size: 14px;
-    }
-
-    .auth-toggle a {
-      color: #1a1a1a;
-      text-decoration: none;
-      font-weight: 600;
-      margin-left: 5px;
-    }
-
-    .auth-toggle a:hover {
-      text-decoration: underline;
-    }
-
-    .alert {
-      padding: 12px 15px;
-      border-radius: 6px;
-      margin-bottom: 20px;
-      font-size: 14px;
-      display: none;
-    }
-
-    .alert.show {
-      display: block;
-    }
-
-    .alert.error {
-      background: #fee;
-      color: #c33;
-      border: 1px solid #fcc;
-    }
-
-    .alert.success {
-      background: #efe;
-      color: #3c3;
-      border: 1px solid #cfc;
-    }
-
-    .loading-spinner {
-      display: none;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-top: 3px solid white;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-right: 10px;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .btn-content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .forgot-password {
-      text-align: right;
-      margin-bottom: 20px;
-    }
-
-    .forgot-password a {
-      color: #1a1a1a;
-      font-size: 13px;
-      text-decoration: none;
-    }
-
-    .forgot-password a:hover {
-      text-decoration: underline;
-    }
-  </style>
+        @media (max-width: 768px) {
+            .ivy-auth-split {
+                grid-template-columns: 1fr;
+            }
+            .ivy-auth-divider {
+                display: none;
+            }
+        }
+    </style>
 </head>
-<body>
-  <header class="top-nav"></header>
-  <div class="auth-container">
-    <div class="auth-card">
-      <div class="auth-header">
-        <h1>Đăng Nhập</h1>
-        <p>Chào mừng quay lại Aurelia Prada</p>
-      </div>
+<body class="bg-white">
+    <header class="top-nav"></header>
 
-      <div class="alert error" id="errorAlert"></div>
-      <div class="alert success" id="successAlert"></div>
+    <main class="ivy-auth-shell">
+        <div class="container">
+            <div class="ivy-auth-split">
+                
+                <!-- LEFT: Login -->
+                <div class="ivy-auth-col">
+                    <h2>Bạn đã có tài khoản IVY</h2>
+                    <p>Nếu bạn đã có tài khoản, hãy đăng nhập để tích lũy điểm thành viên và nhận được những ưu đãi tốt hơn!</p>
+                    
+                    <div id="errorAlert" class="alert error"></div>
 
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                    <form id="loginForm" class="ivy-login-form">
+                        <div class="ivy-field-auth">
+                            <input type="email" id="email" placeholder="Email / SĐT" required>
+                        </div>
+                        <div class="ivy-field-auth">
+                            <input type="password" id="password" placeholder="Mật khẩu" required>
+                        </div>
+
+                        <div class="ivy-auth-meta">
+                            <label><input type="checkbox"> Ghi nhớ đăng nhập</label>
+                            <a href="#">Quên mật khẩu?</a>
+                        </div>
+
+                        <div class="ivy-auth-links-extra">
+                            <a href="#">Đăng nhập bằng mã QR</a>
+                            <a href="#">Đăng nhập bằng OTP</a>
+                        </div>
+
+                        <button type="submit" class="ivy-btn-auth-full" id="submitBtn">ĐẲNG NHẬP</button>
+                    </form>
+                </div>
+
+                <!-- Divider -->
+                <div class="ivy-auth-divider"></div>
+
+                <!-- RIGHT: Register Promo -->
+                <div class="ivy-auth-col">
+                    <h2>Khách hàng mới của IVY moda</h2>
+                    <p>Nếu bạn chưa có tài khoản trên ivymoda.com, hãy sử dụng tùy chọn này để truy cập biểu mẫu đăng ký. Bằng cách cung cấp cho IVY moda thông tin chi tiết của bạn, quá trình mua hàng trên ivymoda.com sẽ là một trải nghiệm thú vị và nhanh chóng hơn!</p>
+                    
+                    <div class="ivy-login-form">
+                         <a href="register.html" class="ivy-btn-auth-full" style="display:block; text-align:center; text-decoration:none;">ĐĂNG KÝ</a>
+                    </div>
+                </div>
+
+            </div>
         </div>
+    </main>
 
-        <div class="form-group">
-          <label for="password">Mật Khẩu</label>
-          <input type="password" id="password" name="password" placeholder="••••••••" required>
-        </div>
-
-        <div class="forgot-password">
-          <a href="#">Quên mật khẩu?</a>
-        </div>
-
-        <button type="submit" class="submit-btn" id="submitBtn">
-          <div class="btn-content">
-            <span class="loading-spinner" id="spinner"></span>
-            <span id="btnText">Đăng Nhập</span>
-          </div>
-        </button>
-      </form>
-
-      <div class="auth-toggle">
-        <p>Chưa có tài khoản?<a href="register.html">Đăng ký ngay</a></p>
-      </div>
-    </div>
-  </div>
-
-  <footer class="site-footer"></footer>
-  <script type="module" src="../assets/js/common.js"></script>
-  <script type="module" src="../assets/js/auth.js"></script>
+    <footer class="site-footer"></footer>
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module" src="../assets/js/auth.js"></script>
 </body>
 </html>
-
