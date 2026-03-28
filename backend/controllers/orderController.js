@@ -209,6 +209,36 @@ const updateOrderToDelivered = async (req, res) => {
   }
 };
 
+// @desc    Update order status (Admin)
+// @route   PUT /api/orders/:id/status
+// @access  Private/Admin
+const updateOrderStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const validStatuses = ['Processing', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Trạng thái không hợp lệ.' });
+    }
+
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    order.status = status;
+    if (status === 'Delivered') {
+      order.isDelivered = true;
+      order.deliveredAt = Date.now();
+    }
+    if (status === 'Confirmed') {
+      order.isPaid = order.paymentMethod !== 'COD' ? true : order.isPaid;
+    }
+
+    const updated = await order.save();
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   addOrderItems,
   getOrderById,
@@ -217,4 +247,5 @@ module.exports = {
   getOrders,
   updateOrderToPaid,
   updateOrderToDelivered,
+  updateOrderStatus,
 };

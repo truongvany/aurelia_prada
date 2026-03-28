@@ -150,6 +150,25 @@ export async function updateOrderToDelivered(id) {
   return res.json();
 }
 
+export async function updateOrderStatus(id, status) {
+  const res = await fetch(`${API_URL}/orders/${id}/status`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ status }),
+  });
+  if (!res.ok) throw new Error('Failed to update order status');
+  return res.json();
+}
+
+export async function getOrderById(id) {
+  const res = await fetch(`${API_URL}/orders/${id}`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to fetch order');
+  return res.json();
+}
+
+
 export async function getMyOrders() {
   const res = await fetch(`${API_URL}/orders/myorders`, {
     headers: getAuthHeaders(),

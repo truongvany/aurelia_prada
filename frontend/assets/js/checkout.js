@@ -258,22 +258,17 @@ async function placeOrder() {
     // Clear backend cart
     try { await clearCart(); } catch (_) {}
 
-    // Mark done step
+    // Mark payment step active
+    document.getElementById('step-payment')?.classList.add('active', 'done');
     document.getElementById('step-done')?.classList.add('active');
-    document.getElementById('step-payment')?.classList.add('done');
-
-    // Show success
-    const overlay = document.getElementById('successOverlay');
-    const orderIdEl = document.getElementById('successOrderId');
-    if (orderIdEl) orderIdEl.textContent = `#${order._id.slice(-8).toUpperCase()}`;
-    if (overlay) {
-      overlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
 
     // Update cart badge
     const badge = document.getElementById('cart-badge');
     if (badge) { badge.textContent = '0'; badge.style.display = 'none'; }
+
+    // Redirect to payment page with order ID
+    window.location.href = `payment.html?orderId=${order._id}`;
+
 
   } catch (err) {
     console.error('Order failed:', err);

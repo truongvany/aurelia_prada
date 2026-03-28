@@ -330,144 +330,6 @@ async function applyVoucher() {
   }
 }
 
-// ─── Checkout Modal ───────────────────────────────────────────────────────────
-function openCheckoutModal() {
-  const overlay = document.getElementById('checkoutModalOverlay');
-  if (!overlay) return;
-
-  // Pre-fill user info
-  const user = getUserInfo();
-  if (user) {
-    const nameEl = document.getElementById('co-name');
-    const phoneEl = document.getElementById('co-phone');
-    if (nameEl && user.name) nameEl.value = user.name;
-    if (phoneEl && user.phone) phoneEl.value = user.phone;
-  }
-
-  // Build order summary in modal
-  buildModalSummary();
-
-  overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeCheckoutModal() {
-  const overlay = document.getElementById('checkoutModalOverlay');
-  if (overlay) overlay.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function buildModalSummary() {
-  const summaryEl = document.getElementById('modalOrderSummary');
-  if (!summaryEl || !cartData) return;
-
-  const subtotal = getItemsTotal();
-  const discount = getDiscountAmount(subtotal);
-  const finalTotal = getFinalTotal();
-  const shipping = finalTotal >= 2000000 ? 0 : 30000;
-  const grandTotal = finalTotal + shipping;
-
-  let voucherLine = '';
-  if (appliedVoucher && discount > 0) {
-    voucherLine = `<div class="co-order-summary-row"><span>Voucher <b>${appliedVoucher.code}</b></span><span class="co-discount">-${formatVnd(discount)}</span></div>`;
-  }
-
-  summaryEl.innerHTML = `
-    <div class="co-order-summary-row"><span>Tổng hàng (${cartData.items.length} sp)</span><span>${formatVnd(subtotal)}</span></div>
-    ${voucherLine}
-    <div class="co-order-summary-row"><span>Phí vận chuyển</span><span>${shipping === 0 ? '<span style="color:#27ae60">Miễn phí</span>' : formatVnd(shipping)}</span></div>
-    <div class="co-order-summary-row total"><span>Tổng thanh toán</span><span style="color:#e74c3c">${formatVnd(grandTotal)}</span></div>
-  `;
-}
-
-// ─── Place Order ──────────────────────────────────────────────────────────────
-async function placeOrder() {
-  const btn = document.getElementById('placeOrderBtn');
-
-  // Validate form
-  const street = document.getElementById('co-street')?.value.trim();
-  const city = document.getElementById('co-city')?.value.trim();
-  const state = document.getElementById('co-state')?.value.trim();
-  const zip = document.getElementById('co-zip')?.value.trim() || '00000';
-  const country = document.getElementById('co-country')?.value.trim() || 'Việt Nam';
-  const name = document.getElementById('co-name')?.value.trim();
-  const phone = document.getElementById('co-phone')?.value.trim();
-
-  if (!name || !phone || !street || !city || !state) {
-    alert('Vui lòng điền đầy đủ thông tin bắt buộc (*).');
-    return;
-  }
-
-  const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'COD';
-  const subtotal = getItemsTotal();
-  const discount = getDiscountAmount(subtotal);
-  const finalTotal = getFinalTotal();
-  const shipping = finalTotal >= 2000000 ? 0 : 30000;
-  const grandTotal = finalTotal + shipping;
-
-  const orderItems = cartData.items.map(item => ({
-    name: item.product.name,
-    qty: item.quantity,
-    image: item.product.image,
-    price: item.product.price,
-    product: item.product._id,
-  }));
-
-  const orderData = {
-    orderItems,
-    shippingAddress: { street, city, state, zipCode: zip, country },
-    paymentMethod,
-    itemsPrice: subtotal,
-    taxPrice: 0,
-    shippingPrice: shipping,
-    totalPrice: grandTotal,
-    voucherCode: appliedVoucher?.code || null,
-    discountPrice: discount,
-  };
-
-  btn.classList.add('loading');
-  btn.disabled = true;
-
-  try {
-    const order = await createOrder(orderData);
-
-    // Clear cart on backend
-    try { await clearCart(); } catch (_) {}
-
-    // Reset local state
-    cartData = { items: [] };
-    appliedVoucher = null;
-
-    // Close checkout modal
-    closeCheckoutModal();
-
-    // Show success modal
-    const successOverlay = document.getElementById('successModalOverlay');
-    const orderIdEl = document.getElementById('successOrderId');
-    if (orderIdEl) orderIdEl.textContent = `#${order._id.slice(-8).toUpperCase()}`;
-    if (successOverlay) {
-      successOverlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    // Update cart badge
-    const badge = document.getElementById('cart-badge');
-    if (badge) { badge.textContent = '0'; badge.style.display = 'none'; }
-
-    // Re-render empty cart
-    renderCartItems();
-    updateSummary();
-    updateCheckoutBtn();
-
-  } catch (err) {
-    console.error('Order failed:', err);
-    alert('Đặt hàng thất bại: ' + (err.message || 'Lỗi không xác định'));
-  } finally {
-    btn.classList.remove('loading');
-    btn.disabled = false;
-  }
-}
-
 // ─── Bootstrap ────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
   // Load cart from backend
@@ -492,49 +354,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // Checkout button → open modal
+  // Checkout button → go to standalone checkout page
   const checkoutBtn = document.getElementById('checkoutBtn');
   if (checkoutBtn) {
     checkoutBtn.addEventListener('click', () => {
       if (!requireLogin()) return;
-      openCheckoutModal();
-      // Advance progress step
-      document.getElementById('step-info')?.classList.add('active');
-    });
-  }
-
-  // Close modal on overlay click
-  const checkoutOverlay = document.getElementById('checkoutModalOverlay');
-  if (checkoutOverlay) {
-    checkoutOverlay.addEventListener('click', (e) => {
-      if (e.target === checkoutOverlay) closeCheckoutModal();
-    });
-  }
-
-  // Cancel checkout
-  const cancelBtn = document.getElementById('cancelCheckoutBtn');
-  if (cancelBtn) cancelBtn.addEventListener('click', () => {
-    closeCheckoutModal();
-    document.getElementById('step-info')?.classList.remove('active');
-  });
-
-  // Place order
-  const placeOrderBtn = document.getElementById('placeOrderBtn');
-  if (placeOrderBtn) placeOrderBtn.addEventListener('click', placeOrder);
-
-  // Payment method toggle style
-  document.querySelectorAll('.co-payment-opt').forEach(opt => {
-    opt.addEventListener('click', () => {
-      document.querySelectorAll('.co-payment-opt').forEach(o => o.classList.remove('selected'));
-      opt.classList.add('selected');
-    });
-  });
-
-  // Go to profile after success
-  const goToProfileBtn = document.getElementById('goToProfileBtn');
-  if (goToProfileBtn) {
-    goToProfileBtn.addEventListener('click', () => {
-      window.location.href = 'profile.html';
+      window.location.href = 'checkout.html';
     });
   }
 });
+
