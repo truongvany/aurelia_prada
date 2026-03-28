@@ -3,31 +3,109 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aurelia Admin | Orders</title>
+    <title>AURELIA | Orders Admin</title>
     <link rel="stylesheet" href="../../assets/css/styles.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700;800&display=swap');
+    </style>
   </head>
-  <body>
-    <header class="top-nav"><div class="container nav-inner"><a class="brand" href="dashboard.html">AURELIA Admin</a><a class="btn btn-outline" href="../../index.html">View Store</a></div></header>
-    <main class="admin-shell">
-      <aside class="admin-side">
-        <a href="dashboard.html" data-admin-link>Dashboard</a>
-        <a href="products.html" data-admin-link>Products</a>
-        <a href="orders.html" data-admin-link>Orders</a>
-        <a href="customers.html" data-admin-link>Customers</a>
-        <a href="settings.html" data-admin-link>Settings</a>
-      </aside>
-      <section class="admin-main">
-        <h1>Orders</h1>
-        <div class="card panel table-wrap">
-          <table>
-            <thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
-            <tbody id="admin-orders-body"></tbody>
+  <body class="admin-body">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="admin-logo">
+        <h1>AURELIA</h1>
+        <small>Luxury Editorial Admin</small>
+      </div>
+
+      <nav class="admin-nav">
+        <a href="dashboard.html" class="admin-nav-item">
+          <span>📊</span>
+          Dashboard
+        </a>
+        <a href="products.html" class="admin-nav-item">
+          <span>📦</span>
+          Products
+        </a>
+        <a href="orders.html" class="admin-nav-item active">
+          <span>🛒</span>
+          Orders
+        </a>
+        <a href="customers.html" class="admin-nav-item">
+          <span>👥</span>
+          Customers
+        </a>
+        <a href="settings.html" class="admin-nav-item">
+          <span>⚙️</span>
+          Settings
+        </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="upgrade-card">
+          <button id="upgrade-btn">UPGRADE PLAN</button>
+        </div>
+        <a href="#" class="admin-nav-item" id="admin-logout">
+          <span>🚪</span>
+          Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="admin-content">
+      <!-- Header -->
+      <header class="admin-header">
+        <div class="admin-header-left">
+          <span class="admin-header-title">Order Management</span>
+          <a href="../../index.html" class="btn-view-store">View Store</a>
+        </div>
+        <div class="admin-header-right">
+          <div class="admin-notif">🔔</div>
+          <div class="admin-user-pill">
+            <span>👤</span>
+            <span id="admin-name">Director</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Section -->
+      <main class="dashboard-main">
+        <div class="dashboard-title-row">
+          <div>
+            <h2>Client Orders</h2>
+            <p>Monitor your shop's transactions and fulfillment states.</p>
+          </div>
+          <button class="btn-export">EXPORT CSV</button>
+        </div>
+
+        <div class="table-card">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-orders-body">
+              <!-- JS Injected -->
+            </tbody>
           </table>
         </div>
-      </section>
-    </main>
+
+        <!-- Footer -->
+        <footer class="footer-admin">
+          <span>© <span id="current-year">2024</span> AURELIA EDITORIAL GROUP</span>
+        </footer>
+      </main>
+    </div>
+
     <script type="module" src="../../assets/js/common.js"></script>
     <script type="module" src="../../assets/js/admin.js"></script>
   </body>
 </html>
-

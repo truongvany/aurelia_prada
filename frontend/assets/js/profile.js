@@ -70,37 +70,60 @@ async function loadOrders() {
     const orders = await getMyOrders();
     if (!orders || orders.length === 0) {
       container.innerHTML = `
-        <div class="orders-empty">
-          <p>Bạn chưa có đơn hàng nào.</p>
-          <a href="shop.html" class="btn btn-outline" style="margin-top: 15px; display: inline-block;">Bắt Đầu Mua Sắm</a>
-        </div>
+        <tr>
+          <td colspan="5" class="orders-empty">Bạn chưa có đơn hàng nào. <a href="shop.html" class="btn btn-outline" style="margin-left: 12px;">Bắt Đầu Mua Sắm</a></td>
+        </tr>
       `;
       return;
     }
 
-    container.innerHTML = `
-      <div class="orders-list">
-        ${orders.map(order => `
-          <div class="order-card card" style="margin-bottom: 15px; padding: 15px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px;">
-              <div>
-                <strong>Mã Đơn: #${order._id.substring(0, 8)}</strong>
-                <p style="margin: 5px 0 0; font-size: 13px; color: #999;">Ngày đặt: ${new Date(order.createdAt).toLocaleDateString()}</p>
-              </div>
-              <span class="status ${order.status === 'Delivered' ? 'success' : 'warning'}" style="padding: 4px 10px; border-radius: 4px; font-size: 12px;">
-                ${order.status}
-              </span>
+    container.innerHTML = orders
+      .map(order => `
+        <tr>
+          <td>${order._id.substring(0, 8)}</td>
+          <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+          <td><span class="status-pill ${order.status === 'Delivered' ? 'status-delivered' : 'status-processing'}">${order.status}</span></td>
+          <td class="text-end">${formatVnd(order.totalPrice)}</td>
+          <td class="text-end"><button class="btn btn-light-custom btn-sm" data-order-id="${order._id}">Xem chi tiết</button></td>
+        </tr>
+        <tr class="order-details-row" id="order-details-${order._id}" style="display:none; background:#fbfaf8;">
+          <td colspan="5" style="padding: 14px 12px;">
+            <strong>Địa chỉ:</strong> ${order.shippingAddress?.street || '-'}, ${order.shippingAddress?.city || '-'}, ${order.shippingAddress?.state || '-'}, ${order.shippingAddress?.zipCode || '-'}, ${order.shippingAddress?.country || '-'}<br>
+            <strong>Thanh toán:</strong> ${order.paymentMethod || '-'}<br>
+            <strong>Thuế:</strong> ${formatVnd(order.taxPrice || 0)} • <strong>VC:</strong> ${formatVnd(order.shippingPrice || 0)}<br>
+            <div style="margin-top:8px;">
+              <table style="width:100%; border-collapse: collapse; font-size: 13px;">
+                <thead>
+                  <tr><th style="text-align:left; border-bottom:1px solid #eee; padding:6px;">Sản phẩm</th><th style="text-align:right; border-bottom:1px solid #eee; padding:6px;">SL</th><th style="text-align:right; border-bottom:1px solid #eee; padding:6px;">Giá</th><th style="text-align:right; border-bottom:1px solid #eee; padding:6px;">Tạm tính</th></tr>
+                </thead>
+                <tbody>
+                  ${order.orderItems.map(item => `
+                    <tr>
+                      <td style="padding:6px;">${item.name}</td>
+                      <td style="text-align:right; padding:6px;">${item.qty}</td>
+                      <td style="text-align:right; padding:6px;">${formatVnd(item.price)}</td>
+                      <td style="text-align:right; padding:6px;">${formatVnd(item.qty * item.price)}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
             </div>
-            <div style="display: flex; justify-content: space-between;">
-              <span>Số lượng: ${order.orderItems.length} sản phẩm</span>
-              <strong>Tổng thanh toán: ${formatVnd(order.totalPrice)}</strong>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `;
+          </td>
+        </tr>
+      `)
+      .join('');
+
+    document.querySelectorAll('button[data-order-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const orderId = btn.getAttribute('data-order-id');
+        const row = document.getElementById(`order-details-${orderId}`);
+        if (row) {
+          row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+        }
+      });
+    });
   } catch (err) {
-    container.innerHTML = '<p style="color:red">Không thể tải danh sách đơn hàng.</p>';
+    container.innerHTML = '<tr><td colspan="5" style="color:red">Không thể tải danh sách đơn hàng.</td></tr>';
   }
 }
 
@@ -157,7 +180,7 @@ function setupForm(user) {
 }
 
 function setupLogout() {
-  const btn = document.getElementById('logoutBtn');
+  const btn = document.getElementById('signOutBtn');
   if (btn) {
     btn.addEventListener('click', () => {
       if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {

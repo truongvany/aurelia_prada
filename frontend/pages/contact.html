@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aurelia | Contact</title>
     <link rel="stylesheet" href="../assets/css/styles.css" />
+    <style>
+      .contact-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: 1.5rem; }
+      .info-item { display: flex; gap: 0.8rem; align-items: flex-start; margin-bottom: 1.25rem; }
+      .info-badge { width: 44px; height: 44px; border-radius: 50%; background: #f8f9fa; display: grid; place-items: center; box-shadow: 0 3px 12px rgba(0,0,0,.08); }
+      .info-badge svg { width: 20px; height: 20px; color: #333; }
+      .card-extra { background-color: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,.08); border: 1px solid #f1f1f1; }
+      .contact-form .form-row { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+      .contact-form .form-row-full { grid-column: 1 / -1; }
+      @media (max-width: 991px) {
+        .contact-grid { grid-template-columns: 1fr; }
+        .contact-form .form-row { grid-template-columns: 1fr; }
+      }
+    </style>
   </head>
   <body>
     <header class="top-nav">
@@ -25,31 +38,77 @@
     </header>
 
     <main class="section">
-      <div class="container two-col" style="grid-template-columns:1fr 1.2fr;">
-        <section class="card panel">
-          <h1>Contact Information</h1>
-          <p>123 Fashion Avenue, New York, NY 10001</p>
-          <p>Phone: +1 (555) 123-4567</p>
-          <p>Email: hello@aurelia.com</p>
+      <div class="container contact-grid">
+        <section class="card-extra">
+          <h1 class="font-serif fw-bold mb-4">Get in Touch</h1>
+          <p class="text-muted mb-4">Our customer service team is available Monday through Friday, 9am to 5pm EST. We are happy to help with any style inquiry or order question.</p>
+
+          <div class="info-item">
+            <div class="info-badge" aria-hidden="true">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7A8.5 8.5 0 014 14.3a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 018.5-8.5 8.5 8.5 0 018.4 8.5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12a3 3 0 100-6 3 3 0 000 6z"/></svg>
+            </div>
+            <div>
+              <h5 class="font-serif fw-bold mb-1">Our Studio</h5>
+              <p class="text-muted mb-0">123 Fashion Avenue, New York, NY 10001</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-badge" aria-hidden="true">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h2l3.6 7.59-1.35 2.45A1 1 0 007 17h12v-2H8.42a.5.5 0 01-.45-.28L7.1 13h7.45a1 1 0 00.92-.62l2.4-5.25H3.21"/></svg>
+            </div>
+            <div>
+              <h5 class="font-serif fw-bold mb-1">Phone</h5>
+              <p class="text-muted mb-0">+1 (555) 123-4567</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-badge" aria-hidden="true">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 0v8a2 2 0 002 2h14a2 2 0 002-2V8m-18 0L12 13l9-5"/></svg>
+            </div>
+            <div>
+              <h5 class="font-serif fw-bold mb-1">Email</h5>
+              <p class="text-muted mb-0">hello@aurelia.com</p>
+            </div>
+          </div>
         </section>
 
-        <section class="card panel">
-          <h2>Send A Message</h2>
-          <form>
-            <div class="form-grid">
-              <div><label>First Name</label><input class="input" required></div>
-              <div><label>Last Name</label><input class="input" required></div>
-              <div class="full"><label>Email</label><input class="input" type="email" required></div>
-              <div class="full"><label>Subject</label><input class="input" required></div>
-              <div class="full"><label>Message</label><textarea rows="5" required></textarea></div>
+        <section class="card-extra">
+          <h3 class="font-serif fw-bold mb-4">Send a Message</h3>
+          <form id="contact-form" class="contact-form" novalidate>
+            <div class="form-row">
+              <div><label class="form-label small fw-medium text-muted">First Name</label><input class="input" type="text" name="firstName" placeholder="Jane" required></div>
+              <div><label class="form-label small fw-medium text-muted">Last Name</label><input class="input" type="text" name="lastName" placeholder="Doe" required></div>
+              <div class="form-row-full"><label class="form-label small fw-medium text-muted">Email Address</label><input class="input" type="email" name="email" placeholder="jane@example.com" required></div>
+              <div class="form-row-full"><label class="form-label small fw-medium text-muted">Subject</label><input class="input" type="text" name="subject" placeholder="How can we help?" required></div>
+              <div class="form-row-full"><label class="form-label small fw-medium text-muted">Message</label><textarea class="input" name="message" rows="5" placeholder="Your message here..." required></textarea></div>
             </div>
-            <button class="btn btn-dark" style="margin-top:14px;">Send Message</button>
+            <button type="submit" class="btn btn-dark rounded-pill px-5 mt-3">Send Message</button>
+            <p id="form-feedback" class="text-muted mt-3" style="display:none;"></p>
           </form>
         </section>
       </div>
     </main>
 
     <footer class="site-footer"><div class="container footer-note">&copy; <span id="current-year"></span> Aurelia.</div></footer>
+    <script>
+      const contactForm = document.querySelector('#contact-form');
+      const formFeedback = document.querySelector('#form-feedback');
+
+      contactForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (!contactForm.checkValidity()) {
+          contactForm.reportValidity();
+          return;
+        }
+
+        formFeedback.style.display = 'block';
+        formFeedback.style.color = '#0f5132';
+        formFeedback.textContent = 'Cảm ơn bạn! Tin nhắn đã được gửi thành công. Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.';
+        contactForm.reset();
+      });
+    </script>
     <script type="module" src="../assets/js/common.js"></script>
   </body>
 </html>
