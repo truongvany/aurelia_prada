@@ -1,4 +1,4 @@
-import { adminOrders, adminCustomers, products } from './data.js';
+import { fetchProducts, fetchAllOrders, fetchAllUsers } from './api.js';
 import { formatVnd } from './common.js';
 
 function renderDashboard() {
@@ -13,46 +13,64 @@ function renderDashboard() {
   }).join('');
 }
 
-function renderProducts() {
+async function renderProducts() {
   const body = document.getElementById('admin-products-body');
   if (!body) return;
-  body.innerHTML = products.map((p) => `
-    <tr>
-      <td>${p.name}</td>
-      <td>${p.category}</td>
-      <td>${formatVnd(p.price)}</td>
-      <td>${p.originalPrice ? '<span class="status warning">Sale</span>' : '<span class="status success">Active</span>'}</td>
-    </tr>
-  `).join('');
+  
+  try {
+    const products = await fetchProducts();
+    body.innerHTML = products.map((p) => `
+      <tr>
+        <td>${p.name}</td>
+        <td>${p.category?.name || 'Unknown'}</td>
+        <td>${formatVnd(p.price)}</td>
+        <td>${p.originalPrice ? '<span class="status warning">Sale</span>' : '<span class="status success">Active</span>'}</td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    body.innerHTML = `<tr><td colspan="4">Error loading products</td></tr>`;
+  }
 }
 
-function renderOrders() {
+async function renderOrders() {
   const body = document.getElementById('admin-orders-body');
   if (!body) return;
-  body.innerHTML = adminOrders.map((o) => `
-    <tr>
-      <td>${o.id}</td>
-      <td>${o.customer}</td>
-      <td>${o.date}</td>
-      <td>${o.items}</td>
-      <td>${formatVnd(o.total * 25000)}</td>
-      <td><span class="status ${o.status === 'Completed' ? 'success' : o.status === 'Processing' ? 'warning' : o.status === 'Shipped' ? 'info' : 'danger'}">${o.status}</span></td>
-    </tr>
-  `).join('');
+  
+  try {
+    const orders = await fetchAllOrders();
+    body.innerHTML = orders.map((o) => `
+      <tr>
+        <td>${o._id.substring(0, 8)}</td>
+        <td>${o.user?.name || 'Unknown'}</td>
+        <td>${new Date(o.createdAt).toLocaleDateString()}</td>
+        <td>${o.orderItems?.length || 0}</td>
+        <td>${formatVnd(o.totalPrice)}</td>
+        <td><span class="status ${o.status === 'Delivered' ? 'success' : o.status === 'Processing' ? 'warning' : o.status === 'Shipped' ? 'info' : 'danger'}">${o.status}</span></td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    body.innerHTML = `<tr><td colspan="6">Error loading orders</td></tr>`;
+  }
 }
 
-function renderCustomers() {
+async function renderCustomers() {
   const body = document.getElementById('admin-customers-body');
   if (!body) return;
-  body.innerHTML = adminCustomers.map((c) => `
-    <tr>
-      <td>${c.name}</td>
-      <td>${c.email}<br><small>${c.phone}</small></td>
-      <td>${c.orders}</td>
-      <td>${formatVnd(c.spent * 25000)}</td>
-      <td><span class="status ${c.status === 'VIP' ? 'info' : c.status === 'Active' ? 'success' : c.status === 'New' ? 'warning' : 'danger'}">${c.status}</span></td>
-    </tr>
-  `).join('');
+  
+  try {
+    const users = await fetchAllUsers();
+    body.innerHTML = users.map((c) => `
+      <tr>
+        <td>${c.name}</td>
+        <td>${c.email}<br><small>${c.phone || 'N/A'}</small></td>
+        <td>Admin: ${c.role === 'admin' ? 'Yes' : 'No'}</td>
+        <td>${c.createdAt ? new Date(c.createdAt).toLocaleDateString() : 'N/A'}</td>
+        <td><span class="status ${c.role === 'admin' ? 'info' : 'success'}">${c.role}</span></td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    body.innerHTML = `<tr><td colspan="5">Error loading customers</td></tr>`;
+  }
 }
 
 function bindSettings() {
@@ -61,7 +79,7 @@ function bindSettings() {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const note = document.getElementById('settings-notice');
-    if (note) note.textContent = 'Settings were saved locally for demo (no backend write).';
+    if (note) note.textContent = 'Settings saves are simulated.';
   });
 }
 

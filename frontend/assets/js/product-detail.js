@@ -1,13 +1,26 @@
-import { products } from './data.js';
+import { fetchProductById, addToCart } from './api.js';
 import { formatVnd } from './common.js';
 
 function getProductId() {
   const params = new URLSearchParams(window.location.search);
-  return Number(params.get('id') || '1');
+  return params.get('id');
 }
 
-function initDetail() {
-  const product = products.find((p) => p.id === getProductId()) || products[0];
+async function initDetail() {
+  const productId = getProductId();
+  if (!productId) {
+    document.body.innerHTML = '<h2>Product ID missing</h2>';
+    return;
+  }
+
+  let product;
+  try {
+    product = await fetchProductById(productId);
+  } catch (error) {
+    document.body.innerHTML = '<h2>Product not found</h2>';
+    return;
+  }
+
   const title = document.getElementById('product-title');
   const titleCrumb = document.getElementById('product-title-crumb');
   const price = document.getElementById('product-price');
@@ -56,6 +69,23 @@ function initDetail() {
       if (panel) panel.hidden = false;
     });
   });
+
+  // Handle Add to Cart
+  const addBtn = document.querySelector('.btn-primary'); // Assuming this is Add to Cart
+  if (addBtn) {
+    addBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const activeSize = document.querySelector('[data-size].active')?.getAttribute('data-size') || 'L';
+        const qtyStr = document.querySelector('.qty span')?.textContent || '1';
+        
+        try {
+            await addToCart(product._id, Number(qtyStr), activeSize);
+            alert('Added to cart!');
+        } catch (error) {
+            alert('You must be logged in to add items to cart.');
+        }
+    });
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initDetail);

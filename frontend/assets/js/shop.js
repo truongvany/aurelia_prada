@@ -1,5 +1,7 @@
-import { products } from './data.js';
+import { fetchProducts } from './api.js';
 import { createProductCard } from './common.js';
+
+let products = [];
 
 function renderProducts(list) {
   const grid = document.getElementById('shop-grid');
@@ -24,16 +26,19 @@ function applyFilters() {
     filtered = filtered.filter((p) => p.name.toLowerCase().includes(query));
   }
   if (category !== 'all') {
-    filtered = filtered.filter((p) => p.category === category);
+    // category object format depends on response, we assume p.category.slug or similar
+    filtered = filtered.filter((p) => (p.category?.slug || p.category) === category);
   }
-  filtered = filtered.filter((p) => p.price <= maxPrice);
+  if (maxPrice) {
+    filtered = filtered.filter((p) => p.price <= maxPrice);
+  }
 
   if (sortBy === 'priceAsc') {
     filtered.sort((a, b) => a.price - b.price);
   } else if (sortBy === 'priceDesc') {
     filtered.sort((a, b) => b.price - a.price);
   } else if (sortBy === 'newest') {
-    filtered.sort((a, b) => b.id - a.id);
+    filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
 
   renderProducts(filtered);
@@ -41,16 +46,25 @@ function applyFilters() {
   if (count) count.textContent = String(filtered.length);
 }
 
-function initShop() {
-  if (!document.getElementById('shop-grid')) return;
-  renderProducts(products);
-  ['shop-search', 'filter-category', 'filter-price', 'sort-by'].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('input', applyFilters);
-    if (el && el.tagName === 'SELECT') el.addEventListener('change', applyFilters);
-  });
+async function initShop() {
+  const grid = document.getElementById('shop-grid');
+  if (!grid) return;
 
-  applyFilters();
+  grid.innerHTML = '<p>Loading products...</p>';
+
+  try {
+    products = await fetchProducts();
+    
+    ['shop-search', 'filter-category', 'filter-price', 'sort-by'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', applyFilters);
+      if (el && el.tagName === 'SELECT') el.addEventListener('change', applyFilters);
+    });
+
+    applyFilters();
+  } catch (error) {
+    grid.innerHTML = `<p style="color:red">Failed to load products: ${error.message}</p>`;
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initShop);

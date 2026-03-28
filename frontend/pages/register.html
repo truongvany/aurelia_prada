@@ -356,17 +356,18 @@
 
         const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(data.error || 'Đăng ký thất bại');
+        if (data.message && !data.token) {
+          throw new Error(data.message || 'Đăng ký thất bại');
         }
 
+        // Backend trả về: _id, name, email, role, token
         localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('user', JSON.stringify(data));
 
         showSuccess('Đăng ký thành công! Chuyển hướng...');
         
         setTimeout(() => {
-          window.location.href = 'shop.html';
+          window.location.href = '../index.html';
         }, 1500);
 
       } catch (error) {

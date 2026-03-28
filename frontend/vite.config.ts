@@ -22,6 +22,12 @@ export default defineConfig({
     }
   },
   server: {
-    hmr: true
+    hmr: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
+      }
+    }
   }
 });
