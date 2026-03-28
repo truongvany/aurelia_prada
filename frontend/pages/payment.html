@@ -107,12 +107,12 @@
     .qr-panel.active { display: block; }
 
     .qr-img-wrap {
-      width: 200px; height: 200px; margin: 0 auto 16px;
-      border: 2px solid #eee; border-radius: 4px; padding: 10px;
+      width: 280px; height: 280px; margin: 0 auto 20px;
+      border: 1px solid #eee; border-radius: 4px; padding: 15px;
       display: flex; align-items: center; justify-content: center;
       background: #fff;
     }
-    .qr-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .qr-img-wrap img { width: 100%; height: 100%; object-fit: contain; transform: scale(1.1); }
     .qr-img-wrap .qr-placeholder {
       font-size: 60px; opacity: .4;
     }
@@ -220,19 +220,8 @@
         <!-- LEFT -->
         <div class="pay-left">
 
-          <!-- Order Status Timeline -->
-          <div class="pay-card">
-            <h2 class="pay-card-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              Trạng thái đơn hàng
-              <span id="statusBadge" class="status-badge-inline sb-processing" style="margin-left:auto;">Đang xử lý</span>
-            </h2>
-
-            <div class="status-timeline" id="statusTimeline">
-              <!-- Injected by JS -->
-              <div class="skeleton" style="height:80px; border-radius:4px;"></div>
-            </div>
-          </div>
+          <!-- Initial Status Timeline (Removed per request, will show in success state) -->
+          <div id="success-view-container"></div>
 
           <!-- Payment Method Panel -->
           <div class="pay-card" id="paymentPanel">

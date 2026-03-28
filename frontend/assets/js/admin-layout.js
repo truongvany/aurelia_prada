@@ -24,6 +24,9 @@ export function renderAdminLayout() {
         <a href="customers.html" class="admin-nav-item ${activePage === 'customers.html' ? 'active' : ''}">
           Khách hàng
         </a>
+        <a href="vouchers.html" class="admin-nav-item ${activePage === 'vouchers.html' ? 'active' : ''}">
+          Mã giảm giá
+        </a>
         <a href="settings.html" class="admin-nav-item ${activePage === 'settings.html' ? 'active' : ''}">
           Cài đặt
         </a>
@@ -99,6 +102,7 @@ export function renderAdminLayout() {
       'products.html': 'Quản lý Sản phẩm',
       'orders.html': 'Quản lý Đơn hàng',
       'customers.html': 'Quản lý Khách hàng',
+      'vouchers.html': 'Quản lý Mã giảm giá',
       'settings.html': 'Cài đặt Hệ thống'
   };
   const titleEl = document.getElementById('adminHeaderTitle');

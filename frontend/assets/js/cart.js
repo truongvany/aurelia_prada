@@ -1,5 +1,5 @@
 import { formatVnd } from './common.js';
-import { fetchCart, removeFromCart, addToCart, clearCart, getUserInfo, createOrder } from './api.js';
+import { fetchCart, removeFromCart, addToCart, clearCart, getUserInfo, createOrder, getVoucherByCode } from './api.js';
 
 // ─── State ────────────────────────────────────────────────────────────────────
 let cartData = null;          // Cart from API: { _id, items: [{_id, product, quantity, size}] }
@@ -298,31 +298,26 @@ async function applyVoucher() {
   showVoucherFeedback('');
 
   try {
-    const res = await fetch(`/api/vouchers/code/${code}`);
-    const data = await res.json();
-
-    if (!res.ok) {
-      showVoucherFeedback(data.message || 'Mã không hợp lệ.', 'error');
+    const data = await getVoucherByCode(code);
+    const subtotal = getItemsTotal();
+    
+    if (data.minOrderValue && subtotal < data.minOrderValue) {
+      showVoucherFeedback(`Đơn hàng tối thiểu ${formatVnd(data.minOrderValue)} để dùng mã này.`, 'error');
       input.className = 'is-invalid';
       appliedVoucher = null;
     } else {
-      const subtotal = getItemsTotal();
-      if (data.minOrderValue && subtotal < data.minOrderValue) {
-        showVoucherFeedback(`Đơn hàng tối thiểu ${formatVnd(data.minOrderValue)} để dùng mã này.`, 'error');
-        input.className = 'is-invalid';
-        appliedVoucher = null;
-      } else {
-        appliedVoucher = data;
-        input.className = 'is-valid';
-        const discountDesc = data.discountType === 'percent'
-          ? `${data.discountAmount}%`
-          : formatVnd(data.discountAmount);
-        showVoucherFeedback(`✓ Áp dụng thành công! Giảm ${discountDesc}`, 'success');
-        document.getElementById('voucherRow').style.display = 'flex';
-      }
+      appliedVoucher = data;
+      input.className = 'is-valid';
+      const discountDesc = data.discountType === 'percent'
+        ? `${data.discountAmount}%`
+        : formatVnd(data.discountAmount);
+      showVoucherFeedback(`✓ Áp dụng thành công! Giảm ${discountDesc}`, 'success');
+      document.getElementById('voucherRow').style.display = 'flex';
     }
   } catch (err) {
-    showVoucherFeedback('Lỗi kết nối. Vui lòng thử lại.', 'error');
+    showVoucherFeedback(err.message || 'Lỗi áp dụng voucher.', 'error');
+    input.className = 'is-invalid';
+    appliedVoucher = null;
   } finally {
     btn.disabled = false;
     btn.textContent = 'ÁP DỤNG';

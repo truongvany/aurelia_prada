@@ -26,7 +26,13 @@ async function initProfile() {
     setupTabs();
     setupForm(user);
     setupLogout();
-    
+
+    // Auto-switch to tab if hash exists (e.g., #orders)
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      const tabBtn = document.querySelector(`[data-profile-tab="${hash}"]`);
+      if (tabBtn) tabBtn.click();
+    }
   } catch (error) {
     if (errorAlert) {
       errorAlert.textContent = 'Phiên đăng nhập đã hết hạn. Đang chuyển hướng...';
@@ -411,8 +417,8 @@ async function loadOrders() {
         <td><span class="status-pill ${order.status === 'Delivered' ? 'status-delivered' : order.status === 'Cancelled' ? 'status-cancelled' : 'status-processing'}">${statusTrans[order.status] || order.status}</span></td>
         <td class="text-end">${formatVnd(order.totalPrice)}</td>
         <td class="text-end">
-          <button class="btn btn-light-custom btn-sm pom-open-btn" data-order='${JSON.stringify(order).replace(/'/g, '&apos;')}'>
-            Xem chi tiết
+          <button class="pom-open-btn" data-order='${JSON.stringify(order).replace(/'/g, '&apos;')}' style="background:#1a1a1a; color:#fff; border:none; padding:8px 18px; font-size:10px; font-weight:700; letter-spacing:1px; cursor:pointer; border-radius:2px; text-transform:uppercase;">
+            CHI TIẾT
           </button>
         </td>
       </tr>

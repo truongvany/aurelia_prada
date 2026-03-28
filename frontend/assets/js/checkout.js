@@ -1,5 +1,5 @@
 import { formatVnd } from './common.js';
-import { fetchCart, clearCart, getUserInfo, createOrder } from './api.js';
+import { fetchCart, clearCart, getUserInfo, createOrder, getVoucherByCode } from './api.js';
 
 // ─── State ─────────────────────────────────────────────────────────────────
 let cartData = null;
@@ -149,30 +149,24 @@ async function applyVoucher() {
   showVoucherMsg('', '');
 
   try {
-    const res = await fetch(`/api/vouchers/code/${code}`);
-    const data = await res.json();
-
-    if (!res.ok) {
-      showVoucherMsg(data.message || 'Mã không hợp lệ.', 'err');
+    const data = await getVoucherByCode(code);
+    const sub = getSubtotal();
+    if (data.minOrderValue && sub < data.minOrderValue) {
+      showVoucherMsg(`Đơn hàng tối thiểu ${formatVnd(data.minOrderValue)} để dùng mã này.`, 'err');
       input.className = 'err';
       appliedVoucher = null;
     } else {
-      const sub = getSubtotal();
-      if (data.minOrderValue && sub < data.minOrderValue) {
-        showVoucherMsg(`Đơn hàng tối thiểu ${formatVnd(data.minOrderValue)} để dùng mã này.`, 'err');
-        input.className = 'err';
-        appliedVoucher = null;
-      } else {
-        appliedVoucher = data;
-        input.className = 'ok';
-        const discStr = data.discountType === 'percent'
-          ? `${data.discountAmount}%`
-          : formatVnd(data.discountAmount);
-        showVoucherMsg(`✓ Áp dụng thành công — giảm ${discStr}`, 'ok');
-      }
+      appliedVoucher = data;
+      input.className = 'ok';
+      const discStr = data.discountType === 'percent'
+        ? `${data.discountAmount}%`
+        : formatVnd(data.discountAmount);
+      showVoucherMsg(`✓ Áp dụng thành công — giảm ${discStr}`, 'ok');
     }
-  } catch {
-    showVoucherMsg('Lỗi kết nối. Vui lòng thử lại.', 'err');
+  } catch (err) {
+    showVoucherMsg(err.message || 'Lỗi áp dụng voucher.', 'err');
+    input.className = 'err';
+    appliedVoucher = null;
   } finally {
     btn.disabled = false;
     btn.textContent = 'ÁP DỤNG';

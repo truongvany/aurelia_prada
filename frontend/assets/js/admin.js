@@ -9,7 +9,11 @@ import {
   fetchCategories,
   updateOrderToDelivered,
   updateOrderStatus,
-  deleteUser
+  deleteUser,
+  fetchAllVouchers,
+  createVoucher,
+  updateVoucher,
+  deleteVoucher
 } from './api.js';
 
 import { formatVnd } from './common.js';
@@ -516,6 +520,120 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   if (path.includes('orders.html')) renderOrders();
   if (path.includes('customers.html')) renderCustomers();
+  if (path.includes('vouchers.html')) {
+    renderVouchers();
+    setupVoucherModal();
+  }
   
   setupSettings();
 });
+
+async function renderVouchers() {
+  const body = document.getElementById('admin-vouchers-body');
+  if (!body) return;
+  
+  try {
+    const vouchers = await fetchAllVouchers();
+    body.innerHTML = vouchers.map(v => `
+      <tr>
+        <td><strong>${v.code}</strong></td>
+        <td>${v.description || '—'}</td>
+        <td>${v.discountType === 'percent' ? 'Giảm %' : 'Cố định (đ)'}</td>
+        <td>${v.discountType === 'percent' ? v.discountAmount + '%' : formatVnd(v.discountAmount)}</td>
+        <td>${formatVnd(v.minOrderValue)}</td>
+        <td>${new Date(v.expirationDate).toLocaleDateString('vi-VN')}</td>
+        <td><span class="status-pill ${v.isActive ? 'success' : 'danger'}">${v.isActive ? 'Hoạt động' : 'Tạm ngưng'}</span></td>
+        <td>
+          <button class="btn-admin-action edit edit-voucher" data-id="${v._id}" data-v='${JSON.stringify(v).replace(/'/g, "&apos;")}'>SỬA</button>
+          <button class="btn-admin-action delete delete-voucher" data-id="${v._id}">XÓA</button>
+        </td>
+      </tr>
+    `).join('');
+
+    body.querySelectorAll('.edit-voucher').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const v = JSON.parse(btn.getAttribute('data-v'));
+        openVoucherModal(v);
+      });
+    });
+
+    body.querySelectorAll('.delete-voucher').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (confirm('Bạn có chắc chắn muốn xóa Voucher này?')) {
+          try {
+            await deleteVoucher(btn.getAttribute('data-id'));
+            renderVouchers();
+          } catch (err) { alert(err.message); }
+        }
+      });
+    });
+  } catch (err) {
+    body.innerHTML = `<tr><td colspan="8">Lỗi tải danh sách mã giảm giá</td></tr>`;
+  }
+}
+
+function setupVoucherModal() {
+  const modal = document.getElementById('voucher-modal');
+  const addBtn = document.getElementById('add-voucher-btn');
+  const closeBtn = document.getElementById('close-modal');
+  const form = document.getElementById('voucher-form');
+
+  if (addBtn) addBtn.onclick = () => openVoucherModal();
+  if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
+  
+  window.addEventListener('click', (e) => {
+    if (e.target == modal) modal.style.display = 'none';
+  });
+
+  if (form) {
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('edit-voucher-id').value;
+      const data = {
+        code: document.getElementById('v-code').value.toUpperCase(),
+        discountType: document.getElementById('v-type').value,
+        discountAmount: Number(document.getElementById('v-amount').value),
+        description: document.getElementById('v-desc').value,
+        minOrderValue: Number(document.getElementById('v-min').value),
+        maxUsage: Number(document.getElementById('v-max').value) || undefined,
+        expirationDate: document.getElementById('v-expiry').value,
+        isActive: document.getElementById('v-active').checked,
+      };
+
+      try {
+        if (id) {
+          await updateVoucher(id, data);
+        } else {
+          await createVoucher(data);
+        }
+        modal.style.display = 'none';
+        renderVouchers();
+      } catch (err) { alert(err.message); }
+    };
+  }
+}
+
+function openVoucherModal(v = null) {
+  const modal = document.getElementById('voucher-modal');
+  const title = document.getElementById('modal-title');
+  const form = document.getElementById('voucher-form');
+  
+  if (v) {
+    title.textContent = 'Cập nhật Voucher';
+    document.getElementById('edit-voucher-id').value = v._id;
+    document.getElementById('v-code').value = v.code;
+    document.getElementById('v-type').value = v.discountType;
+    document.getElementById('v-amount').value = v.discountAmount;
+    document.getElementById('v-desc').value = v.description;
+    document.getElementById('v-min').value = v.minOrderValue;
+    document.getElementById('v-max').value = v.maxUsage || '';
+    document.getElementById('v-expiry').value = v.expirationDate.split('T')[0];
+    document.getElementById('v-active').checked = v.isActive;
+  } else {
+    title.textContent = 'Thêm Voucher mới';
+    form.reset();
+    document.getElementById('edit-voucher-id').value = '';
+    document.getElementById('v-expiry').value = new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0];
+  }
+  modal.style.display = 'flex';
+}

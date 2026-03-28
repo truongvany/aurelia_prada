@@ -33,6 +33,17 @@ export async function fetchProductById(id) {
   return res.json();
 }
 
+export async function getVoucherByCode(code) {
+  const res = await fetch(`${API_URL}/vouchers/code/${code}`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to fetch voucher');
+  }
+  return res.json();
+}
+
 export async function loginUser(email, password) {
   const res = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
@@ -241,4 +252,40 @@ export async function deleteProduct(id) {
   return res.json();
 }
 
+// Voucher CRUD
+export async function fetchAllVouchers() {
+  const res = await fetch(`${API_URL}/vouchers`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to load vouchers');
+  return res.json();
+}
 
+export async function createVoucher(voucherData) {
+  const res = await fetch(`${API_URL}/vouchers`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(voucherData),
+  });
+  if (!res.ok) throw new Error('Failed to create voucher');
+  return res.json();
+}
+
+export async function updateVoucher(id, voucherData) {
+  const res = await fetch(`${API_URL}/vouchers/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(voucherData),
+  });
+  if (!res.ok) throw new Error('Failed to update voucher');
+  return res.json();
+}
+
+export async function deleteVoucher(id) {
+  const res = await fetch(`${API_URL}/vouchers/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to delete voucher');
+  return res.json();
+}
