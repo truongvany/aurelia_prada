@@ -1,54 +1,69 @@
 import { loginUser, registerUser } from './api.js';
 
-function bindAuthForm(formId) {
-  const form = document.getElementById(formId);
-  if (!form) return;
+function setupAuth() {
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
 
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const notice = form.querySelector('[data-notice]');
-    if (notice) notice.textContent = 'Processing...';
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const errorAlert = document.getElementById('errorAlert');
+      const submitBtn = document.getElementById('submitBtn');
 
-    if (formId === 'register-form') {
-      const name = document.getElementById('reg-name')?.value || '';
-      const email = document.getElementById('reg-email')?.value || '';
-      const pwd = document.getElementById('reg-password')?.value || '';
-      const confirm = document.getElementById('reg-confirm-password')?.value || '';
-      
-      if (pwd.length < 6) {
-        if (notice) notice.textContent = 'Password must have at least 6 characters.';
-        return;
+      try {
+        if (submitBtn) submitBtn.disabled = true;
+        await loginUser(email, password);
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        
+        if (userInfo.role === 'admin') {
+          window.location.href = 'admin/dashboard.html';
+        } else {
+          window.location.href = '../index.html';
+        }
+      } catch (err) {
+        if (errorAlert) {
+          errorAlert.textContent = err.message;
+          errorAlert.classList.add('show');
+        }
+        if (submitBtn) submitBtn.disabled = false;
       }
-      if (pwd !== confirm) {
-        if (notice) notice.textContent = 'Confirm password does not match.';
+    });
+  }
+
+  if (registerForm) {
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const errorAlert = document.getElementById('errorAlert');
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (password !== confirmPassword) {
+        if (errorAlert) {
+          errorAlert.textContent = 'Mật khẩu xác nhận không khớp';
+          errorAlert.classList.add('show');
+        }
         return;
       }
 
       try {
-        await registerUser(name, email, pwd, '', {}); // default empty phone/address
-        if (notice) notice.textContent = 'Registration successful! Redirecting...';
-        setTimeout(() => window.location.href = '/', 1500);
+        if (submitBtn) submitBtn.disabled = true;
+        await registerUser(name, email, password, phone, {}); 
+        window.location.href = '../index.html';
       } catch (err) {
-        if (notice) notice.textContent = err.message;
+        if (errorAlert) {
+          errorAlert.textContent = err.message;
+          errorAlert.classList.add('show');
+        }
+        if (submitBtn) submitBtn.disabled = false;
       }
-    }
-
-    if (formId === 'login-form') {
-      const email = document.getElementById('log-email')?.value || '';
-      const pwd = document.getElementById('log-password')?.value || '';
-
-      try {
-        await loginUser(email, pwd);
-        if (notice) notice.textContent = 'Login successful! Redirecting...';
-        setTimeout(() => window.location.href = '/', 1500);
-      } catch (err) {
-        if (notice) notice.textContent = err.message;
-      }
-    }
-  });
+    });
+  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  bindAuthForm('login-form');
-  bindAuthForm('register-form');
-});
+document.addEventListener('DOMContentLoaded', setupAuth);

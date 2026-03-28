@@ -104,6 +104,26 @@ export async function clearCart() {
   return res.json();
 }
 
+// User Profile
+export async function getUserProfile() {
+  const res = await fetch(`${API_URL}/auth/profile`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to load profile');
+  const data = await res.json();
+  return data;
+}
+
+export async function updateUserProfile(userData) {
+  const res = await fetch(`${API_URL}/auth/profile`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(userData),
+  });
+  if (!res.ok) throw new Error('Failed to update profile');
+  return res.json();
+}
+
 // Orders
 export async function createOrder(orderData) {
   const res = await fetch(`${API_URL}/orders`, {
@@ -112,6 +132,14 @@ export async function createOrder(orderData) {
     body: JSON.stringify(orderData),
   });
   if (!res.ok) throw new Error('Failed to create order');
+  return res.json();
+}
+
+export async function getMyOrders() {
+  const res = await fetch(`${API_URL}/orders/myorders`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to load orders');
   return res.json();
 }
 
