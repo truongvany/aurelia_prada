@@ -21,13 +21,10 @@ const seedData = async () => {
 
         console.log('🗑️  Data cleared.');
 
-        const salt = await bcrypt.genSalt(10);
-        const adminPassword = await bcrypt.hash('admin123', salt);
-        
         await User.create({
             name: 'Aurelia Admin',
             email: 'admin@aurelia.com',
-            password: adminPassword,
+            password: 'admin123',
             role: 'admin',
             phone: '+84 898 123 456'
         });
