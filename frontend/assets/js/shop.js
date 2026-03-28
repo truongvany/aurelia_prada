@@ -58,9 +58,9 @@ function renderPaginationUI() {
 
 function applyFilters() {
   const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(el => el.value);
-  const selectedPrices = Array.from(document.querySelectorAll('input[name="price"]:checked')).map(el => el.value);
-  const selectedMaterials = Array.from(document.querySelectorAll('input[name="material"]:checked')).map(el => el.value);
   const selectedCollections = Array.from(document.querySelectorAll('input[name="collection"]:checked')).map(el => el.value);
+  const priceSlider = document.getElementById('price-slider');
+  const maxPrice = priceSlider ? parseInt(priceSlider.value) : Infinity;
 
   filteredProducts = [...products];
 
@@ -68,19 +68,8 @@ function applyFilters() {
     filteredProducts = filteredProducts.filter(p => selectedCategories.includes(p.category?.name || p.category));
   }
 
-  if (selectedPrices.length > 0) {
-    filteredProducts = filteredProducts.filter(p => {
-      return selectedPrices.some(range => {
-        if (range === '2000000+') return p.price >= 2000000;
-        const [min, max] = range.split('-').map(Number);
-        return p.price >= min && p.price <= max;
-      });
-    });
-  }
-
-  if (selectedMaterials.length > 0) {
-    filteredProducts = filteredProducts.filter(p => selectedMaterials.includes(p.material));
-  }
+  // Price Range filtering
+  filteredProducts = filteredProducts.filter(p => p.price <= maxPrice);
 
   if (selectedCollections.length > 0) {
     filteredProducts = filteredProducts.filter(p => selectedCollections.includes(p.collectionName));
@@ -113,17 +102,29 @@ async function initShop() {
       `).join('');
     }
 
-    // 2. Populate Materials
-    const materials = [...new Set(products.map(p => p.material).filter(Boolean))];
-    const matFilter = document.querySelector('.filter-group:nth-of-type(3) .filter-group-content');
-    if (matFilter) {
-      matFilter.innerHTML = materials.map(m => `
-        <label class="filter-item">
-          <input type="checkbox" name="material" value="${m}" hidden>
-          <div class="filter-checkbox"></div>
-          <span>${m}</span>
-        </label>
-      `).join('');
+    // 2. Initialize Price Slider
+    const productPrices = products.map(p => p.price).filter(p => !isNaN(p));
+    const rawMaxPrice = productPrices.length > 0 ? Math.max(...productPrices) : 10000000;
+    // Round up to nearest 100,000 for clean UI (e.g., 1,177,685 -> 1,200,000)
+    const shopMaxPrice = Math.ceil(rawMaxPrice / 100000) * 100000;
+    
+    const priceSlider = document.getElementById('price-slider');
+    const priceMaxDisplay = document.getElementById('price-max-display');
+    const priceCurrentDisplay = document.getElementById('price-current-display');
+
+    if (priceSlider) {
+      priceSlider.max = shopMaxPrice;
+      priceSlider.value = shopMaxPrice;
+      
+      const formatPrice = (p) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(p).replace('₫', 'đ');
+      
+      if (priceMaxDisplay) priceMaxDisplay.innerText = formatPrice(shopMaxPrice);
+      if (priceCurrentDisplay) priceCurrentDisplay.innerText = `0 đ - ${formatPrice(shopMaxPrice)}`;
+
+      priceSlider.addEventListener('input', () => {
+        if (priceCurrentDisplay) priceCurrentDisplay.innerText = `0 đ - ${formatPrice(priceSlider.value)}`;
+        applyFilters();
+      });
     }
 
     // 3. Populate Collections
