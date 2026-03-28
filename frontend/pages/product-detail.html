@@ -5,171 +5,181 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aurelia | Product Detail</title>
     <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/product-detail.css" />
   </head>
   <body>
     <header class="top-nav">
-      <div class="container nav-inner">
-        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
-        <nav class="nav-links" data-nav-links>
-          <a href="../index.html" data-nav-link>Home</a>
-          <a href="shop.html" data-nav-link>Shop</a>
-          <a href="about.html" data-nav-link>About</a>
-          <a href="contact.html" data-nav-link>Contact</a>
-        </nav>
-        <a class="brand" href="../index.html">AURELIA</a>
-        <div class="nav-actions">
-          <a class="nav-icon" href="profile.html">U</a>
-          <a class="nav-icon" href="cart.html">B</a>
-        </div>
-      </div>
+      <!-- Header content is dynamically injected via common.js -->
     </header>
 
-    <main class="section product-page-main">
+    <main class="product-page-main">
       <div class="container">
         <nav aria-label="breadcrumb" class="product-breadcrumb">
           <ol>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="shop.html">Shop</a></li>
-            <li id="product-title-crumb">Silk Slip Dress in Pearl</li>
+            <li><a href="../index.html">Trang chủ</a></li>
+            <li><a href="shop.html">Sản Phẩm</a></li>
+            <li id="product-title-crumb">Tên sản phẩm</li>
           </ol>
         </nav>
 
         <div class="product-main-grid">
-          <div class="product-gallery-grid">
-            <div class="product-gallery-track">
-              <img id="product-hero" src="" alt="Main" class="product-gallery-main" />
-              <img id="product-thumb" src="" alt="Thumb" class="product-gallery-sub" />
-              <img src="https://images.unsplash.com/photo-1583391733958-d15319a5120b?auto=format&fit=crop&w=800&q=80" alt="Thumb alt" class="product-gallery-sub" />
+          <!-- GALLERY SECTION -->
+          <div class="product-gallery-container">
+            <div class="product-thumbnails" id="product-thumbnails">
+              <div class="thumb-item active" data-index="0">
+                <img id="product-thumb-0" src="" alt="Thumbnail 1" />
+              </div>
+              <div class="thumb-item" data-index="1">
+                <img id="product-thumb-1" src="" alt="Thumbnail 2" />
+              </div>
+              <div class="thumb-item" data-index="2">
+                <img id="product-thumb-2" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" alt="Thumbnail 3" />
+              </div>
+              <div class="thumb-item" data-index="3">
+                <img id="product-thumb-3" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80" alt="Thumbnail 4" />
+              </div>
+            </div>
+            
+            <div class="product-main-image">
+              <span class="image-badge">New</span>
+              <img id="product-hero" src="" alt="Main product" />
+              <button class="nav-arrow prev" aria-label="Previous image">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="nav-arrow next" aria-label="Next image">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
             </div>
           </div>
-          <div class="card panel product-info-card">
-            <h1 id="product-title">Silk Slip Dress in Pearl</h1>
-            <p id="product-price" class="product-price-text"></p>
 
-            <div class="product-rating-row">
-              <div class="stars">★★★★☆</div>
-              <span>(124 đánh giá)</span>
+          <!-- CONTENT SECTION -->
+          <div class="product-content">
+            <div class="product-title-wrap">
+              <h1 id="product-title">Loading...</h1>
+              <div id="product-price" class="product-price-large">0 đ</div>
             </div>
 
-            <p class="product-desc">A timeless classic. Our Silk Slip Dress is cut on the bias to beautifully drape over your silhouette. Crafted from 100% pure mulberry silk, it features a delicate V-neckline and adjustable spaghetti straps. Perfect for evening wear or layering during the day.</p>
+            <div class="divider"></div>
 
-            <div style="margin:20px 0;">
-              <p class="selector-title">Color: <span id="selected-color">Champagne</span></p>
-              <div style="display:flex;gap:8px;margin-top:8px;">
-                <button class="color-swatch active" data-color="Champagne" style="background:#E8D8D0" title="Champagne"></button>
-                <button class="color-swatch" data-color="Black" style="background:#222" title="Black"></button>
-                <button class="color-swatch" data-color="Ivory" style="background:#FDFBF7" title="Ivory"></button>
-              </div>
+            <!-- Color Selection -->
+            <div class="option-group">
+                <div class="option-label">MÀU SẮC: <span id="selected-color">Trắng</span></div>
+                <div class="color-list">
+                    <div class="color-dot active" data-color="Trắng" style="background: #ffffff;" title="Trắng"></div>
+                    <div class="color-dot" data-color="Đen" style="background: #222;" title="Đen"></div>
+                    <div class="color-dot" data-color="Be" style="background: #f5f5dc;" title="Be"></div>
+                </div>
             </div>
 
-            <div style="margin:20px 0;">
-              <div class="size-row">
-                <p class="selector-title">Size: <span id="selected-size">M</span></p>
-                <button class="size-guide-btn" type="button">Size Guide</button>
-              </div>
-              <div class="size-list">
-                <button class="size-btn" data-size="XS">XS</button>
-                <button class="size-btn" data-size="S">S</button>
-                <button class="size-btn active" data-size="M">M</button>
-                <button class="size-btn" data-size="L">L</button>
-                <button class="size-btn" data-size="XL">XL</button>
-              </div>
+            <!-- Size Selection -->
+            <div class="option-group">
+                <div class="option-label">SIZE: <span id="selected-size">L</span></div>
+                <div class="size-grid">
+                    <div class="size-option" data-size="S">S</div>
+                    <div class="size-option" data-size="M">M</div>
+                    <div class="size-option active" data-size="L">L</div>
+                    <div class="size-option" data-size="XL">XL</div>
+                </div>
+                <a href="#" class="size-guide-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+                    Hướng dẫn chọn size
+                </a>
             </div>
 
-            <a href="cart.html" class="btn btn-dark product-add-btn">Add to Bag - <span id="product-price-cta"></span></a>
+            <!-- Quantity -->
+            <div class="option-group">
+                <div class="option-label">SỐ LƯỢNG:</div>
+                <div class="quantity-control">
+                    <button class="qty-btn" id="qty-minus">-</button>
+                    <span class="qty-val" id="qty-value">1</span>
+                    <button class="qty-btn" id="qty-plus">+</button>
+                </div>
+            </div>
 
-            <div class="product-feature-list">
-              <p>Free shipping on orders over $200</p>
-              <p>30-day free returns</p>
-              <p>2-year quality guarantee</p>
+            <!-- Actions -->
+            <div class="action-buttons">
+                <button class="btn-add-cart" id="add-to-cart-btn">Thêm vào giỏ hàng</button>
+                <button class="btn-buy-now">Mua ngay</button>
+            </div>
+
+            <div class="secondary-actions">
+                <a href="#" class="status-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Kiểm tra cửa hàng còn hàng
+                </a>
+                <div class="icon-actions">
+                    <button class="icon-btn" title="Yêu thích">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        <span>Yêu thích</span>
+                    </button>
+                    <button class="icon-btn" title="Chia sẻ">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        <span>Chia sẻ</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Promotion Banner -->
+            <div class="promo-section">
+                <div class="promo-header">
+                    <div class="promo-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b38e7a" stroke-width="2"><path d="M15 5l-1.761 4.239L9 11l4.239 1.761L15 17l1.761-4.239L21 11l-4.239-1.761L15 5zM5 21l-.881 2.119L2 24l2.119-.881L5 21zM9 3l-1.321 3.179L4.5 7.5l3.179 1.321L9 12l1.321-3.179L13.5 7.5l-3.179-1.321L9 3z"></path></svg>
+                        Ưu đãi dành riêng cho bạn
+                    </div>
+                    <a href="#" class="btn-view-all-promo">Xem tất cả</a>
+                </div>
+                <div class="promo-item">
+                    Khách hàng mới nhập <strong>THANKYOU</strong> giảm 5% tối đa 150.000đ cho đơn từ 1 triệu
+                    <span class="copy-code">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Sao chép
+                    </span>
+                </div>
+            </div>
+
+            <!-- Service Highlights -->
+            <div class="service-highlights">
+                <div class="service-item">
+                    <div class="service-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 21L15 15M17 11C17 14.3137 14.3137 17 11 17C7.68629 17 5 14.3137 5 11C5 7.68629 7.68629 5 11 5C14.3137 5 17 7.68629 17 11Z"></path></svg></div>
+                    <div class="service-text">DỔI HÀNG TẠI NHÀ DỄ DÀNG<br/><span class="service-sub">15 ngày theo chính sách đổi trả</span></div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></div>
+                    <div class="service-text">MIỄN PHÍ GIAO HÀNG<br/><span class="service-sub">Cho đơn hàng từ 1.000.000đ</span></div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+                    <div class="service-text">GIAO HÀNG NHANH CHÓNG<br/><span class="service-sub">Được kiểm tra trước khi thanh toán</span></div>
+                </div>
             </div>
           </div>
         </div>
 
-        <section class="section product-tabs-wrap" style="padding-bottom:0;">
-          <div class="tab-bar product-tab-bar">
-            <button class="tab-btn active" data-tab="details">Chi tiet</button>
-            <button class="tab-btn" data-tab="reviews">Danh gia</button>
-            <button class="tab-btn" data-tab="privacy">Bao mat</button>
-            <button class="tab-btn" data-tab="faq">FAQ</button>
+        <!-- NEWLY ADDED: Description Tabs -->
+        <section class="section product-tabs-wrap" style="margin-top: 64px;">
+          <div class="tab-bar product-tab-bar" style="border-bottom: 2px solid #eee; display: flex; gap: 40px; margin-bottom: 32px;">
+            <button class="tab-btn active" data-tab="details" style="background:none; border:none; padding: 12px 0; font-weight: 700; cursor: pointer; border-bottom: 2px solid #000; position: relative; bottom: -2px;">ĐẶC ĐIỂM NỔI BẬT</button>
+            <button class="tab-btn" data-tab="reviews" style="background:none; border:none; padding: 12px 0; font-weight: 500; cursor: pointer; color: #666;">ĐÁNH GIÁ</button>
+            <button class="tab-btn" data-tab="faq" style="background:none; border:none; padding: 12px 0; font-weight: 500; cursor: pointer; color: #666;">CÂU HỎI THƯỜNG GẶP</button>
           </div>
 
-          <article class="tab-content product-tab-content" data-tab-panel="details">
-            <h4>Chi tiết sản phẩm</h4>
-            <p>Chiếc váy lụa Silk Slip Dress của chúng tôi được thiết kế để mang lại sự thanh lịch và thoải mái tối đa. Được cắt may tỉ mỉ theo đường xéo vải giúp tôn lên đường cong tự nhiên của cơ thể.</p>
-            <ul>
-              <li><strong>Chất liệu:</strong> 100% Lụa Mulberry cao cấp (19 momme).</li>
-              <li><strong>Thiết kế:</strong> Cổ chữ V tinh tế, dây áo spaghetti có thể điều chỉnh độ dài.</li>
-              <li><strong>Sản xuất:</strong> Được may thủ công tại xưởng may đạt chuẩn đạo đức nghề nghiệp.</li>
-              <li><strong>Bảo quản:</strong> Giặt tay bằng nước lạnh hoặc giặt khô, không dùng chất tẩy mạnh.</li>
+          <article class="tab-content" data-tab-panel="details">
+            <p>Sản phẩm của chúng tôi được thiết kế để mang lại sự thanh lịch và thoải mái tối đa. Được cắt may tỉ mỉ giúp tôn lên đường cong tự nhiên của cơ thể.</p>
+            <ul style="margin-top: 16px; list-style: disc; padding-left: 20px; line-height: 2;">
+              <li><strong>Chất liệu:</strong> Vải cao cấp, mềm mại và thoáng khí.</li>
+              <li><strong>Thiết kế:</strong> Hiện đại, tinh tế, phù hợp cho nhiều dịp.</li>
+              <li><strong>Sản xuất:</strong> Quy trình kiểm soát chất lượng nghiêm ngặt.</li>
+              <li><strong>Bảo quản:</strong> Giặt tay hoặc giặt máy chế độ nhẹ để giữ form dáng.</li>
             </ul>
-          </article>
-
-          <article class="tab-content product-tab-content" data-tab-panel="reviews" hidden>
-            <div class="review-head">
-              <h4>Đánh giá từ khách hàng</h4>
-              <button class="btn btn-outline" type="button">Viết đánh giá</button>
-            </div>
-            <div class="review-summary">
-              <strong>4.8</strong>
-              <div>
-                <div class="stars">★★★★☆</div>
-                <span>Dựa trên 124 đánh giá</span>
-              </div>
-            </div>
-            <div class="review-list">
-              <article>
-                <div class="review-top">
-                  <h6>Nguyễn Thị A.</h6>
-                  <small>12/10/2026</small>
-                </div>
-                <p class="stars">★★★★★</p>
-                <p>Chất lụa cực kỳ mềm mại và mát. Form váy ôm vừa vặn, mặc lên rất sang trọng. Giao hàng nhanh và đóng gói cẩn thận.</p>
-              </article>
-              <article>
-                <div class="review-top">
-                  <h6>Lê Như Quỳnh</h6>
-                  <small>08/10/2026</small>
-                </div>
-                <p class="stars">★★★★★</p>
-                <p>Sản phẩm đúng như mô tả, chất lượng tốt và rất tinh tế. Đây là món đồ mình yêu thích nhất mùa này.</p>
-              </article>
-            </div>
-          </article>
-
-          <article class="tab-content product-tab-content" data-tab-panel="privacy" hidden>
-            <h4>Chính sách bảo mật thông tin</h4>
-            <p>Tại Aurelia, chúng tôi cam kết bảo vệ sự riêng tư và thông tin cá nhân của bạn. Chính sách này mô tả cách chúng tôi thu thập, sử dụng và bảo vệ dữ liệu của bạn.</p>
-            <h6>1. Thu thập thông tin</h6>
-            <p>Chúng tôi chỉ thu thập thông tin cần thiết để xử lý đơn hàng và cải thiện trải nghiệm mua sắm của bạn.</p>
-            <h6>2. Sử dụng thông tin</h6>
-            <p>Thông tin của bạn được sử dụng để giao hàng, hỗ trợ khách hàng và gửi thông tin khuyến mãi (nếu bạn đồng ý nhận).</p>
-            <h6>3. Bảo mật dữ liệu</h6>
-            <p>Chúng tôi áp dụng các biện pháp bảo mật tiên tiến để đảm bảo thông tin thanh toán và dữ liệu cá nhân luôn an toàn tuyệt đối.</p>
-          </article>
-
-          <article class="tab-content product-tab-content" data-tab-panel="faq" hidden>
-            <h4>Câu hỏi thường gặp</h4>
-            <details>
-              <summary>Làm thế nào để chọn đúng size?</summary>
-              <p>Bạn có thể tham khảo bảng kích cỡ hoặc liên hệ đội ngũ CSKH để được tư vấn theo số đo cơ thể.</p>
-            </details>
-            <details>
-              <summary>Thời gian giao hàng là bao lâu?</summary>
-              <p>Đơn hàng nội địa dự kiến 2-4 ngày làm việc; đơn quốc tế từ 7-14 ngày tùy vị trí địa lý.</p>
-            </details>
-            <details>
-              <summary>Tôi có thể đổi trả sản phẩm không?</summary>
-              <p>Có. Chúng tôi hỗ trợ đổi trả miễn phí trong vòng 30 ngày với điều kiện sản phẩm còn nguyên tem mác.</p>
-            </details>
           </article>
         </section>
       </div>
     </main>
 
-    <footer class="site-footer"><div class="container footer-note">&copy; <span id="current-year"></span> Aurelia.</div></footer>
+    <footer class="site-footer">
+        <!-- Footer content is dynamically injected via common.js -->
+    </footer>
     <script type="module" src="../assets/js/common.js"></script>
     <script type="module" src="../assets/js/product-detail.js"></script>
   </body>
 </html>
-

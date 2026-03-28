@@ -3,115 +3,164 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aurelia | Shop</title>
+    <title>Aurelia | Shop - All Collections</title>
     <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/shop.css" />
   </head>
   <body>
     <header class="top-nav">
-      <div class="container nav-inner">
-        <button class="btn btn-outline mobile-toggle" data-menu-toggle>Menu</button>
-        <nav class="nav-links" data-nav-links>
-          <a href="../index.html" data-nav-link>Home</a>
-          <a href="shop.html" data-nav-link>Shop</a>
-          <a href="about.html" data-nav-link>About</a>
-          <a href="contact.html" data-nav-link>Contact</a>
-        </nav>
-        <a class="brand" href="../index.html">AURELIA</a>
-        <div class="nav-actions">
-          <a class="nav-icon" href="profile.html">U</a>
-          <a class="nav-icon" href="cart.html">B</a>
-        </div>
-      </div>
+      <!-- Header content is dynamically injected via common.js -->
     </header>
 
-    <main class="section shop-page-main">
-      <div class="container page-head">
-        <h1>All Collections</h1>
-        <p>Tat ca san pham cua Aurelia duoc loc theo nhu cau cua ban.</p>
-      </div>
-      <div class="container two-col shop-layout">
-        <aside class="shop-sidebar card panel">
-          <div class="shop-search-wrap">
-            <input id="shop-search" class="input shop-search-input" type="search" placeholder="Search products..." />
-            <span class="shop-search-icon">⌕</span>
-          </div>
-
-          <div class="shop-accordion">
-            <details class="filter-group" open>
-              <summary>Categories</summary>
-              <div class="filter-options">
-                <a href="#" class="active">New In</a>
-                <a href="#">Clothing</a>
-                <a href="#">Shoes</a>
-                <a href="#">Accessories</a>
-              </div>
-              <label for="filter-category" class="filter-hidden-label">Category</label>
-              <select id="filter-category" class="select" style="margin-top:12px;">
-                <option value="all">All categories</option>
-                <option value="Dresses">Dresses</option>
-                <option value="Tops">Tops</option>
-                <option value="Bottoms">Bottoms</option>
-                <option value="Outerwear">Outerwear</option>
-                <option value="Shoes">Shoes</option>
-              </select>
-            </details>
-
-            <details class="filter-group">
-              <summary>Price Range</summary>
-              <input id="filter-price" class="input" type="range" min="500000" max="2500000" step="50000" value="2500000" />
-              <div class="shop-price-row">
-                <span>0đ</span>
-                <span>2.5M+</span>
-              </div>
-            </details>
-
-            <details class="filter-group">
-              <summary>Color</summary>
-              <div class="shop-color-list">
-                <span class="color-swatch" style="background:#000"></span>
-                <span class="color-swatch" style="background:#fff"></span>
-                <span class="color-swatch" style="background:#E8D8D0"></span>
-                <span class="color-swatch" style="background:#C5A89E"></span>
-                <span class="color-swatch" style="background:#8B9D83"></span>
-                <span class="color-swatch" style="background:#A3B1C6"></span>
-              </div>
-            </details>
-          </div>
-        </aside>
-
-        <section>
-          <div class="shop-toolbar">
-            <h2>All Collections</h2>
-            <div class="shop-sort-wrap">
-              <label for="sort-by">Sort By</label>
-              <select id="sort-by" class="select">
-                <option value="featured">Featured</option>
-                <option value="newest">Newest</option>
-                <option value="priceAsc">Price: Low to High</option>
-                <option value="priceDesc">Price: High to Low</option>
-              </select>
+    <main class="shop-page-main">
+      <div class="container shop-layout">
+        <!-- SIDEBAR FILTERS -->
+        <aside class="filters-sidebar">
+          <div class="filter-header">LỌC SẢN PHẨM</div>
+          
+          <div class="filter-group">
+            <div class="filter-group-header" data-toggle="collapse" data-target="#cat-filter">
+              <h5>DANH MỤC</h5>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </div>
+            <div class="filter-group-content" id="cat-filter">
+              <label class="filter-item">
+                <input type="checkbox" name="category" value="Vest" hidden>
+                <div class="filter-checkbox"></div>
+                <span>Vest</span>
+              </label>
+              <label class="filter-item">
+                <input type="checkbox" name="category" value="Blazer" hidden>
+                <div class="filter-checkbox"></div>
+                <span>Blazer</span>
+              </label>
+              <label class="filter-item">
+                <input type="checkbox" name="category" value="Măng tô" hidden>
+                <div class="filter-checkbox"></div>
+                <span>Măng tô</span>
+              </label>
+              <label class="filter-item">
+                <input type="checkbox" name="category" value="Lông vũ" hidden>
+                <div class="filter-checkbox"></div>
+                <span>Lông vũ</span>
+              </label>
+              <label class="filter-item">
+                <input type="checkbox" name="category" value="Khác" hidden>
+                <div class="filter-checkbox"></div>
+                <span>Khác</span>
+              </label>
             </div>
           </div>
 
-          <p class="muted">Showing <strong id="result-count">0</strong> products</p>
-          <div class="grid-3" id="shop-grid"></div>
+          <div class="filter-group">
+            <div class="filter-group-header">
+              <h5>GIÁ</h5>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </div>
+            <div class="filter-group-content">
+              <label class="filter-item">
+                <input type="checkbox" name="price" value="0-500000" hidden>
+                <div class="filter-checkbox"></div>
+                <span>0 đ - 500.000 đ</span>
+              </label>
+              <label class="filter-item">
+                <input type="checkbox" name="price" value="500000-1000000" hidden>
+                <div class="filter-checkbox"></div>
+                <span>500.000 đ - 1.000.000 đ</span>
+              </label>
+              <label class="filter-item">
+                <input type="checkbox" name="price" value="1000000-1500000" hidden>
+                <div class="filter-checkbox"></div>
+                <span>1.000.000 đ - 1.500.000 đ</span>
+              </label>
+              <label class="filter-item">
+                <input type="checkbox" name="price" value="1500000-2000000" hidden>
+                <div class="filter-checkbox"></div>
+                <span>1.500.000 đ - 2.000.000 đ</span>
+              </label>
+              <label class="filter-item">
+                <input type="checkbox" name="price" value="2000000+" hidden>
+                <div class="filter-checkbox"></div>
+                <span>2.000.000 đ - 4.590.000 đ</span>
+              </label>
+            </div>
+          </div>
 
-          <nav class="shop-pagination" aria-label="Page navigation">
-            <a href="#" class="disabled">Prev</a>
-            <a href="#" class="active">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">Next</a>
+          <div class="filter-group">
+            <div class="filter-group-header">
+              <h5>CHẤT LIỆU</h5>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="transform: rotate(-90deg)"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </div>
+            <div class="filter-group-content collapsed">
+              <!-- Content placeholder -->
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-group-header">
+              <h5>MÀU CƠ BẢN</h5>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="transform: rotate(-90deg)"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </div>
+            <div class="filter-group-content collapsed">
+              <!-- Content placeholder -->
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-group-header">
+              <h5>BỘ SƯU TẬP</h5>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </div>
+            <div class="filter-group-content">
+              <label class="filter-item">
+                <input type="checkbox" name="collection" value="Silk" hidden>
+                <div class="filter-checkbox"></div>
+                <span>Premium Silk by Format</span>
+              </label>
+              <label class="filter-item">
+                <input type="checkbox" name="collection" value="FirstClass" hidden>
+                <div class="filter-checkbox"></div>
+                <span>First Class</span>
+              </label>
+              <label class="filter-item">
+                <input type="checkbox" name="collection" value="No11" hidden>
+                <div class="filter-checkbox"></div>
+                <span>No.11 Être Douce</span>
+              </label>
+            </div>
+          </div>
+        </aside>
+
+        <!-- PRODUCT LIST SECTION -->
+        <section class="shop-content">
+          <div class="shop-grid" id="shop-grid">
+            <!-- Dynamically injected products -->
+          </div>
+          
+          <nav class="shop-pagination" aria-label="Page navigation" style="margin-top: 48px; justify-content: center; display: flex; gap: 8px;">
+            <a href="#" class="btn-pagination disabled">Trước</a>
+            <a href="#" class="btn-pagination active">1</a>
+            <a href="#" class="btn-pagination">2</a>
+            <a href="#" class="btn-pagination">Sau</a>
           </nav>
         </section>
       </div>
     </main>
 
+    <!-- FLOATING TOOLS -->
+    <div class="floating-tools">
+        <button class="tool-btn" title="Hỗ trợ">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        </button>
+        <button class="tool-btn" id="scroll-top" title="Lên đầu trang">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
+        </button>
+    </div>
+
     <footer class="site-footer">
-      <div class="container footer-note">&copy; <span id="current-year"></span> Aurelia. All rights reserved.</div>
+        <!-- Footer content is dynamically injected via common.js -->
     </footer>
     <script type="module" src="../assets/js/common.js"></script>
     <script type="module" src="../assets/js/shop.js"></script>
   </body>
 </html>
-

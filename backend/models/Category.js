@@ -15,6 +15,9 @@ const categorySchema = new mongoose.Schema(
     description: {
       type: String,
     },
+    group: {
+      type: String,
+    },
   },
   {
     timestamps: true,

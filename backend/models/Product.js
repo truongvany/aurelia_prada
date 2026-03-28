@@ -35,6 +35,12 @@ const productSchema = new mongoose.Schema(
     badge: {
       type: String,
     },
+    material: {
+      type: String,
+    },
+    collectionName: {
+      type: String,
+    },
     status: {
       type: String,
       enum: ['Active', 'Low Stock', 'Out of Stock'],

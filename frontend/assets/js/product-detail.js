@@ -21,70 +21,129 @@ async function initDetail() {
     return;
   }
 
-  const title = document.getElementById('product-title');
+  // Update text content
+  const titleElem = document.getElementById('product-title');
   const titleCrumb = document.getElementById('product-title-crumb');
-  const price = document.getElementById('product-price');
-  const priceCta = document.getElementById('product-price-cta');
-  const hero = document.getElementById('product-hero');
-  const thumb = document.getElementById('product-thumb');
+  const priceElem = document.getElementById('product-price');
+  const heroElem = document.getElementById('product-hero');
 
-  if (title) title.textContent = product.name;
+  if (titleElem) titleElem.textContent = product.name;
   if (titleCrumb) titleCrumb.textContent = product.name;
-  if (price) price.textContent = formatVnd(product.price);
-  if (priceCta) priceCta.textContent = formatVnd(product.price);
-  if (hero) hero.src = product.image;
-  if (thumb) thumb.src = product.image;
+  if (priceElem) priceElem.textContent = formatVnd(product.price);
+  if (heroElem) heroElem.src = product.image;
 
-  const galleryTrack = document.querySelector('.product-gallery-track');
-  if (galleryTrack) {
-    // Duplicate gallery content so animation can loop seamlessly
-    galleryTrack.innerHTML += galleryTrack.innerHTML;
+  // Update thumbnails
+  for (let i = 0; i < 4; i++) {
+    const thumb = document.getElementById(`product-thumb-${i}`);
+    if (thumb) {
+        // For demo, we use the main image for all thumbs or placeholders
+        thumb.src = i === 0 ? product.image : thumb.src || product.image;
+    }
   }
 
-  document.querySelectorAll('[data-size]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-size]').forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-      const selected = document.getElementById('selected-size');
-      if (selected) selected.textContent = btn.getAttribute('data-size') || '';
+  // Color selection
+  const colorDots = document.querySelectorAll('.color-dot');
+  colorDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      colorDots.forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+      const selectedColor = document.getElementById('selected-color');
+      if (selectedColor) selectedColor.textContent = dot.getAttribute('data-color');
     });
   });
 
-  document.querySelectorAll('[data-color]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-color]').forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-      const selected = document.getElementById('selected-color');
-      if (selected) selected.textContent = btn.getAttribute('data-color') || '';
+  // Size selection
+  const sizeOptions = document.querySelectorAll('.size-option');
+  sizeOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      sizeOptions.forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      const selectedSize = document.getElementById('selected-size');
+      if (selectedSize) selectedSize.textContent = opt.getAttribute('data-size');
     });
   });
 
-  document.querySelectorAll('[data-tab]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const tab = btn.getAttribute('data-tab');
-      document.querySelectorAll('[data-tab]').forEach((t) => t.classList.remove('active'));
-      document.querySelectorAll('[data-tab-panel]').forEach((p) => p.hidden = true);
-      btn.classList.add('active');
-      const panel = document.querySelector(`[data-tab-panel="${tab}"]`);
-      if (panel) panel.hidden = false;
+  // Quantity control
+  const qtyValue = document.getElementById('qty-value');
+  const qtyPlus = document.getElementById('qty-plus');
+  const qtyMinus = document.getElementById('qty-minus');
+
+  if (qtyPlus && qtyMinus && qtyValue) {
+    qtyPlus.addEventListener('click', () => {
+      let val = parseInt(qtyValue.textContent);
+      qtyValue.textContent = val + 1;
+    });
+    qtyMinus.addEventListener('click', () => {
+      let val = parseInt(qtyValue.textContent);
+      if (val > 1) qtyValue.textContent = val - 1;
+    });
+  }
+
+  // Thumbnail click to change main image
+  const thumbItems = document.querySelectorAll('.thumb-item');
+  thumbItems.forEach(item => {
+    item.addEventListener('click', () => {
+      thumbItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const img = item.querySelector('img');
+      if (img && heroElem) {
+        heroElem.src = img.src;
+      }
     });
   });
 
-  // Handle Add to Cart
-  const addBtn = document.querySelector('.btn-primary'); // Assuming this is Add to Cart
-  if (addBtn) {
-    addBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        const activeSize = document.querySelector('[data-size].active')?.getAttribute('data-size') || 'L';
-        const qtyStr = document.querySelector('.qty span')?.textContent || '1';
-        
-        try {
-            await addToCart(product._id, Number(qtyStr), activeSize);
-            updateCartBadge();
-            alert('Added to cart!');
-        } catch (error) {
-            alert('You must be logged in to add items to cart.');
-        }
+  // Buy now click
+  const buyNowBtn = document.querySelector('.btn-buy-now');
+  if (buyNowBtn) {
+    buyNowBtn.addEventListener('click', async () => {
+      // For now, Buy Now does the same as Add to Cart but could redirect to checkout
+      await addCartBtn.click();
+      window.location.href = 'cart.html';
+    });
+  }
+
+  // Tab switching
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-tab');
+      tabBtns.forEach(b => {
+        b.classList.remove('active');
+        b.style.fontWeight = '500';
+        b.style.color = '#666';
+        b.style.borderBottom = 'none';
+      });
+      btn.classList.add('active');
+      btn.style.fontWeight = '700';
+      btn.style.color = '#000';
+      btn.style.borderBottom = '2px solid #000';
+      
+      // Note: In this simple version, we only have one panel being updated
+      // If we had multiple panels, we'd toggle their hidden attribute here.
+    });
+  });
+
+  // Add to cart click
+  const addCartBtn = document.getElementById('add-to-cart-btn');
+  if (addCartBtn) {
+    addCartBtn.addEventListener('click', async () => {
+      const activeSize = document.querySelector('.size-option.active')?.getAttribute('data-size') || 'L';
+      const qtyStr = qtyValue ? qtyValue.textContent : '1';
+      
+      addCartBtn.disabled = true;
+      const originalText = addCartBtn.textContent;
+      addCartBtn.textContent = 'Đang xử lý...';
+
+      try {
+        await addToCart(product._id, Number(qtyStr), activeSize);
+        updateCartBadge();
+        alert('Đã thêm sản phẩm vào giỏ hàng!');
+      } catch (error) {
+        alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
+      } finally {
+        addCartBtn.disabled = false;
+        addCartBtn.textContent = originalText;
+      }
     });
   }
 }

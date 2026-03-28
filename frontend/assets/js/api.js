@@ -21,6 +21,12 @@ export async function fetchProducts() {
   return res.json();
 }
 
+export async function fetchCategories() {
+  const res = await fetch(`${API_URL}/categories`);
+  if (!res.ok) throw new Error('Failed to fetch categories');
+  return res.json();
+}
+
 export async function fetchProductById(id) {
   const res = await fetch(`${API_URL}/products/${id}`);
   if (!res.ok) throw new Error('Failed to fetch product');

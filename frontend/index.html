@@ -36,34 +36,37 @@
         </div>
       </section>
 
-      <section class="section section-soft new-arrival-sec">
-        <div class="container">
-          <div class="section-head">
+      <section class="section new-arrival-sec" data-reveal="up">
+        <div class="container text-center">
+          <div class="section-head reveal-item">
+            <span class="section-subtitle">BỘ SƯU TẬP 2026</span>
             <h2>NEW ARRIVAL</h2>
             <div class="section-tabs ivy-tabs">
               <span class="active">Aurelia</span>
               <span>Metagent</span>
             </div>
           </div>
-          <div class="grid-6" id="new-arrivals"></div>
-          <div class="section-cta text-center" style="text-align: center; justify-content: center;">
-            <a href="pages/shop.html" class="btn-view-all">Xem tất cả</a>
+          <div class="grid-6 reveal-item" id="new-arrivals"></div>
+          <div class="section-cta reveal-item">
+            <a href="pages/shop.html" class="btn-aura-outline">XEM TẤT CẢ SẢN PHẨM</a>
           </div>
         </div>
       </section>
 
-      <section class="section section-sale">
-        <div class="container">
-          <div class="section-head">
-            <h2>Hot Summer Deal | Sale Upto 70%</h2>
-            <div class="section-tabs">
-              <span class="active">Aurelia</span>
-              <span>Metagent</span>
-            </div>
+      <section class="section section-sale-enhanced" data-reveal="up">
+        <div class="container sale-container">
+          <div class="sale-banner-content reveal-item">
+             <div class="sale-label">LIMITED OFFER</div>
+             <h2>Hot Summer Deal<br>Sale Upto 70%</h2>
+             <p>Khám phá bộ sưu tập mùa hè với những thiết kế tinh tế và mức giá ưu đãi nhất năm.</p>
+             <div class="section-tabs reveal-item">
+               <span class="active">Aurelia Shop</span>
+               <span>Metagent Outlet</span>
+             </div>
           </div>
-          <div class="grid-4" id="sale-products"></div>
-          <div class="section-cta text-center" style="text-align: center; justify-content: center;">
-            <a href="pages/shop.html" class="btn-view-all">Xem tất cả</a>
+          <div class="grid-4 reveal-item" id="sale-products"></div>
+          <div class="section-cta reveal-item">
+            <a href="pages/shop.html" class="btn-aura-solid">MUA NGAY BÂY GIỜ</a>
           </div>
         </div>
       </section>
@@ -463,6 +466,24 @@
       // Pause summer slider on hover
       summerSlider.addEventListener('mouseenter', () => clearInterval(summerAutoPlayInterval));
       summerSlider.addEventListener('mouseleave', () => { if(!isSumDragging) startSummerAutoPlay(); });
+
+      // --- Reveal Animation Logic ---
+      const revealCallback = (entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      };
+
+      const revealObserver = new IntersectionObserver(revealCallback, {
+        threshold: 0.15
+      });
+
+      document.querySelectorAll('[data-reveal]').forEach(el => {
+        revealObserver.observe(el);
+      });
 
     </script>
     <script type="module" src="assets/js/common.js"></script>
