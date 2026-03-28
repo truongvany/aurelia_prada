@@ -81,6 +81,7 @@ function buildUserShell() {
           </div>
           <a href="${storeHref}" data-nav-link>Cửa hàng</a>
           <a href="${aboutHref}" data-nav-link>Về chúng tôi</a>
+          <a href="${contactHref}" data-nav-link>Liên hệ</a>
         </nav>
         <div class="aura-nav-actions">
           <a class="aura-nav-icon" href="${profileHref}" aria-label="Profile">

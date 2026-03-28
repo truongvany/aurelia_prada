@@ -53,13 +53,18 @@ const deleteProduct = async (req, res) => {
 // @access  Private/Admin
 const createProduct = async (req, res) => {
   try {
+    const { name, price, originalPrice, description, image, category, stock, color, badge } = req.body;
+    
     const product = new Product({
-      name: 'Sample name',
-      price: 0,
-      category: req.body.category, // Need a valid category ID here
-      stock: 0,
-      image: '/images/sample.jpg',
-      description: 'Sample description',
+      name: name || 'New Product',
+      price: price || 0,
+      originalPrice: originalPrice || 0,
+      category: category, 
+      stock: stock || 0,
+      image: image || '/images/sample.jpg',
+      description: description || '',
+      color: color || '',
+      badge: badge || '',
     });
 
     const createdProduct = await product.save();

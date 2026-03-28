@@ -117,9 +117,102 @@ const seedData = async () => {
       }
     ];
 
-    await Product.insertMany(productsToCreate);
+    const seededProducts = await Product.insertMany(productsToCreate);
 
     console.log('👚 Products seeded.');
+
+    // 4. Create Sample Orders
+    const customer = createdUsers[1]._id;
+    const ordersToCreate = [
+      {
+        user: customer,
+        orderItems: [
+          {
+            name: seededProducts[0].name,
+            qty: 1,
+            image: seededProducts[0].image,
+            price: seededProducts[0].price,
+            product: seededProducts[0]._id,
+          }
+        ],
+        shippingAddress: {
+          street: '456 Customer Blvd',
+          city: 'Ho Chi Minh City',
+          state: 'SG',
+          zipCode: '700000',
+          country: 'Vietnam'
+        },
+        paymentMethod: 'COD',
+        itemsPrice: seededProducts[0].price,
+        taxPrice: 0,
+        shippingPrice: 30000,
+        totalPrice: seededProducts[0].price + 30000,
+        isPaid: true,
+        paidAt: new Date(),
+        status: 'Delivered',
+        createdAt: new Date()
+      },
+      {
+        user: customer,
+        orderItems: [
+          {
+            name: seededProducts[1].name,
+            qty: 2,
+            image: seededProducts[1].image,
+            price: seededProducts[1].price,
+            product: seededProducts[1]._id,
+          }
+        ],
+        shippingAddress: {
+          street: '456 Customer Blvd',
+          city: 'Ho Chi Minh City',
+          state: 'SG',
+          zipCode: '700000',
+          country: 'Vietnam'
+        },
+        paymentMethod: 'COD',
+        itemsPrice: seededProducts[1].price * 2,
+        taxPrice: 0,
+        shippingPrice: 30000,
+        totalPrice: (seededProducts[1].price * 2) + 30000,
+        isPaid: true,
+        paidAt: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        status: 'Delivered',
+        createdAt: new Date(new Date().setMonth(new Date().getMonth() - 1))
+      },
+      {
+        user: customer,
+        orderItems: [
+          {
+            name: seededProducts[2].name,
+            qty: 1,
+            image: seededProducts[2].image,
+            price: seededProducts[2].price,
+            product: seededProducts[2]._id,
+          }
+        ],
+        shippingAddress: {
+          street: '456 Customer Blvd',
+          city: 'Ho Chi Minh City',
+          state: 'SG',
+          zipCode: '700000',
+          country: 'Vietnam'
+        },
+        paymentMethod: 'COD',
+        itemsPrice: seededProducts[2].price,
+        taxPrice: 0,
+        shippingPrice: 30000,
+        totalPrice: seededProducts[2].price + 30000,
+        isPaid: true,
+        paidAt: new Date(new Date().setMonth(new Date().getMonth() - 2)),
+        status: 'Delivered',
+        createdAt: new Date(new Date().setMonth(new Date().getMonth() - 2))
+      }
+    ];
+
+    await Order.insertMany(ordersToCreate);
+    console.log('📦 Sample Orders seeded.');
+
     console.log('🌱 Database initialized perfectly!');
     process.exit();
   } catch (error) {

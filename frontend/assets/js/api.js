@@ -159,3 +159,48 @@ export async function fetchAllUsers() {
   if (!res.ok) throw new Error('Failed to load users');
   return res.json();
 }
+
+export async function fetchDashboardStats() {
+  const res = await fetch(`${API_URL}/dashboard/stats`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to load dashboard stats');
+  return res.json();
+}
+
+// Product CRUD
+export async function createProduct(productData) {
+  const res = await fetch(`${API_URL}/products`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(productData),
+  });
+  if (!res.ok) throw new Error('Failed to create product');
+  return res.json();
+}
+
+export async function updateProduct(id, productData) {
+  const res = await fetch(`${API_URL}/products/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(productData),
+  });
+  if (!res.ok) throw new Error('Failed to update product');
+  return res.json();
+}
+
+export async function deleteProduct(id) {
+  const res = await fetch(`${API_URL}/products/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to delete product');
+  return res.json();
+}
+
+// Categories
+export async function fetchCategories() {
+  const res = await fetch(`${API_URL}/categories`);
+  if (!res.ok) throw new Error('Failed to fetch categories');
+  return res.json();
+}
