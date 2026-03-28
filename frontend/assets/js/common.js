@@ -6,7 +6,8 @@ export function createProductCard(product) {
   const badgeType = product.originalPrice ? 'sale' : 'new';
   const oldPrice = product.originalPrice ? `<span class="ivy-old-price">${formatVnd(product.originalPrice)}</span>` : '';
   const inPagesFolder = window.location.pathname.includes('/pages/');
-  const detailHref = inPagesFolder ? `product-detail.html?id=${product.id}` : `pages/product-detail.html?id=${product.id}`;
+  const productId = product._id || product.id;
+  const detailHref = inPagesFolder ? `product-detail.html?id=${productId}` : `pages/product-detail.html?id=${productId}`;
 
   return `
     <article class="ivy-product-card">
@@ -28,7 +29,7 @@ export function createProductCard(product) {
             <strong>${formatVnd(product.price)}</strong>
             ${oldPrice}
           </div>
-          <button class="ivy-cart-btn" aria-label="Add to bag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></button>
+          <button class="ivy-cart-btn" data-product-id="${productId}" aria-label="Add to bag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></button>
         </div>
       </div>
     </article>
@@ -87,7 +88,7 @@ function buildUserShell() {
           </a>
           <a class="aura-nav-icon aura-cart" href="${cartHref}" aria-label="Cart">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-            <span class="aura-cart-badge">3</span>
+            <span class="aura-cart-badge" id="cart-badge">0</span>
           </a>
         </div>
       </div>
@@ -207,11 +208,57 @@ export function initBaseUI() {
     year.textContent = String(new Date().getFullYear());
   }
 
+  // Update cart badge on load
+  updateCartBadge();
+
+  // Global "Add to Cart" Handling (Event Delegation)
+  document.addEventListener('click', async (e) => {
+    const cartBtn = e.target.closest('.ivy-cart-btn');
+    if (cartBtn) {
+        e.preventDefault();
+        const productId = cartBtn.getAttribute('data-product-id');
+        if (!productId) return;
+
+        const { addToCart } = await import('./api.js');
+        
+        cartBtn.disabled = true;
+        const originalContent = cartBtn.innerHTML;
+        cartBtn.innerHTML = '...';
+
+        try {
+            await addToCart(productId, 1, 'L'); // Default size L
+            updateCartBadge();
+            // Show a simple alert for now
+            alert('Added to cart!');
+        } catch (error) {
+            alert('Please login to add to cart.');
+        } finally {
+            cartBtn.disabled = false;
+            cartBtn.innerHTML = originalContent;
+        }
+    }
+  });
+
   // Infinite scroll gallery track duplication
   const galleryTrack = document.querySelector('.gallery-track');
   if (galleryTrack) {
     galleryTrack.innerHTML += galleryTrack.innerHTML;
   }
+}
+
+export async function updateCartBadge() {
+    const badge = document.getElementById('cart-badge');
+    if (!badge) return;
+
+    try {
+        const { fetchCart } = await import('./api.js');
+        const cart = await fetchCart();
+        const count = cart.items.reduce((acc, item) => acc + item.quantity, 0);
+        badge.textContent = String(count);
+        badge.style.display = count > 0 ? 'flex' : 'none';
+    } catch (error) {
+        badge.style.display = 'none';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', initBaseUI);

@@ -171,21 +171,34 @@
     </footer>
 
     <script type="module">
-      import { products } from './assets/js/data.js';
+      import { fetchProducts } from './assets/js/api.js';
       import { createProductCard } from './assets/js/common.js';
 
-      const newArrivals = products.slice(0, 6);
-      const sales = products.filter((product) => product.originalPrice);
-      document.getElementById('new-arrivals').innerHTML = newArrivals.map(createProductCard).join('');
-      document.getElementById('sale-products').innerHTML = sales.map(createProductCard).join('');
+      async function initHomeProducts() {
+        try {
+          const products = await fetchProducts();
+          const newArrivals = products.slice(0, 6);
+          const sales = products.filter((product) => product.originalPrice);
+          
+          const newArrivalsEl = document.getElementById('new-arrivals');
+          const saleProductsEl = document.getElementById('sale-products');
+          
+          if (newArrivalsEl) newArrivalsEl.innerHTML = newArrivals.map(createProductCard).join('');
+          if (saleProductsEl) saleProductsEl.innerHTML = sales.map(createProductCard).join('');
 
-      const galleryImages = products.map(product => product.image);
-      const galleryTrackEl = document.getElementById('gallery-track');
-      if (galleryTrackEl && galleryImages.length > 0) {
-        // Double the images array so seamless infinite scroll works
-        const seamlessImages = [...galleryImages, ...galleryImages];
-        galleryTrackEl.innerHTML = seamlessImages.map((src, idx) => `<div class="gallery-item"><img src="${src}" alt="Gallery image ${idx + 1}" /></div>`).join('');
+          const galleryImages = products.map(product => product.image);
+          const galleryTrackEl = document.getElementById('gallery-track');
+          if (galleryTrackEl && galleryImages.length > 0) {
+            // Double the images array so seamless infinite scroll works
+            const seamlessImages = [...galleryImages, ...galleryImages];
+            galleryTrackEl.innerHTML = seamlessImages.map((src, idx) => `<div class="gallery-item"><img src="${src}" alt="Gallery image ${idx + 1}" /></div>`).join('');
+          }
+        } catch (error) {
+          console.error('Failed to load home products:', error);
+        }
       }
+
+      initHomeProducts();
 
       // Hero Slider logic (Infinite Loop)
       const track = document.getElementById('heroTrack');

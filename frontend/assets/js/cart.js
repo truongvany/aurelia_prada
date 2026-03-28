@@ -1,12 +1,13 @@
-import { fetchCart, removeFromCart } from './api.js';
-import { formatVnd } from './common.js';
+import { fetchCart, removeFromCart, createOrder, clearCart, getUserInfo } from './api.js';
+import { formatVnd, updateCartBadge } from './common.js';
 
 let cartGlobal = null;
 
 function totals(cartItems) {
-  const subtotal = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  const subtotal = cartItems.reduce((acc, item) => acc + (item.product?.price || 0) * item.quantity, 0);
   const tax = subtotal * 0.08;
-  return { subtotal, tax, total: subtotal + tax };
+  const shipping = subtotal > 2000000 ? 0 : 30000;
+  return { subtotal, tax, shipping, total: subtotal + tax + shipping };
 }
 
 function render(cartItems) {
@@ -41,6 +42,20 @@ function render(cartItems) {
   if (subtotalEl) subtotalEl.textContent = formatVnd(calc.subtotal);
   if (taxEl) taxEl.textContent = formatVnd(calc.tax);
   if (totalEl) totalEl.textContent = formatVnd(calc.total);
+
+  // Update Checkout Button state
+  const checkoutBtn = document.getElementById('checkout-btn');
+  if (checkoutBtn) {
+      if (cartItems.length === 0) {
+          checkoutBtn.classList.add('disabled');
+          checkoutBtn.style.opacity = '0.5';
+          checkoutBtn.style.pointerEvents = 'none';
+      } else {
+          checkoutBtn.classList.remove('disabled');
+          checkoutBtn.style.opacity = '1';
+          checkoutBtn.style.pointerEvents = 'auto';
+      }
+  }
 }
 
 async function initCart() {
@@ -71,6 +86,7 @@ async function initCart() {
         try {
             cartGlobal = await removeFromCart(itemId);
             render(cartGlobal.items);
+            updateCartBadge();
         } catch (error) {
             alert('Failed to remove item');
             target.textContent = 'Remove';
@@ -78,6 +94,57 @@ async function initCart() {
         }
     }
   });
+
+  const checkoutBtn = document.getElementById('checkout-btn');
+  if (checkoutBtn) {
+      checkoutBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          if (cartGlobal.items.length === 0) return;
+
+          const user = getUserInfo();
+          if (!user) {
+              alert('Please login to checkout.');
+              return;
+          }
+
+          const calc = totals(cartGlobal.items);
+          const orderData = {
+              orderItems: cartGlobal.items.map(item => ({
+                  name: item.product.name,
+                  qty: item.quantity,
+                  image: item.product.image,
+                  price: item.product.price,
+                  product: item.product._id
+              })),
+              shippingAddress: user.address || {
+                  street: '123 Default St',
+                  city: 'HCM',
+                  state: 'SG',
+                  zipCode: '70000',
+                  country: 'VN'
+              },
+              itemsPrice: calc.subtotal,
+              taxPrice: calc.tax,
+              shippingPrice: calc.shipping,
+              totalPrice: calc.total
+          };
+
+          checkoutBtn.textContent = 'Processing...';
+          checkoutBtn.style.pointerEvents = 'none';
+
+          try {
+              await createOrder(orderData);
+              await clearCart();
+              updateCartBadge();
+              alert('Order placed successfully!');
+              window.location.href = 'profile.html';
+          } catch (error) {
+              alert('Failed to place order: ' + error.message);
+              checkoutBtn.textContent = 'Thanh Toán';
+              checkoutBtn.style.pointerEvents = 'auto';
+          }
+      });
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initCart);

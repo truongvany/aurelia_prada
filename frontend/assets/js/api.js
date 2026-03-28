@@ -95,6 +95,26 @@ export async function removeFromCart(itemId) {
   return res.json();
 }
 
+export async function clearCart() {
+  const res = await fetch(`${API_URL}/cart`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to clear cart');
+  return res.json();
+}
+
+// Orders
+export async function createOrder(orderData) {
+  const res = await fetch(`${API_URL}/orders`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(orderData),
+  });
+  if (!res.ok) throw new Error('Failed to create order');
+  return res.json();
+}
+
 // Admin APIs
 export async function fetchAllOrders() {
   const res = await fetch(`${API_URL}/orders`, {

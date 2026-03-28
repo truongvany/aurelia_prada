@@ -1,5 +1,5 @@
 import { fetchProductById, addToCart } from './api.js';
-import { formatVnd } from './common.js';
+import { formatVnd, updateCartBadge } from './common.js';
 
 function getProductId() {
   const params = new URLSearchParams(window.location.search);
@@ -80,6 +80,7 @@ async function initDetail() {
         
         try {
             await addToCart(product._id, Number(qtyStr), activeSize);
+            updateCartBadge();
             alert('Added to cart!');
         } catch (error) {
             alert('You must be logged in to add items to cart.');
