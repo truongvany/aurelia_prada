@@ -26,6 +26,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -708,7 +709,8 @@ p {
   box-shadow: none;
   transform: translateZ(0);
   will-change: transform;
-  width: 100vw;
+  width: 100%;
+  padding: 0;
 }
 
 .gallery-track {
@@ -723,9 +725,9 @@ p {
 }
 
 .gallery-item {
-  width: 20vw;
-  flex-shrink: 0;
-  padding: 0 4px; /* small gap between items */
+  width: 250px;
+  flex: 0 0 auto;
+  padding: 0 10px;
 }
 
 .gallery-item img {

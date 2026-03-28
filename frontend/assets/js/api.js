@@ -204,9 +204,4 @@ export async function deleteProduct(id) {
   return res.json();
 }
 
-// Categories
-export async function fetchCategories() {
-  const res = await fetch(`${API_URL}/categories`);
-  if (!res.ok) throw new Error('Failed to fetch categories');
-  return res.json();
-}
+
