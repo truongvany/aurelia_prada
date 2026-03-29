@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Khuyến mãi & Combo | AURELIA Admin</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+    <style>
+      .modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); display: none; justify-content: center;
+        align-items: center; z-index: 1000;
+      }
+      .modal-content {
+        background: var(--admin-card); padding: 30px; border-radius: 4px;
+        width: 100%; max-width: 650px; position: relative;
+        max-height: 90vh; overflow-y: auto;
+      }
+      .modal-header {
+        display: flex; justify-content: space-between; align-items: center;
+        margin-bottom: 24px; border-bottom: 1px solid var(--admin-border);
+        padding-bottom: 15px;
+      }
+      .btn-close-modal {
+        background: none; border: none; font-size: 24px; cursor: pointer; color: var(--admin-text-main);
+      }
+    </style>
+  </head>
+  <body class="admin-body">
+    <div id="admin-app">
+      <main class="dashboard-main">
+        <div class="dashboard-title-row">
+          <div>
+            <h2>Khuyến Mãi & Combo</h2>
+            <p>Tạo và quản lý các chương trình Flash Sale và Combo mua nhiều giảm nhiều.</p>
+          </div>
+          <button class="btn-export" id="add-promotion-btn">TẠO CHƯƠNG TRÌNH MỚI</button>
+        </div>
+
+        <div class="table-card" style="margin-top: 24px;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>TÊN CHƯƠNG TRÌNH</th>
+                <th>LOẠI</th>
+                <th>GIẢM GIÁ</th>
+                <th>ĐIỀU KIỆN</th>
+                <th>THỜI GIAN</th>
+                <th>TRẠNG THÁI</th>
+                <th>THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody id="admin-promotions-body">
+              <!-- JS Injected -->
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <!-- Promotion Modal -->
+    <div id="promotion-modal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-title">Thêm Khuyến Mãi Mới</h2>
+          <button class="btn-close-modal" id="close-modal">&times;</button>
+        </div>
+        <form id="promotion-form">
+          <input type="hidden" id="edit-promotion-id" />
+          
+          <div class="admin-input-group">
+            <label class="admin-label">Tên chương trình (Phục vụ hiển thị nhãn)</label>
+            <input type="text" class="admin-input" id="p-name" required placeholder="VD: Flash Sale Tháng 11 / Combo Mua 2 Giảm 10%" />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="admin-input-group">
+              <label class="admin-label">Loại chương trình</label>
+              <select class="admin-input" id="p-type">
+                <option value="percentage">Giảm theo %</option>
+                <option value="fixed_amount">Giảm số tiền cố định (đ)</option>
+                <option value="combo_quantity">Combo: Mua X giảm Y</option>
+              </select>
+            </div>
+            <div class="admin-input-group">
+              <label class="admin-label">Giá trị giảm</label>
+              <input type="number" class="admin-input" id="p-amount" required min="1" placeholder="Số % hoặc số đ" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="admin-input-group">
+              <label class="admin-label" id="label-min-qty">Số lượng tối thiểu (Áp dụng Combo)</label>
+              <input type="number" class="admin-input" id="p-min" value="1" min="1" />
+            </div>
+            <div class="admin-input-group" style="display:flex; align-items:center; margin-top: 28px; gap: 8px;">
+              <input type="checkbox" id="p-all-products" style="width: 18px; height: 18px; cursor: pointer;" />
+              <label for="p-all-products" style="font-size: 13px; font-weight: 700; cursor: pointer;">Áp dụng toàn bộ SP</label>
+            </div>
+          </div>
+
+          <div class="admin-input-group" id="target-products-group">
+            <label class="admin-label">Sản phẩm áp dụng (Chọn nhiều)</label>
+            <!-- A simpler mockup: We would ideally have a multiple select or checkbox list here -->
+            <select class="admin-input" id="p-targets" multiple style="height: 100px; padding: 10px;">
+              <!-- JS INJECTED PRODUCTS -->
+            </select>
+            <small style="color:var(--admin-text-muted);">Giữ Ctrl/Cmd để chọn nhiều</small>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="admin-input-group">
+              <label class="admin-label">Ngày bắt đầu</label>
+              <input type="datetime-local" class="admin-input" id="p-start" required />
+            </div>
+            <div class="admin-input-group">
+              <label class="admin-label">Ngày kết thúc</label>
+              <input type="datetime-local" class="admin-input" id="p-end" required />
+            </div>
+          </div>
+
+          <div class="admin-input-group">
+            <label class="admin-label">Mô tả chương trình</label>
+            <input type="text" class="admin-input" id="p-desc" placeholder="Hiển thị ở chi tiết" />
+          </div>
+
+          <div style="margin-bottom: 25px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="checkbox" id="p-active" checked style="width: 20px; height: 20px; cursor: pointer;" />
+              <label for="p-active" style="font-size: 13px; font-weight: 700; cursor: pointer;">Kích hoạt chương trình</label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-admin-save" style="width: 100%;">LƯU CHƯƠNG TRÌNH</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Script Integration -->
+    <script type="module" src="../../assets/js/common.js"></script>
+    <script type="module" src="../../assets/js/admin-sales.js"></script>
+  </body>
+</html>

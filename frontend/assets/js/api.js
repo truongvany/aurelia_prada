@@ -319,3 +319,47 @@ export async function deleteVoucher(id) {
   if (!res.ok) throw new Error('Failed to delete voucher');
   return res.json();
 }
+
+// Promotions CRUD
+export async function fetchAllPromotions() {
+  const res = await fetch(`${API_URL}/promotions`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to load promotions');
+  return res.json();
+}
+
+export async function fetchActivePromotions() {
+  const res = await fetch(`${API_URL}/promotions/active`);
+  if (!res.ok) throw new Error('Failed to load active promotions');
+  return res.json();
+}
+
+export async function createPromotion(promoData) {
+  const res = await fetch(`${API_URL}/promotions`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(promoData),
+  });
+  if (!res.ok) throw new Error('Failed to create promotion');
+  return res.json();
+}
+
+export async function updatePromotion(id, promoData) {
+  const res = await fetch(`${API_URL}/promotions/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(promoData),
+  });
+  if (!res.ok) throw new Error('Failed to update promotion');
+  return res.json();
+}
+
+export async function deletePromotion(id) {
+  const res = await fetch(`${API_URL}/promotions/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to delete promotion');
+  return res.json();
+}

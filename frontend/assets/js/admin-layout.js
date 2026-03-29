@@ -31,6 +31,9 @@ export function renderAdminLayout() {
         <a href="vouchers.html" class="admin-nav-item ${activePage === 'vouchers.html' ? 'active' : ''}">
           Mã giảm giá
         </a>
+        <a href="sales.html" class="admin-nav-item ${activePage === 'sales.html' ? 'active' : ''}">
+          Khuyến mãi & Combo
+        </a>
         <a href="settings.html" class="admin-nav-item ${activePage === 'settings.html' ? 'active' : ''}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
           Cài đặt
@@ -107,6 +110,7 @@ export function renderAdminLayout() {
       'orders.html': 'Quản lý Đơn hàng',
       'customers.html': 'Quản lý Khách hàng',
       'vouchers.html': 'Quản lý Mã giảm giá',
+      'sales.html': 'Quản lý Khuyến mãi & Combo',
       'settings.html': 'Cài đặt Hệ thống'
   };
   const titleEl = document.getElementById('adminHeaderTitle');

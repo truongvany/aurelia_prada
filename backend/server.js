@@ -21,6 +21,7 @@ const cartRoutes = require('./routes/cartRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const voucherRoutes = require('./routes/voucherRoutes');
+const promotionRoutes = require('./routes/promotionRoutes');
 
 // Mount Routes
 app.use('/api/auth', authRoutes);
@@ -31,6 +32,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/vouchers', voucherRoutes);
+app.use('/api/promotions', promotionRoutes);
 
 // Basic route
 app.get('/', (req, res) => {

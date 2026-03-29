@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sale Đồng Giá | AURELIA PRADA</title>
+    <title>Khuyến Mãi & Combo | AURELIA PRADA</title>
     <link rel="stylesheet" href="../assets/css/styles.css" />
     <style>
         :root {
@@ -13,7 +13,7 @@
         .sale-banner {
             background: #000;
             color: #fff;
-            padding: 100px 0;
+            padding: 100px 0 60px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -32,7 +32,7 @@
         }
 
         .sale-banner h1 {
-            font-size: 6rem;
+            font-size: 5rem;
             font-weight: 900;
             text-transform: uppercase;
             line-height: 1;
@@ -40,74 +40,67 @@
             letter-spacing: -2px;
         }
         
-        .countdown-wrap {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 40px;
-        }
-        
-        .countdown-item { text-align: center; }
-        .countdown-val { font-size: 32px; font-weight: 800; display: block; border: 1px solid rgba(255,255,255,0.3); padding: 15px 25px; min-width: 100px; }
-        .countdown-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #999; margin-top: 8px; display: block; }
-
-        /* Price Tabs Section */
-        .price-nav {
-            background: #fff;
+        /* Promotion Section styles */
+        .promo-section {
+            padding: 80px 0;
             border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            padding: 20px 0;
         }
         
-        .price-tab {
-            font-size: 16px;
-            font-weight: 800;
-            color: #999;
-            cursor: pointer;
-            transition: 0.3s;
-            position: relative;
-            text-transform: uppercase;
+        .promo-section:last-child {
+            border-bottom: none;
         }
-        .price-tab:hover, .price-tab.active { color: #000; }
-        .price-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -22px;
-            left: 0;
-            right: 0;
+
+        .promo-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .promo-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .promo-header .line {
+            width: 60px;
             height: 3px;
             background: var(--aura-sale);
+            margin: 15px auto;
+        }
+        
+        .promo-desc {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        /* Products Grid */
-        .sale-grid-wrapper { padding: 80px 0; }
         .sale-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 30px;
         }
-        
-        .price-header {
+
+        .no-promo-msg {
             text-align: center;
-            margin-bottom: 80px;
+            padding: 100px 20px;
+            font-size: 1.5rem;
+            color: #888;
         }
-        .price-header h2 {
-            font-size: 3rem;
-            font-weight: 800;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            color: #000;
-        }
-        .price-header .line {
-            width: 80px;
-            height: 4px;
-            background: var(--aura-sale);
-            margin: 20px auto;
+
+        .combo-badge {
+            background: #111;
+            color: #fff;
+            display: inline-block;
+            padding: 5px 15px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            border-radius: 20px;
         }
 
         @media (max-width: 1200px) {
@@ -116,117 +109,109 @@
         }
         @media (max-width: 850px) {
             .sale-grid { grid-template-columns: repeat(2, 1fr); }
-            .price-nav { gap: 15px; font-size: 12px; }
+            .promo-header h2 { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
-    <header class="top-nav"></header>
+    <header class="top-nav" id="topNav"></header>
 
     <main>
-        <div class="sale-badge-float">LIMITED OFFER</div>
+        <div class="sale-badge-float">SPECIAL OFFERS</div>
         <section class="sale-banner">
             <div class="container">
-                <span style="font-weight: 800; letter-spacing: 5px; color: var(--aura-sale); display: block; margin-bottom: 15px;">FLASH SALE EVENT</span>
-                <h1>UNIFORM SALE</h1>
-                <p style="color: #aaa; font-weight: 500; letter-spacing: 1px;">Sự kiện ưu đãi đồng giá lớn nhất năm - Đừng bỏ lỡ.</p>
-                
-                <div class="countdown-wrap">
-                    <div class="countdown-item">
-                        <span class="countdown-val">04</span>
-                        <span class="countdown-label">Ngày</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-val">12</span>
-                        <span class="countdown-label">Giờ</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-val">45</span>
-                        <span class="countdown-label">Phút</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-val">09</span>
-                        <span class="countdown-label">Giây</span>
-                    </div>
-                </div>
+                <span style="font-weight: 800; letter-spacing: 5px; color: var(--aura-sale); display: block; margin-bottom: 15px;">AURELIA EXCLUSIVE</span>
+                <h1>HAY LÀ MÌNH MUA ĐI</h1>
+                <p style="color: #bbb; font-weight: 500; letter-spacing: 1px; margin-top: 20px;">Khám phá các chương trình Khuyến mãi & Combo hấp dẫn nhất hiện nay.</p>
             </div>
         </section>
 
-        <nav class="price-nav">
-            <div class="price-tab active" data-price="199000">ĐỒNG GIÁ 199K</div>
-            <div class="price-tab" data-price="399000">ĐỒNG GIÁ 399K</div>
-            <div class="price-tab" data-price="599000">ĐỒNG GIÁ 599K</div>
-            <div class="price-tab" data-price="999000">ĐỒNG GIÁ 999K</div>
-        </nav>
-
-        <section class="sale-grid-wrapper container">
-            <div class="price-header">
-                <h2 id="current-price-title">ĐỒNG GIÁ 199K</h2>
-                <div class="line"></div>
-                <p class="text-muted">Chọn lọc những sản phẩm tâm đắc nhất tại AURELIA.</p>
-            </div>
-            
-            <div class="sale-grid" id="sale-grid">
-                <!-- Products will be loaded here -->
-            </div>
-        </section>
+        <div id="promotions-container">
+            <div class="no-promo-msg">Đang tải dữ liệu khuyến mãi...</div>
+        </div>
     </main>
 
     <footer class="site-footer"></footer>
 
     <script type="module">
         import { createProductCard } from '../assets/js/common.js';
-        import { fetchProducts } from '../assets/js/api.js';
+        import { fetchActivePromotions, fetchProducts } from '../assets/js/api.js';
 
-        const grid = document.getElementById('sale-grid');
-        const priceTitle = document.getElementById('current-price-title');
-        const tabs = document.querySelectorAll('.price-tab');
+        const container = document.getElementById('promotions-container');
 
-        let allSaleProducts = [];
-
-        async function initSale() {
+        async function initPromotions() {
             try {
-                // For demonstration, we fetch all products
-                // In a real app, you might have a dedicated /api/products/sale
-                allSaleProducts = await fetchProducts();
-                
-                // Shuffle items for variety
-                allSaleProducts = allSaleProducts.sort(() => Math.random() - 0.5);
-                
-                // Set initial grid (199K)
-                loadByPrice(199000);
+                // Fetch Active Promotions & All Products
+                const [promotions, allProducts] = await Promise.all([
+                    fetchActivePromotions(),
+                    fetchProducts()
+                ]);
+
+                if (!promotions || promotions.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-promo-msg">
+                            Hiện tại chưa có chương trình khuyến mãi nào.<br>
+                            <a href="shop.html" style="color:#000; font-weight:bold; font-size: 1rem; text-decoration:underline; display:inline-block; margin-top: 15px;">Khám phá sản phẩm mới</a>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                // Render each promotion block
+                promotions.forEach(promo => {
+                    let productsToShow = [];
+
+                    // Determine which products apply
+                    if (promo.applyToAll) {
+                        productsToShow = [...allProducts];
+                    } else if (promo.targetProducts && promo.targetProducts.length > 0) {
+                        const targetIds = promo.targetProducts.map(p => p._id || p);
+                        productsToShow = allProducts.filter(p => targetIds.includes(p._id));
+                    }
+
+                    if (productsToShow.length === 0) return; // Skip if no products match
+
+                    // Apply discount logic locally for DISPLAY ONLY (Backend Cart API will recalculate for actual order)
+                    const displayItems = productsToShow.map(p => {
+                        const item = { ...p };
+                        if (promo.type === 'percentage') {
+                            item.originalPrice = p.price;
+                            item.price = p.price * (1 - promo.discountValue / 100);
+                        } else if (promo.type === 'fixed_amount') {
+                            item.originalPrice = p.price;
+                            item.price = Math.max(0, p.price - promo.discountValue);
+                        }
+                        // If combo_quantity, we might just display "Combo" badge and original price, 
+                        // logic applied at checkout when minQuantity is met.
+                        return item;
+                    });
+
+                    const sectionHtml = `
+                        <section class="promo-section">
+                            <div class="container">
+                                <div class="promo-header">
+                                    ${promo.type === 'combo_quantity' ? `<div class="combo-badge">COMBO MUA ${promo.minQuantity}</div>` : ''}
+                                    <h2>${promo.name}</h2>
+                                    <div class="line"></div>
+                                    <p class="promo-desc">${promo.description || 'Số lượng có hạn. Áp dụng ngay hôm nay.'}</p>
+                                </div>
+                                <div class="sale-grid">
+                                    ${displayItems.map(p => createProductCard(p)).join('')}
+                                </div>
+                            </div>
+                        </section>
+                    `;
+                    container.innerHTML += sectionHtml;
+                });
+
             } catch (err) {
-                console.error('Sale products error:', err);
+                console.error('Lỗi tải dữ liệu Khuyến mãi:', err);
+                container.innerHTML = `<div class="no-promo-msg">Đã xảy ra lỗi tải dữ liệu. Vui lòng thử lại sau.</div>`;
             }
         }
 
-        function loadByPrice(price) {
-            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 100px;">Đang tải sản phẩm...</div>';
-            
-            // Mocking the "flattening" of prices for the sale page
-            // We map some products to the specific target price for visual consistency
-            // In a real system, the DB would already have these prices
-            const targetItems = allSaleProducts.slice(0, 8).map(p => ({
-                ...p,
-                originalPrice: p.price,
-                price: price
-            }));
-
-            setTimeout(() => {
-                grid.innerHTML = targetItems.map(p => createProductCard(p)).join('');
-                priceTitle.textContent = `ĐỒNG GIÁ ${price / 1000}K`;
-            }, 300);
-        }
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                loadByPrice(parseInt(tab.dataset.price));
-            });
-        });
-
-        initSale();
+        initPromotions();
     </script>
     <script type="module" src="../assets/js/common.js"></script>
 </body>
