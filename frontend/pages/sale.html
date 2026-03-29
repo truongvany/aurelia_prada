@@ -170,7 +170,9 @@
                         productsToShow = allProducts.filter(p => targetIds.includes(p._id));
                     }
 
-                    if (productsToShow.length === 0) return; // Skip if no products match
+                    if (productsToShow.length === 0) {
+                        productsToShow = []; // Still render the section but with a message
+                    }
 
                     // Apply discount logic locally for DISPLAY ONLY (Backend Cart API will recalculate for actual order)
                     const displayItems = productsToShow.map(p => {
@@ -182,10 +184,12 @@
                             item.originalPrice = p.price;
                             item.price = Math.max(0, p.price - promo.discountValue);
                         }
-                        // If combo_quantity, we might just display "Combo" badge and original price, 
-                        // logic applied at checkout when minQuantity is met.
                         return item;
                     });
+
+                    const gridHtml = productsToShow.length > 0
+                        ? displayItems.map(p => createProductCard(p)).join('')
+                        : '<div style="grid-column: 1/-1; text-align:center; padding: 40px; color:#999;">Chưa có sản phẩm nào thuộc chương trình này tiếp theo cấu hình hiện tại.</div>';
 
                     const sectionHtml = `
                         <section class="promo-section">
@@ -197,7 +201,7 @@
                                     <p class="promo-desc">${promo.description || 'Số lượng có hạn. Áp dụng ngay hôm nay.'}</p>
                                 </div>
                                 <div class="sale-grid">
-                                    ${displayItems.map(p => createProductCard(p)).join('')}
+                                    ${gridHtml}
                                 </div>
                             </div>
                         </section>

@@ -105,14 +105,21 @@ function setupModal() {
       const selectTarget = document.getElementById('p-targets');
       const selectedOptions = Array.from(selectTarget.selectedOptions).map(opt => opt.value);
 
+      const applyToAll = document.getElementById('p-all-products').checked;
+      
+      if (!applyToAll && selectedOptions.length === 0) {
+        alert('Vui lòng chọn ít nhất một sản phẩm hoặc chọn "Áp dụng toàn bộ SP"');
+        return;
+      }
+
       const data = {
         name: document.getElementById('p-name').value,
         description: document.getElementById('p-desc').value,
         type: document.getElementById('p-type').value,
         discountValue: Number(document.getElementById('p-amount').value),
         minQuantity: Number(document.getElementById('p-min').value),
-        applyToAll: document.getElementById('p-all-products').checked,
-        targetProducts: document.getElementById('p-all-products').checked ? [] : selectedOptions,
+        applyToAll: applyToAll,
+        targetProducts: applyToAll ? [] : selectedOptions,
         startDate: document.getElementById('p-start').value,
         endDate: document.getElementById('p-end').value,
         isActive: document.getElementById('p-active').checked,
