@@ -91,6 +91,7 @@ function buildUserShell() {
   const menHref = `${shopHref}?gender=men`;
   const storesHref = inPagesFolder ? 'stores.html' : 'pages/stores.html';
   const storeHref = shopHref; // Keep for other uses if any
+  const accessoriesHref = inPagesFolder ? 'accessories.html' : 'pages/accessories.html';
 
   const header = `
     <header class="aura-topbar top-nav">
@@ -207,19 +208,21 @@ function buildUserShell() {
             </div>
 
             <div class="aura-nav-item-new mega-dropdown">
-              <a href="${shopHref}?category=accessories" class="aura-nav-link-new" data-nav-link>PHỤ KIỆN</a>
+              <a href="${accessoriesHref}" class="aura-nav-link-new" data-nav-link>PHỤ KIỆN</a>
               <div class="aura-mega-menu">
                 <div class="aura-mega-main">
                   <div class="aura-mega-content">
                     <div class="aura-mega-left">
                         <div class="container-fluid aura-mega-grid">
                             <div class="mega-column">
-                                <h5>HÀNG MỚI VỀ</h5>
+                                <h5>TẤT CẢ PHỤ KIỆN</h5>
                                 <div class="mega-links-stack">
-                                    <a href="#" class="mega-item-link">Trang sức cao cấp</a>
-                                    <a href="#" class="mega-item-link">Khăn lụa</a>
-                                    <a href="#" class="mega-item-link">Mũ thời trang</a>
-                                    <a href="#" class="mega-item-link">Kính mát Heritage</a>
+                                    <a href="${accessoriesHref}" class="mega-item-link">Xem tất cả phụ kiện</a>
+                                    <a href="${accessoriesHref}?category=Túi xách" class="mega-item-link">Túi xách</a>
+                                    <a href="${accessoriesHref}?category=Trang sức" class="mega-item-link">Trang sức cao cấp</a>
+                                    <a href="${accessoriesHref}?category=Khăn" class="mega-item-link">Khăn lụa</a>
+                                    <a href="${accessoriesHref}?category=Mũ" class="mega-item-link">Mũ thời trang</a>
+                                    <a href="${accessoriesHref}?category=Kính mắt" class="mega-item-link">Kính mắt</a>
                                 </div>
                             </div>
                         </div>
