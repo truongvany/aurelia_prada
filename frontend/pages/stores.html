@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hệ thống cửa hàng | Aurelia Luxury Fashion</title>
+    <link rel="icon" type="image/png" href="../assets/images/logo/logo.png" />
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <style>
+      body.stores-layout {
+        overflow: hidden;
+        background: #fff;
+      }
+      .stores-container {
+        display: flex;
+        height: calc(100vh - 120px);
+        position: relative;
+        border-top: 1px solid #000;
+        margin-top: 0;
+      }
+      
+      /* Sidebar Styles */
+      .stores-sidebar {
+        width: 320px;
+        background: white;
+        border-right: 1px solid #000;
+        display: flex;
+        flex-direction: column;
+        z-index: 10;
+      }
+      .sidebar-search-area {
+        padding: 20px;
+        border-bottom: 1px solid #000;
+      }
+      .sidebar-search-area h2 {
+        font-size: 16px;
+        margin-bottom: 15px;
+        font-weight: 800;
+      }
+      .search-box {
+        position: relative;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+      }
+      .search-box input {
+        width: 100%;
+        padding: 10px 16px 10px 45px;
+        border: 1px solid #eee;
+        border-radius: 30px;
+        background: #f8f8f8;
+        font-family: var(--font-main);
+        font-size: 13px;
+        font-weight: 500;
+        outline: none;
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+      .search-box input:focus {
+        background: #fff;
+        border-color: var(--ink);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+      }
+      .search-box svg {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888;
+        transition: color 0.3s;
+      }
+      .search-box:focus-within svg {
+        color: var(--ink);
+      }
+      
+      .city-filter-chips {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        scrollbar-width: none;
+      }
+      .city-filter-chips::-webkit-scrollbar { display: none; }
+      
+      .chip {
+        padding: 4px 12px;
+        border-radius: 0;
+        background: #fff;
+        border: 1px solid #eee;
+        font-size: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+        color: #999;
+      }
+      .chip.active {
+        background: #000;
+        color: white;
+        border-color: #000;
+      }
+      
+      .store-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px 0;
+      }
+      .store-list::-webkit-scrollbar { width: 4px; }
+      .store-list::-webkit-scrollbar-thumb { background: #000; border-radius: 0; }
+      
+      .store-item {
+        padding: 15px 20px;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+        transition: 0.2s;
+        position: relative;
+      }
+      .store-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        background: var(--ink);
+        transform: scaleY(0);
+        transition: transform 0.3s;
+      }
+      .store-item:hover {
+        background: #f9f9f9;
+      }
+      .store-item.active {
+        background: #f2f2f2;
+      }
+      .store-item.active::before {
+        transform: scaleY(1);
+      }
+      .store-item h4 {
+        font-family: var(--font-main);
+        font-size: 13px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .store-item p {
+        font-size: 11px;
+        color: #888;
+        line-height: 1.4;
+        margin: 0;
+      }
+      .store-item .dist {
+        display: inline-block;
+        margin-top: 5px;
+        font-size: 9px;
+        font-weight: 800;
+        color: #666;
+        text-transform: uppercase;
+      }
+
+      /* Detail View Styles */
+      .store-detail-view {
+        flex: 1;
+        background: white;
+        overflow-y: auto;
+        padding: 40px 60px;
+        position: relative;
+      }
+      .store-detail-view::-webkit-scrollbar { width: 6px; }
+      .store-detail-view::-webkit-scrollbar-thumb { background: #000; border-radius: 0; }
+
+      .detail-header {
+        margin-bottom: 40px;
+        max-width: 900px;
+      }
+      .detail-header h1 {
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 10px;
+        letter-spacing: 0.5px;
+        color: var(--ink);
+      }
+      .detail-header .city-badge {
+        display: inline-block;
+        background: #000;
+        color: #fff;
+        padding: 3px 8px;
+        border-radius: 0;
+        font-size: 10px;
+        font-weight: 800;
+        margin-bottom: 15px;
+        letter-spacing: 1px;
+      }
+      
+      .detail-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 60px;
+        max-width: 1200px;
+      }
+      
+      .detail-left {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+      
+      .main-photo {
+        width: 100%;
+        height: 400px;
+        border-radius: 0;
+        overflow: hidden;
+        border: 1px solid #000;
+      }
+      .main-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .info-blocks {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+      .stores-hero h1 {
+        font-size: clamp(32px, 5vw, 48px);
+        letter-spacing: 2px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+      .info-block h5 {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #999;
+        margin-bottom: 15px;
+      }
+      .info-block p {
+        font-size: 15px;
+        color: var(--ink);
+        font-weight: 500;
+      }
+      
+      .detail-right {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      
+      .map-container {
+        width: 100%;
+        height: 300px;
+        background: #f5f5f5;
+        border-radius: 0;
+        overflow: hidden;
+        border: 1px solid #000;
+      }
+      .map-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        filter: grayscale(0.2) contrast(1.1);
+      }
+      
+      .gallery-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+      .gallery-row img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 0;
+        cursor: pointer;
+        transition: 0.3s;
+        border: 1px solid #eee;
+      }
+      .gallery-row img:hover {
+        transform: scale(1.05);
+      }
+      
+      .cta-bar {
+        margin-top: 40px;
+        display: flex;
+        gap: 20px;
+      }
+      .btn-luxury {
+        padding: 16px 40px;
+        background: var(--ink);
+        color: white;
+        font-weight: 700;
+        letter-spacing: 2px;
+        font-size: 12px;
+        border-radius: 2px;
+        transition: 0.3s;
+        border: none;
+      }
+      .btn-luxury:hover {
+        background: #444;
+        transform: translateY(-2px);
+      }
+      .btn-outline-luxury {
+        padding: 16px 40px;
+        background: transparent;
+        border: 1px solid var(--ink);
+        color: var(--ink);
+        font-weight: 700;
+        letter-spacing: 2px;
+        font-size: 12px;
+        border-radius: 2px;
+        transition: 0.3s;
+      }
+      .btn-outline-luxury:hover {
+        background: var(--ink);
+        color: white;
+      }
+
+      /* Transitions */
+      .fade-in {
+        animation: fadeIn 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (max-width: 1024px) {
+        .stores-container { flex-direction: column; height: auto; margin-top: 80px; }
+        .stores-sidebar { width: 100%; height: auto; }
+        .store-detail-view { padding: 30px 20px; }
+        .detail-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body class="stores-page stores-layout">
+    <header class="top-nav"></header>
+
+    <main class="stores-container">
+      <!-- Left Side: Menu/Filters -->
+      <aside class="stores-sidebar">
+        <div class="sidebar-search-area">
+          <h2>Hệ thống cửa hàng</h2>
+          <div class="search-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="storeSearch" placeholder="Tìm thành phố, đường...">
+          </div>
+          <div class="city-filter-chips" id="cityChips">
+            <span class="chip active" data-city="all">TẤT CẢ</span>
+            <span class="chip" data-city="hcm">HỒ CHÍ MINH</span>
+            <span class="chip" data-city="hanoi">HÀ NỘI</span>
+            <span class="chip" data-city="danang">ĐÀ NẴNG</span>
+            <span class="chip" data-city="cantho">CẦN THƠ</span>
+          </div>
+        </div>
+        
+        <div class="store-list" id="storeList">
+          <!-- Populated by JS -->
+        </div>
+      </aside>
+
+      <!-- Right Side: Details -->
+      <section class="store-detail-view" id="storeDetail">
+        <!-- Initial Skeleton or First Store -->
+        <div class="detail-placeholder" style="text-align: center; margin-top: 100px; color: #ccc;">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <p style="margin-top: 20px; font-weight: 500; letter-spacing: 1px;">CHỌN MỘT CỬA HÀNG ĐỂ XEM CHI TIẾT</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" style="display: none;"></footer> <!-- Hidden for this layout or stick to bottom -->
+
+    <script type="module">
+      import { initBaseUI } from '../assets/js/common.js';
+      
+      const stores = [
+        {
+          id: 1,
+          name: 'Aurelia Mansion Flagship',
+          city: 'hcm',
+          cityName: 'TP. Hồ Chí Minh',
+          district: 'Quận 1',
+          address: '15 Lê Lợi, Phường Bến Nghé, Quận 1, TP. HCM',
+          phone: '028 3822 0000',
+          hours: '09:00 - 22:00',
+          image: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1200&q=90',
+          mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4582313627764!2d106.701140975845!3d10.776100859196195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f474ccd93f9%3A0xc3995817a02195f0!2zMTUgTMOqIEzhu6NpLCBC4bq_biBOZ2jDqSwgUXXhuq1uIDEsIEjhu5MgQ2jDrSBNaW5oLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1711700000000!5m2!1svi!2s',
+          gallery: [
+            'https://noithattugia.com/wp-content/uploads/2024/09/thiet-ke-shop-thoi-trang-kien-truc-noi-that-tu-gia-4-e1658538964553.jpg',
+            'https://anviethouse.vn/wp-content/uploads/2021/06/Mau-thiet-ke-shop-thoi-trang-nu-1-1.jpg',
+            'https://ketnoikhonggian.com/anh/giangluxury/shop-thoi-trang-nu-giang-luxury-2.webp'
+          ]
+        },
+        {
+          id: 2,
+          name: 'Aurelia Diamond Lounge',
+          city: 'hcm',
+          cityName: 'TP. Hồ Chí Minh',
+          district: 'Quận 1',
+          address: 'Tầng 2, Diamond Plaza, 34 Lê Duẩn, Quận 1, TP. HCM',
+          phone: '028 3822 1111',
+          hours: '09:30 - 22:00',
+          image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=90',
+          mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4061699924558!2d106.69931707584507!3d10.78010475912443!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f48f43c348d%3A0x67ee1c5549008f75!2zRGlhbW9uZCBQbGF6YSwgMzQgTMOqIER14bqpbiwgQuG6vbiBOZ2jDqSwgUXXhuq1uIDEsIEjhu5MgQ2jDrSBNaW5oLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1711700000001!5m2!1svi!2s',
+          gallery: [
+            'https://pendecor.vn/uploads/files/2023/04/25/thiet-ke-shop-quan-ao-nu-2.jpg',
+            'https://multimodalart-qwen-image-multiple-angles-3d-camera.hf.space/gradio_api/file=/tmp/gradio/e896903e86e2232aafb38f00bc0f949ef25ba935e25d9d785b7e083b69fd8255/image.webp',
+            'https://multimodalart-qwen-image-multiple-angles-3d-camera.hf.space/gradio_api/file=/tmp/gradio/579436fea6a59221f65aa1e1e03ff2d3c036334fe62a6bb5f82128dffb493c7c/image.webp'
+          ]
+        },
+        {
+          id: 3,
+          name: 'Aurelia Heritage Hanoi',
+          city: 'hanoi',
+          cityName: 'Hà Nội',
+          district: 'Hai Bà Trưng',
+          address: 'Tầng 1, Vincom Center, 191 Bà Triệu, Hai Bà Trưng, Hà Nội',
+          phone: '024 3974 0000',
+          hours: '09:00 - 21:30',
+          image: 'https://housedesign.vn/wp-content/uploads/2020/03/thiet-ke-noi-that-shop-thoi-trang.jpg',
+          mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.2384950920405!2d105.8491568758801!3d21.013133380632314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab8df77c050d%3A0xa64821c436b135ad!2zMTkxIELDoCBUcmnhu4d1LCBMw6ogxJDhuqFpIEjDoG5oLCBIYWkgQsOgIFRyxrBuZywgSMOgIE7hu5lpLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1711700000002!5m2!1svi!2s',
+          gallery: [
+            'https://multimodalart-qwen-image-multiple-angles-3d-camera.hf.space/gradio_api/file=/tmp/gradio/003df270005c47559b3aa984059329444f2ea7c50f8bbf2f39ce52e9ce968e0d/image.webp',
+            'https://multimodalart-qwen-image-multiple-angles-3d-camera.hf.space/gradio_api/file=/tmp/gradio/e896903e86e2232aafb38f00bc0f949ef25ba935e25d9d785b7e083b69fd8255/image.webp',
+            'https://multimodalart-qwen-image-multiple-angles-3d-camera.hf.space/gradio_api/file=/tmp/gradio/579436fea6a59221f65aa1e1e03ff2d3c036334fe62a6bb5f82128dffb493c7c/image.webp'
+          ]
+        },
+        {
+          id: 4,
+          name: 'Aurelia Royal Danang',
+          city: 'danang',
+          cityName: 'Đà Nẵng',
+          district: 'Sơn Trà',
+          address: 'Tầng L1, Vincom Plaza Ngô Quyền, Sơn Trà, Đà Nẵng',
+          phone: '0236 399 0000',
+          hours: '09:30 - 22:00',
+          image: 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=1200&q=90',
+          mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.868736341775!2d108.22765377586529!3d16.071271684594248!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31421831005a819b%3A0x69680327f12e16f3!2sVincom%20Plaza%20Ngw%20Quyn!5e0!3m2!1svi!2s!4v1711700000003!5m2!1svi!2s',
+          gallery: []
+        }
+      ];
+
+      const storeListEl = document.getElementById('storeList');
+      const detailViewEl = document.getElementById('storeDetail');
+      const searchInput = document.getElementById('storeSearch');
+      const chipContainer = document.getElementById('cityChips');
+
+      function updateDetailView(store) {
+        detailViewEl.innerHTML = `
+          <div class="fade-in">
+            <div class="detail-header">
+                <span class="city-badge">${store.cityName}</span>
+                <h1>${store.name}</h1>
+                <p style="font-size: 18px; color: #666; max-width: 600px;">Trải nghiệm không gian thời trang cao cấp với dịch vụ tư vấn cá nhân hóa tại ${store.district}.</p>
+            </div>
+            
+            <div class="detail-grid">
+              <div class="detail-left">
+                <div class="main-photo">
+                  <img src="${store.image}" alt="${store.name}">
+                </div>
+                
+                <div class="info-blocks">
+                  <div class="info-block">
+                    <h5>ĐỊA CHỈ</h5>
+                    <p>${store.address}</p>
+                  </div>
+                  <div class="info-block">
+                    <h5>LIÊN HỆ</h5>
+                    <p>${store.phone}</p>
+                  </div>
+                  <div class="info-block">
+                    <h5>GIỜ MỞ CỬA</h5>
+                    <p>${store.hours} (Thứ 2 - Chủ Nhật)</p>
+                  </div>
+                  <div class="info-block">
+                    <h5>DỊCH VỤ</h5>
+                    <p>Styling cá nhân, May đo cao cấp, VIP Lounge</p>
+                  </div>
+                </div>
+
+                <div class="cta-bar">
+                    <button class="btn-luxury">ĐẶT LỊCH HẸN</button>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.address)}" target="_blank" class="btn-outline-luxury">DẪN ĐƯỜNG</a>
+                </div>
+              </div>
+              
+              <div class="detail-right">
+                <div class="map-container">
+                  <iframe src="${store.mapUrl}" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                
+                ${store.gallery.length > 0 ? `
+                  <div class="gallery-sec">
+                    <h5 style="font-size: 12px; letter-spacing: 2px; margin-bottom: 20px;">KHÔNG GIAN CỬA HÀNG</h5>
+                    <div class="gallery-row">
+                      ${store.gallery.map(img => `<img src="${img}" alt="Gallery">`).join('')}
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+        detailViewEl.scrollTop = 0;
+      }
+
+      function renderList(filtered) {
+        storeListEl.innerHTML = filtered.map(store => `
+          <div class="store-item" data-id="${store.id}">
+            <h4>${store.name}</h4>
+            <p>${store.address}</p>
+            <span class="dist">${store.district}</span>
+          </div>
+        `).join('');
+        
+        // Add click listeners
+        document.querySelectorAll('.store-item').forEach(item => {
+          item.addEventListener('click', () => {
+             const id = parseInt(item.dataset.id);
+             const store = stores.find(s => s.id === id);
+             
+             document.querySelectorAll('.store-item').forEach(i => i.classList.remove('active'));
+             item.classList.add('active');
+             
+             updateDetailView(store);
+          });
+        });
+
+        // Trigger first store if none active
+        if (filtered.length > 0 && !document.querySelector('.store-item.active')) {
+            const firstItem = storeListEl.querySelector('.store-item');
+            if (firstItem) firstItem.click();
+        }
+      }
+
+      function handleFilter() {
+        const query = searchInput.value.toLowerCase();
+        const city = chipContainer.querySelector('.chip.active').dataset.city;
+        
+        const filtered = stores.filter(s => {
+          const matchQuery = s.name.toLowerCase().includes(query) || s.address.toLowerCase().includes(query);
+          const matchCity = city === 'all' || s.city === city;
+          return matchQuery && matchCity;
+        });
+        
+        renderList(filtered);
+      }
+
+      searchInput.addEventListener('input', handleFilter);
+      chipContainer.addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (chip) {
+            chipContainer.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            handleFilter();
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        initBaseUI();
+        renderList(stores);
+      });
+    </script>
+  </body>
+</html>

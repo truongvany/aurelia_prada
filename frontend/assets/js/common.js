@@ -89,7 +89,8 @@ function buildUserShell() {
 
   const womenHref = `${shopHref}?gender=women`;
   const menHref = `${shopHref}?gender=men`;
-  const storeHref = shopHref;
+  const storesHref = inPagesFolder ? 'stores.html' : 'pages/stores.html';
+  const storeHref = shopHref; // Keep for other uses if any
 
   const header = `
     <header class="aura-topbar top-nav">
@@ -97,8 +98,8 @@ function buildUserShell() {
       <div class="aura-header-top">
         <div class="container aura-header-top-inner">
           <div class="aura-search-bar">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="aura-search-input" placeholder="TÌM KIẾM" aria-label="Search" />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="aura-search-input" placeholder="TÌM KIẾM SẢN PHẨM..." aria-label="Search" />
           </div>
           
           <a class="aura-logo" href="${homeHref}" aria-label="Aurelia home">
@@ -106,7 +107,7 @@ function buildUserShell() {
           </a>
           
           <div class="aura-nav-actions">
-            <a class="aura-action-item" href="${shopHref}">
+            <a class="aura-action-item" href="${storesHref}" data-nav-link>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
               <span>CỬA HÀNG</span>
             </a>
