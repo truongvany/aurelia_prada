@@ -55,16 +55,17 @@ async function initProfile() {
 
 function renderUserInfo(user) {
   const nameEl = document.getElementById('userName');
-  const emailEl = document.getElementById('userEmail');
-  const roleEl = document.getElementById('userRole');
-  const phoneEl = document.getElementById('userPhone');
-  const cityEl = document.getElementById('userCity');
+  const sidebarName = document.getElementById('userNameSidebar');
+  const pointsEl = document.getElementById('profilePoints');
+  const rankEl = document.getElementById('profileRank');
 
   if (nameEl) nameEl.textContent = user.name || 'N/A';
-  if (emailEl) emailEl.textContent = user.email;
-  if (roleEl) roleEl.textContent = user.role === 'admin' ? 'Quản Trị Viên' : 'Khách Hàng';
-  if (phoneEl) phoneEl.textContent = user.phone || '---';
-  if (cityEl) cityEl.textContent = user.address?.city || '---';
+  if (sidebarName) sidebarName.textContent = user.name || 'User';
+  
+  if (pointsEl) pointsEl.textContent = (user.points || 0).toLocaleString();
+  
+  const rankMap = { 'Basic': 'Thường', 'Premium': 'Cao cấp', 'VVIP': 'Kim cương' };
+  if (rankEl) rankEl.textContent = rankMap[user.membershipLevel] || 'Thường';
 }
 
 function renderLoginHistory(history) {

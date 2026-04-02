@@ -1,6 +1,8 @@
 import { formatVnd } from './common.js';
 import { fetchCart, clearCart, getUserInfo, createOrder, getVoucherByCode } from './api.js';
 
+console.log('[checkout.js] Loaded');
+
 // ─── State ─────────────────────────────────────────────────────────────────
 let cartData = null;
 let appliedVoucher = null;
@@ -28,6 +30,72 @@ const getTotal = () => {
 };
 
 // ─── Auth guard ────────────────────────────────────────────────────────────
+// ─── Location API ────────────────────────────────────────────────────────
+async function initLocationSelectors() {
+    const citySelect = document.getElementById('co-city');
+    const stateSelect = document.getElementById('co-state');
+    const wardSelect = document.getElementById('co-ward');
+
+    if (!citySelect) return;
+
+    try {
+        const response = await fetch('https://provinces.open-api.vn/api/p/');
+        const provinces = await response.json();
+        
+        provinces.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.code;
+            opt.textContent = p.name;
+            citySelect.appendChild(opt);
+        });
+
+        citySelect.addEventListener('change', async () => {
+            const pCode = citySelect.value;
+            stateSelect.disabled = true;
+            stateSelect.innerHTML = '<option value="" disabled selected>Quận / Huyện</option>';
+            wardSelect.disabled = true;
+            wardSelect.innerHTML = '<option value="" disabled selected>Phường / Xã</option>';
+
+            if (!pCode) return;
+
+            try {
+                const res = await fetch(`https://provinces.open-api.vn/api/p/${pCode}?depth=2`);
+                const data = await res.json();
+                data.districts.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d.code;
+                    opt.textContent = d.name;
+                    stateSelect.appendChild(opt);
+                });
+                stateSelect.disabled = false;
+            } catch (err) { console.error('Districts load error:', err); }
+        });
+
+        stateSelect.addEventListener('change', async () => {
+            const dCode = stateSelect.value;
+            wardSelect.disabled = true;
+            wardSelect.innerHTML = '<option value="" disabled selected>Phường / Xã</option>';
+
+            if (!dCode) return;
+
+            try {
+                const res = await fetch(`https://provinces.open-api.vn/api/d/${dCode}?depth=2`);
+                const data = await res.json();
+                data.wards.forEach(w => {
+                    const opt = document.createElement('option');
+                    opt.value = w.code; // or w.name
+                    opt.textContent = w.name;
+                    wardSelect.appendChild(opt);
+                });
+                wardSelect.disabled = false;
+            } catch (err) { console.error('Wards load error:', err); }
+        });
+    } catch (err) {
+        console.error('Provinces load error:', err);
+    }
+}
+
+// ─── Auth guard ────────────────────────────────────────────────────────────
 function requireLogin() {
   if (!getUserInfo()) {
     window.location.href = 'login.html?redirect=checkout.html';
@@ -40,57 +108,96 @@ function requireLogin() {
 async function initCheckout() {
   if (!requireLogin()) return;
 
+  initLocationSelectors();
+
   // Pre-fill user info
   const user = getUserInfo();
   if (user) {
+    const prompt = document.querySelector('.login-prompt');
+    if (prompt) prompt.style.display = 'none';
+
     const nameEl = document.getElementById('co-name');
     const phoneEl = document.getElementById('co-phone');
+    const emailEl = document.getElementById('co-email');
     if (nameEl && !nameEl.value && user.name) nameEl.value = user.name;
     if (phoneEl && !phoneEl.value && user.phone) phoneEl.value = user.phone;
+    if (emailEl && !emailEl.value && user.email) emailEl.value = user.email;
   }
 
   try {
-    cartData = await fetchCart();
+    // Check if this is a "Buy Now" flow
+    const params = new URLSearchParams(window.location.search);
+    const isBuyNow = params.get('buyNow') === '1';
+    
+    if (isBuyNow) {
+      // Load product from sessionStorage (Mua ngay)
+      const buyNowProduct = sessionStorage.getItem('buyNow_product');
+      if (!buyNowProduct) {
+        window.location.href = 'collections.html';
+        return;
+      }
+      
+      const product = JSON.parse(buyNowProduct);
+      cartData = {
+        items: [{
+          product: {
+            _id: product._id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+          },
+          quantity: product.quantity,
+          size: product.size,
+        }],
+      };
+    } else {
+      // Load from cart normally
+      cartData = await fetchCart();
+      
+      // Redirect to cart if empty
+      if (!cartData?.items?.length) {
+        window.location.href = 'cart.html';
+        return;
+      }
+    }
+    
     renderItems();
     renderTotals();
-
-    // Redirect to cart if empty
-    if (!cartData?.items?.length) {
-      window.location.href = 'cart.html';
-    }
   } catch (err) {
     console.error('Checkout init error:', err);
     const list = document.getElementById('coItemList');
-    if (list) list.innerHTML = '<p style="color:#e74c3c;font-size:13px;">Lỗi tải giỏ hàng. <a href="cart.html">Quay lại giỏ hàng</a></p>';
+    if (list) list.innerHTML = '<p style="color:#e74c3c;font-size:13px;padding:20px;">Lỗi tải giỏ hàng. <a href="cart.html">Quay lại giỏ hàng</a></p>';
   }
 }
 
 function renderItems() {
   const list = document.getElementById('coItemList');
-  const countEl = document.getElementById('coItemCount');
   if (!list || !cartData) return;
 
   const items = cartData.items || [];
-  if (countEl) countEl.textContent = `${items.length} sản phẩm`;
 
   if (items.length === 0) {
-    list.innerHTML = '<p style="color:#aaa;font-size:13px;text-align:center;">Giỏ hàng trống.</p>';
+    list.innerHTML = '<p style="color:#aaa;font-size:13px;text-align:center;padding:20px;">Giỏ hàng trống.</p>';
     return;
   }
 
   list.innerHTML = items.map(item => {
     const p = item.product || {};
-    const total = (p.price || 0) * item.quantity;
     return `
       <div class="order-item">
         <img src="${p.image || ''}" alt="${p.name || ''}" class="order-item-img"
              onerror="this.style.background='#f0f0f0'">
         <div class="order-item-info">
           <h5>${p.name || 'Sản phẩm'}</h5>
-          <p>Size: ${item.size || 'M'} &nbsp;·&nbsp; ×${item.quantity}</p>
-          <p>${formatVnd(p.price || 0)}</p>
+          <div class="oi-meta">
+            <span class="oi-size-tag">Size: ${item.size || 'M'}</span>
+            <span>Số lượng: ${item.quantity}</span>
+          </div>
+          <div class="oi-bottom">
+            <span class="oi-price">${formatVnd(p.price || 0)}</span>
+            <a href="cart.html" class="oi-edit">Sửa</a>
+          </div>
         </div>
-        <div class="order-item-price">${formatVnd(total)}</div>
       </div>`;
   }).join('');
 }
@@ -105,6 +212,7 @@ function renderTotals() {
   const el = (id) => document.getElementById(id);
 
   if (el('coSubtotal')) el('coSubtotal').textContent = formatVnd(sub);
+  if (el('coSubtotalActual')) el('coSubtotalActual').textContent = formatVnd(afterDisc);
   if (el('coTotal')) el('coTotal').textContent = formatVnd(total);
 
   // Shipping
@@ -112,10 +220,10 @@ function renderTotals() {
   if (shipEl) {
     if (shipping === 0) {
       shipEl.textContent = 'Miễn phí';
-      shipEl.className = 'free-ship';
+      shipEl.style.color = '#27ae60';
     } else {
       shipEl.textContent = formatVnd(shipping);
-      shipEl.className = '';
+      shipEl.style.color = 'var(--aura-ink)';
     }
   }
 
@@ -153,19 +261,16 @@ async function applyVoucher() {
     const sub = getSubtotal();
     if (data.minOrderValue && sub < data.minOrderValue) {
       showVoucherMsg(`Đơn hàng tối thiểu ${formatVnd(data.minOrderValue)} để dùng mã này.`, 'err');
-      input.className = 'err';
       appliedVoucher = null;
     } else {
       appliedVoucher = data;
-      input.className = 'ok';
       const discStr = data.discountType === 'percent'
         ? `${data.discountAmount}%`
         : formatVnd(data.discountAmount);
-      showVoucherMsg(`✓ Áp dụng thành công — giảm ${discStr}`, 'ok');
+      showVoucherMsg(`✓ Đã áp dụng — giảm ${discStr}`, 'ok');
     }
   } catch (err) {
     showVoucherMsg(err.message || 'Lỗi áp dụng voucher.', 'err');
-    input.className = 'err';
     appliedVoucher = null;
   } finally {
     btn.disabled = false;
@@ -174,34 +279,46 @@ async function applyVoucher() {
   }
 }
 
-function removeVoucher() {
-  appliedVoucher = null;
-  const input = document.getElementById('voucherInput');
-  if (input) { input.value = ''; input.className = ''; }
-  showVoucherMsg('Đã bỏ mã giảm giá.', 'ok');
-  renderTotals();
-}
-
 // ─── Place Order ───────────────────────────────────────────────────────────
 async function placeOrder() {
+  console.log('Place Order Clicked - Validating fields...');
   const btn = document.getElementById('placeOrderBtn');
 
-  // Validate required fields
-  const fields = {
-    name: document.getElementById('co-name')?.value.trim(),
-    phone: document.getElementById('co-phone')?.value.trim(),
-    street: document.getElementById('co-street')?.value.trim(),
-    city: document.getElementById('co-city')?.value.trim(),
-    state: document.getElementById('co-state')?.value.trim(),
-    zip: document.getElementById('co-zip')?.value.trim() || '70000',
-    country: document.getElementById('co-country')?.value.trim() || 'Việt Nam',
+  const getVal = (id) => document.getElementById(id)?.value.trim() || '';
+  const getSelectVal = (id) => document.getElementById(id)?.value || '';  // numeric or empty
+  const getSelectedText = (id) => {
+    const sel = document.getElementById(id);
+    return sel && sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex].text : '';
   };
 
-  if (!fields.name || !fields.phone || !fields.street || !fields.city || !fields.state) {
+  const fields = {
+    name: getVal('co-name'),
+    phone: getVal('co-phone'),
+    email: getVal('co-email'),
+    street: getVal('co-street'),
+    // Select value is numeric code when chosen, or empty string for the disabled placeholder
+    city: getSelectVal('co-city') ? getSelectedText('co-city') : '',
+    state: getSelectVal('co-state') ? getSelectedText('co-state') : '',
+    ward: getSelectVal('co-ward') ? getSelectedText('co-ward') : '',
+    note: getVal('co-note'),
+  };
+
+  console.log('Form data:', fields);
+
+  const missing = !fields.name || !fields.phone || !fields.email || !fields.street ||
+                  !fields.city || !fields.state || !fields.ward;
+
+  if (missing) {
+    console.warn('Validation failed:', fields);
     highlightMissingFields(fields);
-    alert('Vui lòng điền đầy đủ các trường bắt buộc (*).');
+    const errorBox = document.getElementById('coFormError');
+    if (errorBox) errorBox.style.display = 'flex';
+
+    const firstError = document.querySelector('.is-invalid');
+    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
+  if (document.getElementById('coFormError')) document.getElementById('coFormError').style.display = 'none';
 
   const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'COD';
   const sub = getSubtotal();
@@ -228,8 +345,8 @@ async function placeOrder() {
       street: fields.street,
       city: fields.city,
       state: fields.state,
-      zipCode: fields.zip,
-      country: fields.country,
+      ward: fields.ward,
+      country: 'Việt Nam',
     },
     paymentMethod,
     itemsPrice: sub,
@@ -238,87 +355,117 @@ async function placeOrder() {
     totalPrice: total,
     voucherCode: appliedVoucher?.code || null,
     discountPrice: disc,
+    note: fields.note
   };
 
-  btn.classList.add('loading');
+  btn.innerHTML = '<span class="loader"></span> ĐANG XỬ LÝ...';
   btn.disabled = true;
 
-  // Mark payment step active
-  document.getElementById('step-payment')?.classList.add('active');
+  // Visual feedback: Next step
+  const stepPayment = document.getElementById('step-payment');
+  if (stepPayment) {
+    document.querySelector('.step.active')?.classList.replace('active', 'done');
+    stepPayment.classList.add('active');
+  }
 
   try {
     const order = await createOrder(orderData);
-
-    // Clear backend cart
-    try { await clearCart(); } catch (_) {}
-
-    // Mark payment step active
-    document.getElementById('step-payment')?.classList.add('active', 'done');
-    document.getElementById('step-done')?.classList.add('active');
-
-    // Update cart badge
-    const badge = document.getElementById('cart-badge');
-    if (badge) { badge.textContent = '0'; badge.style.display = 'none'; }
-
-    // Redirect to payment page with order ID
+    // Save cart data to sessionStorage before redirect (in case payment is abandoned)
+    sessionStorage.setItem(`pending_order_${order._id}`, JSON.stringify(cartData.items));
+    // Clear buy now data after order created
+    sessionStorage.removeItem('buyNow_product');
+    
+    try { 
+      // Don't clear cart here - wait for successful payment
+      // await clearCart(); 
+    } catch (_) {}
     window.location.href = `payment.html?orderId=${order._id}`;
-
-
   } catch (err) {
     console.error('Order failed:', err);
-    alert('Đặt hàng thất bại: ' + (err.message || 'Lỗi không xác định. Vui lòng thử lại.'));
-    document.getElementById('step-payment')?.classList.remove('active');
+    alert('Đặt hàng thất bại: ' + (err.message || 'Lỗi không xác định.'));
+    // Revert steps on error
+    if (stepPayment) {
+        stepPayment.classList.remove('active');
+        const steps = document.querySelectorAll('.step');
+        if (steps[1]) steps[1].classList.replace('done', 'active');
+    }
   } finally {
-    btn.classList.remove('loading');
+    btn.innerHTML = 'ĐẶT HÀNG NGAY';
     btn.disabled = false;
   }
 }
 
 function highlightMissingFields(fields) {
   const map = {
-    name: 'co-name', phone: 'co-phone',
-    street: 'co-street', city: 'co-city', state: 'co-state',
+    name: 'co-name', phone: 'co-phone', email: 'co-email',
+    street: 'co-street', city: 'co-city', state: 'co-state', ward: 'co-ward'
   };
   Object.entries(map).forEach(([key, id]) => {
     const el = document.getElementById(id);
-    if (el) el.style.borderColor = fields[key] ? '' : '#e74c3c';
+    if (!el) return;
+    const parent = el.closest('.form-group');
+    // For selects: value="" means placeholder (not chosen). For inputs: empty string means not filled
+    const elVal = el.tagName === 'SELECT' ? el.value : (el.value?.trim() || '');
+    const isInvalid = !fields[key] || !elVal;
+    
+    if (isInvalid) {
+      el.classList.add('is-invalid');
+      if (parent && !parent.querySelector('.co-tooltip')) {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'co-tooltip';
+        tooltip.innerHTML = '* Trường này bắt buộc';
+        parent.appendChild(tooltip);
+      }
+    } else {
+      el.classList.remove('is-invalid');
+      parent?.querySelector('.co-tooltip')?.remove();
+    }
   });
 }
 
 // ─── Bootstrap ─────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', async () => {
-  await initCheckout();
+console.log('[checkout.js] Module starting execution...');
+
+async function bootstrap() {
+  console.log('[checkout] Starting bootstrap...');
+  
+  // Place order - move early
+  const placeBtn = document.getElementById('placeOrderBtn');
+  console.log('[checkout] placeOrderBtn found:', placeBtn);
+  if (placeBtn) placeBtn.addEventListener('click', placeOrder);
 
   // Voucher
   document.getElementById('applyVoucherBtn')?.addEventListener('click', applyVoucher);
   document.getElementById('voucherInput')?.addEventListener('keydown', e => {
     if (e.key === 'Enter') applyVoucher();
   });
-  document.getElementById('removeVoucherBtn')?.addEventListener('click', removeVoucher);
+
+  console.log('[checkout] Calling initCheckout...');
+  await initCheckout();
+  console.log('[checkout] initCheckout done');
 
   // Payment option highlight
   document.querySelectorAll('.payment-opt').forEach(opt => {
     opt.addEventListener('click', () => {
       document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
       opt.classList.add('selected');
-
-      // Show CC fields only for CreditCard
-      const val = opt.querySelector('input[type="radio"]')?.value;
-      const ccFields = document.getElementById('cc-fields');
-      if (ccFields) ccFields.classList.toggle('visible', val === 'CreditCard');
+      const radio = opt.querySelector('input[type="radio"]');
+      if (radio) radio.checked = true;
     });
   });
 
-  // Remove border-color on input focus/input
-  document.querySelectorAll('.co-forms input').forEach(input => {
-    input.addEventListener('input', () => { input.style.borderColor = ''; });
+  // Clear red border on input
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('input', () => { 
+      el.classList.remove('is-invalid'); 
+      el.closest('.form-group')?.querySelector('.co-tooltip')?.remove();
+    });
+    el.addEventListener('change', () => { 
+      el.classList.remove('is-invalid'); 
+      el.closest('.form-group')?.querySelector('.co-tooltip')?.remove();
+    });
   });
+}
 
-  // Place order
-  document.getElementById('placeOrderBtn')?.addEventListener('click', placeOrder);
-
-  // View orders after success
-  document.getElementById('viewOrdersBtn')?.addEventListener('click', () => {
-    window.location.href = 'profile.html';
-  });
-});
+// Run bootstrap immediately since modules are deferred anyway
+bootstrap().catch(err => console.error('[checkout] Bootstrap failed:', err));

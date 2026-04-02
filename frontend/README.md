@@ -6,7 +6,7 @@ Khong su dung React va khong su dung Bootstrap.
 ## Cau truc
 
 - `index.html`
-- `pages/shop.html`, `pages/product-detail.html`, `pages/cart.html`, `pages/login.html`, `pages/register.html`, `pages/about.html`, `pages/profile.html`, `pages/contact.html`
+- `pages/shop.html`, `pages/product-detail.html`, `pages/cart.html`, `pages/login.html`, `pages/register.html`, `pages/profile.html`
 - `pages/admin/dashboard.html`, `pages/admin/products.html`, `pages/admin/orders.html`, `pages/admin/customers.html`, `pages/admin/settings.html`
 - `assets/css/styles.css`
 - `assets/js/*.js`

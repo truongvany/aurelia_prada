@@ -38,6 +38,8 @@ const loginUser = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      points: user.points,
+      membershipLevel: user.membershipLevel,
       token: generateToken(user._id),
     });
   } else {
@@ -111,6 +113,8 @@ const getUserProfile = async (req, res) => {
       address: user.address,
       dob: user.dob,
       gender: user.gender,
+      points: user.points,
+      membershipLevel: user.membershipLevel,
       wishlist: user.wishlist,
       viewedProducts: user.viewedProducts,
       loginHistory: user.loginHistory,
@@ -144,6 +148,8 @@ const updateUserProfile = async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       role: updatedUser.role,
+      points: updatedUser.points,
+      membershipLevel: updatedUser.membershipLevel,
       token: generateToken(updatedUser._id),
     });
   } else {

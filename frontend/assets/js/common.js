@@ -76,15 +76,14 @@ function buildUserShell() {
   const inPagesFolder = pathname.includes('/pages/');
   const homeHref = inPagesFolder ? '../index.html' : 'index.html';
   const shopHref = inPagesFolder ? 'shop.html' : 'pages/shop.html';
-  const aboutHref = inPagesFolder ? 'about.html' : 'pages/about.html';
-  const contactHref = inPagesFolder ? 'contact.html' : 'pages/contact.html';
   const profileHref = inPagesFolder ? 'profile.html' : 'pages/profile.html';
   const cartHref = inPagesFolder ? 'cart.html' : 'pages/cart.html';
   const favHref = `${profileHref}?tab=wishlist`;
   const loginHref = inPagesFolder ? 'login.html' : 'pages/login.html';
   const registerHref = inPagesFolder ? 'register.html' : 'pages/register.html';
-  const offersHref = inPagesFolder ? 'offers.html' : 'pages/offers.html';
+  const membershipHref = inPagesFolder ? 'membership.html' : 'pages/membership.html';
   const salePageHref = inPagesFolder ? 'sale.html' : 'pages/sale.html';
+  const collectionsHref = inPagesFolder ? 'collections.html' : 'pages/collections.html';
   const logoSrc = inPagesFolder ? '../assets/images/logo/logo.png' : 'assets/images/logo/logo.png';
 
   const womenHref = `${shopHref}?gender=women`;
@@ -93,13 +92,41 @@ function buildUserShell() {
   const storeHref = shopHref; // Keep for other uses if any
 
   const header = `
+    <!-- Info Bar -->
+    <div class="aura-info-bar">
+      <div class="container aura-info-bar-inner">
+        <div style="display: flex; gap: 1.2rem; align-items: center;">
+          <div class="info-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <a href="tel:1900123456">1900 123 456</a>
+          </div>
+          <div class="info-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>09:00 - 22:00 (T2 - CN)</span>
+          </div>
+        </div>
+        
+        <!-- Scrolling Promo Text -->
+        <div class="aura-promo-scroller">
+          <div class="promo-text">
+            ✨ Miễn phí ship đơn từ 500k • Sản phẩm mới hôm nay • Giảm giá đến 60% • Đăng ký thành viên nhận ưu đãi • ✨ Miễn phí ship đơn từ 500k • Sản phẩm mới hôm nay • Giảm giá đến 60% • Đăng ký thành viên nhận ưu đãi •
+          </div>
+        </div>
+        
+        <div class="info-item highlight">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"></path></svg>
+          <strong>Thành viên</strong>
+        </div>
+      </div>
+    </div>
+
     <header class="aura-topbar top-nav">
       <!-- Top Row: Search, Logo, Actions -->
       <div class="aura-header-top">
         <div class="container aura-header-top-inner">
           <div class="aura-search-bar">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="aura-search-input" placeholder="TÌM KIẾM SẢN PHẨM..." aria-label="Search" />
+            <input type="text" id="aura-search-input" placeholder="Tìm kiếm sản phẩm..." aria-label="Search" />
           </div>
           
           <a class="aura-logo" href="${homeHref}" aria-label="Aurelia home">
@@ -179,7 +206,7 @@ function buildUserShell() {
             </div>
 
             <div class="aura-nav-item-new mega-dropdown">
-              <a href="#" class="aura-nav-link-new" data-nav-link>BỘ SƯU TẬP</a>
+              <a href="${collectionsHref}" class="aura-nav-link-new" data-nav-link>BỘ SƯU TẬP</a>
               <div class="aura-mega-menu">
                 <div class="aura-mega-main">
                   <div class="aura-mega-content">
@@ -198,8 +225,8 @@ function buildUserShell() {
                     <div class="container-fluid" style="display:flex; align-items:center; gap:40px;">
                         <span>GỢI Ý:</span>
                         <div class="aura-mega-foot-links">
-                            <a href="${shopHref}?sort=new">BST Mới nhất</a>
-                            <a href="${shopHref}?promo=true">Lookbook 2026</a>
+                          <a href="${collectionsHref}">BST Mới nhất</a>
+                          <a href="${collectionsHref}?group=THEO%20MUA">Lookbook 2026</a>
                         </div>
                     </div>
                 </div>
@@ -229,9 +256,7 @@ function buildUserShell() {
               </div>
             </div>
 
-            <a href="${offersHref}" class="aura-nav-link-new" data-nav-link>ƯU ĐÃI</a>
-            <a href="${aboutHref}" class="aura-nav-link-new" data-nav-link>GIỚI THIỆU</a>
-            <a href="${contactHref}" class="aura-nav-link-new" data-nav-link>LIÊN HỆ</a>
+            <a href="${membershipHref}" class="aura-nav-link-new" data-nav-link>THÀNH VIÊN</a>
           </nav>
         </div>
       </div>
@@ -343,7 +368,6 @@ function buildUserShell() {
             <ul class="footer-links">
               <li><a href="#">Hướng dẫn đặt hàng</a></li>
               <li><a href="#">Phương thức thanh toán</a></li>
-              <li><a href="${aboutHref}">Giới thiệu</a></li>
               <li><a href="#">Blogs thời trang</a></li>
             </ul>
           </div>
@@ -408,6 +432,39 @@ export function showToast(title, message, type = 'success') {
         toast.classList.add('removing');
         setTimeout(() => toast.remove(), 500);
     }, 3000);
+}
+
+// ─── Buy Now Direct (Mua ngay - bypass cart, go to checkout) ────────────────────────
+export async function buyNowDirect(productId) {
+  try {
+    const { getUserInfo, fetchProductById } = await import('./api.js');
+    const user = getUserInfo();
+    if (!user) {
+      showToast('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để mua sắm', 'error');
+      setTimeout(() => {
+        window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
+      }, 1000);
+      return;
+    }
+
+    // Fetch product & save to sessionStorage
+    const product = await fetchProductById(productId);
+    sessionStorage.setItem('buyNow_product', JSON.stringify({
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1,
+      size: 'M',
+    }));
+
+    // Redirect to checkout with buyNow param
+    const inPages = window.location.pathname.includes('/pages/');
+    window.location.href = inPages ? 'checkout.html?buyNow=1' : 'pages/checkout.html?buyNow=1';
+  } catch (err) {
+    console.error('Buy now error:', err);
+    showToast('Lỗi', 'Không thể xử lý: ' + (err.message || 'Vui lòng thử lại'), 'error');
+  }
 }
 
 export function initBaseUI() {
@@ -489,6 +546,13 @@ export function initBaseUI() {
         const productId = btn.getAttribute('data-product-id');
         if (!productId) return;
 
+        // Buy Now: directly create order, bypass cart
+        if (buyNowBtn) {
+            await buyNowDirect(productId);
+            return;
+        }
+
+        // Add to Cart
         const { addToCart } = await import('./api.js');
         
         btn.disabled = true;
@@ -506,11 +570,6 @@ export function initBaseUI() {
             updateCartBadge();
             
             showToast('Thành công', 'Đã thêm sản phẩm vào giỏ hàng');
-
-            if (buyNowBtn) {
-                const inPages = window.location.pathname.includes('/pages/');
-                window.location.href = inPages ? 'cart.html' : 'pages/cart.html';
-            }
         } catch (error) {
             showToast('Lỗi', 'Không thể thêm vào giỏ hàng', 'error');
         } finally {
@@ -648,6 +707,7 @@ async function initMegaMenu() {
     const pathname = window.location.pathname;
     const inPagesFolder = pathname.includes('/pages/');
     const shopHref = inPagesFolder ? 'shop.html' : 'pages/shop.html';
+    const collectionsHref = inPagesFolder ? 'collections.html' : 'pages/collections.html';
 
     // 1. Populate Fashion Menu
     if (fashionContainer) {
@@ -692,7 +752,7 @@ async function initMegaMenu() {
                   <div class="mega-column">
                     <h5>${groupName}</h5>
                     <div class="mega-links-stack">
-                      ${groupCats.map(c => `<a href="${shopHref}?category=${c.name}" class="mega-item-link">${c.name}</a>`).join('')}
+                      ${groupCats.map(c => `<a href="${collectionsHref}?category=${encodeURIComponent(c.name)}" class="mega-item-link">${c.name}</a>`).join('')}
                     </div>
                   </div>
                 `;

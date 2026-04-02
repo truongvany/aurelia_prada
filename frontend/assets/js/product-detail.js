@@ -1,4 +1,4 @@
-import { fetchProducts, fetchProductById, addToCart } from './api.js';
+import { fetchProducts, fetchProductById, addToCart, createOrder, getUserInfo } from './api.js';
 import { formatVnd, updateCartBadge, createProductCard, syncWishlistVisuals } from './common.js';
 
 function getProductId() {
@@ -163,15 +163,44 @@ async function initDetail() {
     };
   }
 
+  // ─── Buy Now (Mua ngay) - Save product & redirect checkout ───────────────────────
+  async function buyNowProduct() {
+    // 1. Check login
+    const user = getUserInfo();
+    if (!user) {
+      window.location.href = 'login.html?redirect=product-detail.html?id=' + getProductId();
+      return;
+    }
+
+    // 2. Get selected size and quantity
+    const sizeSelect = document.getElementById('size-select');
+    const qtyInput = document.getElementById('qty-value');
+    const selectedSize = sizeSelect?.value || 'M';
+    const selectedQty = parseInt(qtyInput?.value || '1');
+
+    if (selectedQty < 1) {
+      alert('Vui lòng chọn số lượng');
+      return;
+    }
+
+    // 3. Save to sessionStorage + redirect checkout with buyNow param
+    sessionStorage.setItem('buyNow_product', JSON.stringify({
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: selectedQty,
+      size: selectedSize,
+    }));
+
+    const inPages = window.location.pathname.includes('/pages/');
+    window.location.href = inPages ? 'checkout.html?buyNow=1' : 'pages/checkout.html?buyNow=1';
+  }
+
   // Buy now click
   const buyNowBtn = document.getElementById('btn-buy-now-main');
   if (buyNowBtn) {
-    buyNowBtn.addEventListener('click', async () => {
-      if (addCartBtn) {
-          await addCartBtn.click();
-          window.location.href = 'cart.html';
-      }
-    });
+    buyNowBtn.addEventListener('click', buyNowProduct);
   }
 
   // NEW: Redesigned Description Section

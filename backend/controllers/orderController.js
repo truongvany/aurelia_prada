@@ -209,6 +209,8 @@ const updateOrderToDelivered = async (req, res) => {
   }
 };
 
+const User = require('../models/User');
+
 // @desc    Update order status (Admin)
 // @route   PUT /api/orders/:id/status
 // @access  Private/Admin
@@ -223,10 +225,31 @@ const updateOrderStatus = async (req, res) => {
     const order = await Order.findById(req.params.id);
     if (!order) return res.status(404).json({ message: 'Order not found' });
 
+    const oldStatus = order.status;
     order.status = status;
     if (status === 'Delivered') {
       order.isDelivered = true;
       order.deliveredAt = Date.now();
+      
+      // Calculate and award points if transitioned from not delivered to delivered
+      if (oldStatus !== 'Delivered') {
+        const pointsAwarded = Math.floor(order.totalPrice / 10000);
+        if (pointsAwarded > 0) {
+          const user = await User.findById(order.user);
+          if (user) {
+            user.points = (user.points || 0) + pointsAwarded;
+            
+            // Auto Update Membership Level
+            if (user.points >= 5000) {
+              user.membershipLevel = 'VVIP';
+            } else if (user.points >= 1000) {
+              user.membershipLevel = 'Premium';
+            }
+            
+            await user.save();
+          }
+        }
+      }
     }
     if (status === 'Confirmed') {
       order.isPaid = order.paymentMethod !== 'COD' ? true : order.isPaid;
@@ -249,3 +272,4 @@ module.exports = {
   updateOrderToDelivered,
   updateOrderStatus,
 };
+

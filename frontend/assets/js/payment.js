@@ -1,5 +1,5 @@
 import { formatVnd } from './common.js';
-import { getOrderById } from './api.js';
+import { getOrderById, clearCart } from './api.js';
 
 // ─── Config ────────────────────────────────────────────────────────────────
 const BANK_CONFIG = {
@@ -99,7 +99,10 @@ function renderPaymentPanel() {
         </div>
       </div>`;
     
-    panel.querySelector('#btn-complete-cod')?.addEventListener('click', () => {
+    panel.querySelector('#btn-complete-cod')?.addEventListener('click', async () => {
+      localStorage.setItem(`paid_${order._id}`, 'true');
+      sessionStorage.removeItem(`pending_order_${order._id}`);
+      await clearCart().catch(() => {});
       showSuccessView();
     });
     return;
@@ -174,8 +177,10 @@ function renderPaymentPanel() {
       confirmBtn.style.opacity = checkPaid.checked ? '1' : '0.5';
       confirmBtn.style.cursor = checkPaid.checked ? 'pointer' : 'not-allowed';
     });
-    confirmBtn.addEventListener('click', () => {
+    confirmBtn.addEventListener('click', async () => {
       localStorage.setItem(`paid_${order._id}`, 'true');
+      sessionStorage.removeItem(`pending_order_${order._id}`);  
+      await clearCart().catch(() => {});
       showSuccessView();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -189,50 +194,57 @@ function showSuccessView() {
 
   panel.style.display = 'none';
   successContainer.innerHTML = `
-    <div class="pay-card" style="text-align:center; padding:50px 30px;">
-       <div style="width:72px; height:72px; background:#f0fff4; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px;">
-         <span style="font-size:32px; color:#27ae60;">✓</span>
+    <div class="success-card">
+       <!-- Horizontal Stepper -->
+       <div class="horizontal-stepper" id="statusTimeline"></div>
+       
+       <div class="success-icon-wrap" style="margin-top: 40px;">
+         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
        </div>
-       <h2 style="font-family:'Playfair Display',serif; font-size:26px; margin-bottom:12px;">Đã ghi nhận thanh toán!</h2>
-       <p style="color:#666; font-size:14px; max-width:400px; margin:0 auto 24px; line-height:1.7;">
-         Cảm ơn bạn! Chúng tôi đã nhận được thông báo và đang xử lý đơn hàng của bạn.
+       <h2 class="success-title">Thanh toán hoàn tất!</h2>
+       <p class="success-desc">
+         Chúng tôi đã ghi nhận thanh toán của bạn. Đơn hàng đang được chuẩn bị và sẽ sớm được giao đến bạn.
        </p>
-       <div style="background:#f9f9f9; padding:12px 20px; border-radius:4px; display:inline-block; font-family:'Space Mono',monospace; font-size:13px; font-weight:700; margin-bottom:24px;">
-         Mã đơn: #${order._id.slice(-8).toUpperCase()}
+       <div class="order-id-badge">
+         <span>Mã đơn</span> #${order._id.slice(-8).toUpperCase()}
        </div>
        <br>
-       <a href="profile.html#orders" style="display:inline-block; background:#1a1a1a; color:#fff; padding:14px 32px; text-decoration:none; font-size:12px; font-weight:700; letter-spacing:1.5px; border-radius:2px; transition:all .3s;">
-         QUẢN LÝ ĐƠN HÀNG CỦA TÔI
+       <a href="profile.html#orders" class="btn-profile-orders">
+         QUẢN LÝ ĐƠN HÀNG
        </a>
-    </div>
-    <div class="pay-card">
-      <h2 class="pay-card-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        Trạng thái đơn hàng
-        <span id="statusBadge" class="status-badge-inline ${getStatusBadgeClass(order.status)}" style="margin-left:auto;">${getStatusLabel(order.status)}</span>
-      </h2>
-      <div class="status-timeline" id="statusTimeline"></div>
     </div>
   `;
 
   renderStatusTimelineHtml(order.status);
-  document.getElementById('pl-pay')?.classList.add('done');
-  document.getElementById('ps-pay')?.classList.add('done');
+
+  // Update overall progress bar
+  document.querySelectorAll('.co-progress .step').forEach((s, i) => {
+    if (i <= 3) { s.classList.add('done'); s.classList.remove('active'); }
+    if (i === 3) s.classList.add('active');
+  });
 }
 
 function renderStatusTimelineHtml(currentStatus) {
   const tl = document.getElementById('statusTimeline');
   if (!tl || !order) return;
+
+  const ICONS = {
+    Processing: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>',
+    Confirmed: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>',
+    Shipped: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polyline points="16 8 20 8 23 11 23 16 16 16 16 8"></polyline><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>',
+    Delivered: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8l-2-2H5L3 8v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8z"></path><path d="M3 8h18"></path><path d="M10 12h4"></path></svg>',
+  };
+
   const currentIdx = STATUS_ORDER.indexOf(currentStatus);
   tl.innerHTML = STATUS_STEPS.map((step, i) => {
     const isDone = currentIdx > i;
     const isActive = currentIdx === i;
     const cls = isDone ? 'done' : isActive ? 'active' : '';
-    const time = isDone ? (i === 0 ? new Date(order.createdAt).toLocaleString('vi-VN') : 'Đã hoàn thành') : isActive ? 'Hiện tại' : 'Đang chờ xử lý';
     return `
-      <div class="status-step ${cls}">
-        <div class="step-icon">${step.icon}</div>
-        <div class="step-content"><h4>${step.label}</h4><p>${step.desc}</p><span class="step-time">${time}</span></div>
+      <div class="h-step ${cls}">
+        <div class="h-step-line"></div>
+        <div class="h-step-icon">${ICONS[step.key]}</div>
+        <div class="h-step-label">${step.label}</div>
       </div>`;
   }).join('');
 }
@@ -280,6 +292,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderItems();
     renderShippingInfo();
     if (localStorage.getItem(`paid_${orderId}`)) showSuccessView();
+    
+    // If payment was abandoned, offer to restore cart
+    if (!localStorage.getItem(`paid_${orderId}`) && sessionStorage.getItem(`pending_order_${orderId}`)) {
+      const cartItems = JSON.parse(sessionStorage.getItem(`pending_order_${orderId}`) || '[]');
+      const banner = document.createElement('div');
+      banner.style.cssText = 'background:#fff3cd; border: 1px solid #ffc107; color: #856404; padding: 12px 16px; margin-bottom: 16px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 13px;';
+      banner.innerHTML = `
+        <span>Bạn có một đơn hàng chưa thanh toán. Nếu muốn quay về giỏ hàng, <a href="cart.html" style="color:#856404; text-decoration:underline; font-weight:700;">bấm đây</a></span>`;
+      const container = document.querySelector('.checkout-container') || document.body;
+      container.insertBefore(banner, container.firstChild);
+    }
     
     setInterval(async () => {
       const fresh = await getOrderById(orderId).catch(() => null);

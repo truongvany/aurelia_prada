@@ -158,7 +158,10 @@ export async function createOrder(orderData) {
     headers: getAuthHeaders(),
     body: JSON.stringify(orderData),
   });
-  if (!res.ok) throw new Error('Failed to create order');
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.message || `Server error ${res.status}`);
+  }
   return res.json();
 }
 
@@ -317,6 +320,30 @@ export async function deleteVoucher(id) {
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error('Failed to delete voucher');
+  return res.json();
+}
+
+export async function fetchRewardVouchers() {
+  const res = await fetch(`${API_URL}/vouchers/rewards`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+     const errorData = await res.json();
+     throw new Error(errorData.message || 'Failed to fetch rewards');
+  }
+  return res.json();
+}
+
+export async function redeemVoucher(voucherId) {
+  const res = await fetch(`${API_URL}/vouchers/redeem`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ voucherId }),
+  });
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Redemption failed');
+  }
   return res.json();
 }
 

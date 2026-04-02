@@ -10,29 +10,6 @@
         /* ── Cart Shell ── */
         .ivy-cart-shell { padding: 40px 0 80px; min-height: 70vh; }
 
-        /* Progress */
-        .ivy-checkout-progress {
-            display: flex; align-items: center; justify-content: center;
-            gap: 0; margin: 0 auto 48px; max-width: 560px; padding: 0 20px;
-        }
-        .ivy-checkout-progress .step {
-            display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 0 0 auto;
-        }
-        .ivy-checkout-progress .step .dot {
-            width: 14px; height: 14px; border-radius: 50%;
-            background: #ddd; border: 2px solid #ddd; transition: all .3s;
-        }
-        .ivy-checkout-progress .step.active .dot { background: #1a1a1a; border-color: #1a1a1a; }
-        .ivy-checkout-progress .step.done .dot { background: #2ecc71; border-color: #2ecc71; }
-        .ivy-checkout-progress .step .lbl {
-            font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
-            color: #aaa; white-space: nowrap; font-weight: 600;
-        }
-        .ivy-checkout-progress .step.active .lbl,
-        .ivy-checkout-progress .step.done .lbl { color: #1a1a1a; }
-        .ivy-checkout-progress .line {
-            flex: 1; height: 1px; background: #e0e0e0; min-width: 40px; margin-bottom: 20px;
-        }
 
         /* Grid */
         .ivy-cart-grid {
@@ -45,7 +22,7 @@
 
         /* Title */
         .ivy-cart-title-main {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Manrope', sans-serif;
             font-size: 26px; font-weight: 700; margin-bottom: 28px;
             display: flex; align-items: center; gap: 12px;
         }
@@ -53,19 +30,19 @@
         /* Table header */
         .cart-table-header {
             display: grid;
-            grid-template-columns: 1fr 160px 140px 140px;
+            grid-template-columns: 1fr 150px 150px;
             gap: 10px;
             padding: 10px 0;
             border-bottom: 2px solid #1a1a1a;
-            font-size: 11px; letter-spacing: 1.5px; font-weight: 700;
+            font-size: 11px; letter-spacing: 1px; font-weight: 700;
             color: #555; text-transform: uppercase;
         }
-        .col-disc, .col-qty, .col-total { text-align: center; }
+        .col-qty, .col-total { text-align: center; }
 
         /* Cart Row */
         .cart-item-row {
             display: grid;
-            grid-template-columns: 1fr 160px 140px 140px;
+            grid-template-columns: 1fr 150px 150px;
             gap: 10px;
             align-items: center;
             padding: 20px 0;
@@ -75,10 +52,9 @@
         .cart-item-row:hover { background: #fafafa; }
         .cart-item-media { display: flex; align-items: center; gap: 14px; }
         .cart-item-img { width: 72px; height: 90px; object-fit: cover; border-radius: 2px; flex-shrink: 0; background: #f5f5f5; }
-        .cart-item-info h4 { font-size: 14px; font-weight: 600; margin: 0 0 4px; color: #1a1a1a; }
+        .cart-item-info h4 { font-size: 14px; font-weight: 800; margin: 0 0 6px; color: #1a1a1a; text-transform: none; }
         .cart-item-info p { font-size: 12px; color: #888; margin: 0; }
-        .cart-item-disc { text-align: center; font-size: 13px; color: #e74c3c; font-weight: 600; }
-        .cart-item-disc .percent { display: block; font-size: 11px; color: #aaa; font-weight: 400; }
+        .cart-item-price-unit { font-size: 13px; font-weight: 600; color: #af2e2e; margin-top: 6px; font-family: 'Inter', sans-serif; }
         .cart-item-qty { display: flex; align-items: center; justify-content: center; gap: 8px; }
         .qty-btn {
             width: 28px; height: 28px; border: 1px solid #ddd; background: #fff;
@@ -89,8 +65,9 @@
         .qty-btn:hover { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
         .qty-val { font-weight: 700; font-size: 14px; min-width: 24px; text-align: center; }
         .cart-item-total {
-            text-align: center; font-size: 14px; font-weight: 700; color: #1a1a1a;
+            text-align: center; font-size: 14px; font-weight: 700; color: #af2e2e;
             display: flex; flex-direction: column; align-items: center; gap: 8px;
+            font-family: 'Inter', sans-serif;
         }
         .cart-btn-del {
             background: none; border: none; cursor: pointer; color: #ccc;
@@ -104,7 +81,7 @@
             border: 2px dashed #eee; border-radius: 4px; margin-top: 10px;
         }
         .empty-cart-state svg { color: #ddd; margin-bottom: 20px; }
-        .empty-cart-state h3 { font-family: 'Playfair Display', serif; font-size: 22px; color: #888; margin-bottom: 10px; }
+        .empty-cart-state h3 { font-family: 'Manrope', sans-serif; font-size: 22px; color: #888; margin-bottom: 10px; }
         .empty-cart-state p { color: #aaa; font-size: 14px; }
 
         /* Skeleton */
@@ -118,48 +95,53 @@
             background: #fff; border: 1px solid #eee;
             border-radius: 4px; padding: 28px;
         }
-        .summary-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
+        .summary-title { font-family: 'Manrope', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
         .summary-body { margin-bottom: 20px; }
         .summary-row {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 0; font-size: 14px; color: #555;
+            padding: 10px 0; font-size: 12px; color: #000000; font-weight: bold;
         }
         .summary-row.highlight { border-top: 1px solid #eee; margin-top: 8px; padding-top: 18px; font-weight: 700; color: #1a1a1a; font-size: 16px; }
         .summary-row .discount-val { color: #e74c3c; font-weight: 600; }
         .summary-row.voucher-applied { color: #27ae60; background: #f0fff4; margin: 4px -4px; padding: 10px 4px; border-radius: 2px; }
 
         /* Voucher Input */
-        .voucher-section { margin-bottom: 20px; }
-        .voucher-label { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #555; margin-bottom: 8px; display: block; }
-        .voucher-input-group { display: flex; gap: 8px; }
+        .voucher-section { margin-bottom: 24px; }
+        .voucher-label { font-size: 11px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #888; margin-bottom: 10px; display: block; }
+        .voucher-input-group { display: flex; gap: 6px; }
         .voucher-input-group input {
-            flex: 1; padding: 10px 14px; border: 1px solid #ddd;
-            border-radius: 2px; font-size: 13px; font-family: 'Space Mono', monospace;
-            text-transform: uppercase; letter-spacing: 1px;
-            transition: border-color .2s; outline: none;
+            flex: 1; padding: 10px 14px; border: 1px solid #eee;
+            border-radius: 4px; font-size: 13px; font-family: var(--font-main);
+            transition: all .2s; outline: none; background: #fafafa;
         }
-        .voucher-input-group input:focus { border-color: #1a1a1a; }
-        .voucher-input-group input.is-valid { border-color: #27ae60; }
-        .voucher-input-group input.is-invalid { border-color: #e74c3c; }
+        .voucher-input-group input:focus { border-color: #1a1a1a; background: #fff; box-shadow: 0 0 0 3px rgba(0,0,0,0.02); }
+        .voucher-input-group input.is-valid { border-color: #27ae60; background: #f0fff4; }
+        .voucher-input-group input.is-invalid { border-color: #e74c3c; background: #fff5f5; }
         .btn-apply-voucher {
-            padding: 10px 16px; background: #1a1a1a; color: #fff;
-            border: none; border-radius: 2px; font-size: 12px; font-weight: 700;
-            cursor: pointer; letter-spacing: 1px; transition: background .2s; white-space: nowrap;
+            padding: 10px 18px; background: #1a1a1a; color: #fff;
+            border: none; border-radius: 4px; font-size: 12px; font-weight: 700;
+            cursor: pointer; transition: all .2s; white-space: nowrap;
         }
-        .btn-apply-voucher:hover { background: #333; }
-        .btn-apply-voucher:disabled { background: #ccc; cursor: not-allowed; }
-        .voucher-feedback { font-size: 12px; margin-top: 6px; min-height: 18px; }
+        .btn-apply-voucher:hover { background: #333; transform: translateY(-1px); }
+        .btn-apply-voucher:active { transform: translateY(0); }
+        .btn-apply-voucher:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .voucher-feedback { font-size: 11px; margin-top: 8px; min-height: 16px; font-weight: 600; }
         .voucher-feedback.success { color: #27ae60; }
         .voucher-feedback.error { color: #e74c3c; }
         .voucher-remove {
-            background: none; border: none; cursor: pointer; font-size: 12px;
-            color: #e74c3c; text-decoration: underline; padding: 0;
+            background: none; border: none; cursor: pointer; font-size: 11px;
+            color: #e74c3c; text-decoration: underline; padding: 0; font-weight: 700;
         }
 
         /* Notices */
-        .summary-notices { border-top: 1px solid #f0f0f0; padding-top: 16px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .notice-item { display: flex; align-items: flex-start; gap: 8px; font-size: 11px; color: #888; line-height: 1.5; }
-        .notice-item svg { flex-shrink: 0; margin-top: 1px; }
+        .summary-notices { border-top: 1px solid #f5f5f5; padding-top: 20px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; }
+        .notice-item { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: #666; line-height: 1.5; font-weight: 500; }
+        .icon-tick-box {
+            width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #27ae60;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #27ae60;
+            margin-top: 1px;
+        }
+        .icon-tick-box svg { width: 10px; height: 10px; stroke-width: 4px; }
 
         /* Checkout button */
         .ivy-btn-black {
@@ -192,7 +174,7 @@
             transform: translateY(20px); transition: transform .3s;
         }
         .checkout-modal-overlay.open .checkout-modal { transform: translateY(0); }
-        .checkout-modal h2 { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 8px; }
+        .checkout-modal h2 { font-family: 'Manrope', sans-serif; font-size: 22px; margin-bottom: 8px; }
         .checkout-modal .modal-subtitle { font-size: 13px; color: #888; margin-bottom: 28px; }
         .co-form-group { margin-bottom: 18px; }
         .co-form-group label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #555; margin-bottom: 6px; }
@@ -243,7 +225,7 @@
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 24px; font-size: 32px;
         }
-        .success-modal h2 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 12px; }
+        .success-modal h2 { font-family: 'Manrope', sans-serif; font-size: 24px; margin-bottom: 12px; }
         .success-modal p { color: #888; font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
         .success-modal .order-id-badge {
             display: inline-block; background: #f5f5f5; border-radius: 2px;
@@ -269,26 +251,27 @@
     <main class="ivy-cart-shell">
         <div class="container" style="max-width:1200px;">
             <!-- Progress Tracker -->
-            <div class="ivy-checkout-progress">
-                <div class="step active" id="step-cart">
-                    <span class="dot"></span>
-                    <span class="lbl">Giỏ hàng</span>
-                </div>
+            <div class="co-progress">
+              <a href="cart.html" class="step active">
+                <div class="dot">1</div>
+                <div class="lbl">Giỏ hàng</div>
                 <div class="line"></div>
-                <div class="step" id="step-info">
-                    <span class="dot"></span>
-                    <span class="lbl">Đặt hàng</span>
-                </div>
+              </a>
+              <a href="checkout.html" class="step">
+                <div class="dot">2</div>
+                <div class="lbl">Đặt hàng</div>
                 <div class="line"></div>
-                <div class="step" id="step-payment">
-                    <span class="dot"></span>
-                    <span class="lbl">Thanh toán</span>
-                </div>
+              </a>
+              <a href="#" class="step" style="pointer-events: none;">
+                <div class="dot">3</div>
+                <div class="lbl">Thanh toán</div>
                 <div class="line"></div>
-                <div class="step" id="step-done">
-                    <span class="dot"></span>
-                    <span class="lbl">Hoàn thành</span>
-                </div>
+              </a>
+              <a href="#" class="step" style="pointer-events: none;">
+                <div class="dot">4</div>
+                <div class="lbl">Hoàn thành</div>
+                <div class="line"></div>
+              </a>
             </div>
 
             <div class="ivy-cart-grid">
@@ -296,12 +279,11 @@
                 <div class="ivy-cart-main">
                     <h2 class="ivy-cart-title-main">
                         Giỏ hàng của bạn
-                        <span id="cartCountLabel" class="text-danger" style="font-size:16px;font-weight:600;">0 Sản Phẩm</span>
+                        <span id="cartCountLabel" class="text-danger" style="font-size:16px;font-weight:600; ">0 Sản Phẩm</span>
                     </h2>
 
                     <div class="cart-table-header">
                         <span>TÊN SẢN PHẨM</span>
-                        <span class="col-disc">CHIẾT KHẤU</span>
                         <span class="col-qty">SỐ LƯỢNG</span>
                         <span class="col-total">THÀNH TIỀN</span>
                     </div>
@@ -335,8 +317,8 @@
                         <div class="voucher-section">
                             <span class="voucher-label">Mã giảm giá</span>
                             <div class="voucher-input-group">
-                                <input type="text" id="voucherInput" placeholder="Nhập mã voucher..." maxlength="30" autocomplete="off">
-                                <button class="btn-apply-voucher" id="applyVoucherBtn">ÁP DỤNG</button>
+                                <input type="text" id="voucherInput" placeholder="Mã giảm giá (nếu có)" maxlength="30" autocomplete="off">
+                                <button class="btn-apply-voucher" id="applyVoucherBtn">Áp dụng</button>
                             </div>
                             <div class="voucher-feedback" id="voucherFeedback"></div>
                         </div>
@@ -356,21 +338,21 @@
                             </div>
                             <div class="summary-row">
                                 <span>Phí vận chuyển</span>
-                                <span id="summaryShipping" style="color:#27ae60;font-weight:600;">Miễn phí</span>
+                                <span id="summaryShipping" style="color:#11c95e;font-weight:600;">Miễn phí</span>
                             </div>
                             <div class="summary-row highlight">
                                 <span>Thành tiền</span>
-                                <span id="summaryFinalTotal" class="text-danger" style="font-weight:800;">0đ</span>
+                                <span id="summaryFinalTotal" class="text-danger" style="font-weight:800; color: #e74c3c;">0đ</span>
                             </div>
                         </div>
 
                         <div class="summary-notices">
                             <div class="notice-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                <div class="icon-tick-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <span>Sản phẩm KM giảm giá trên 50% không hỗ trợ đổi trả.</span>
                             </div>
                             <div class="notice-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                <div class="icon-tick-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <span>Không thanh toán cho Shipper khi chưa nhận hàng!</span>
                             </div>
                         </div>

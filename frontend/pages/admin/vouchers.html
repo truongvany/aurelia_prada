@@ -29,6 +29,7 @@
                 <th>TỐI THIỂU</th>
                 <th>HẾT HẠN</th>
                 <th>TRẠNG THÁI</th>
+                <th>ĐỔI ĐIỂM</th>
                 <th>THAO TÁC</th>
               </tr>
             </thead>
@@ -85,12 +86,19 @@
             <input type="text" class="admin-input" id="v-desc" required placeholder="VD: Giảm 10% cho đơn từ 500k" />
           </div>
 
-          <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 25px;">
-            <div class="admin-input-group" style="margin-bottom: 0;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="admin-input-group">
               <label class="admin-label">Lượt dùng tối đa</label>
               <input type="number" class="admin-input" id="v-max" placeholder="Không giới hạn" />
             </div>
-            <div style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
+            <div class="admin-input-group">
+                <label class="admin-label">Điểm để đổi (0 = Không cho đổi)</label>
+                <input type="number" class="admin-input" id="v-points" value="0" min="0" />
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 25px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
               <input type="checkbox" id="v-active" checked style="width: 20px; height: 20px; cursor: pointer;" />
               <label for="v-active" style="font-size: 13px; font-weight: 700; cursor: pointer;">Kích hoạt ngay</label>
             </div>

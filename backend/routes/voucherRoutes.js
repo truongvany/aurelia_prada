@@ -6,11 +6,19 @@ const {
   updateVoucher,
   deleteVoucher,
   getVoucherByCode,
+  redeemVoucher,
+  getAvailableRewards,
 } = require('../controllers/voucherController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
 // Public route to validate a voucher code
 router.get('/code/:code', getVoucherByCode);
+
+// Reward vouchers for points redemption
+router.get('/rewards', protect, getAvailableRewards);
+
+// Points redemption route
+router.post('/redeem', protect, redeemVoucher);
 
 // Admin routes
 router.route('/')

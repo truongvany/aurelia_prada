@@ -42,6 +42,10 @@ const voucherSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    pointsCost: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

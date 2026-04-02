@@ -7,199 +7,205 @@
     <meta name="description" content="Hoàn tất đơn hàng của bạn tại Aurelia Prada.">
     <link rel="stylesheet" href="../assets/css/styles.css" />
     <style>
-      /* ─── Layout ─────────────────────── */
-      .co-shell { padding: 48px 0 100px; min-height: 70vh; }
+      /* ─── Base Styles ─────────────────── */
+      :root {
+        --aura-red: #af2e2e;
+        --aura-ink: #111111;
+        --aura-muted: #666666;
+        --aura-line: #eeeeee;
+        --aura-bg: #fdfdfd;
+      }
 
-      .co-progress {
-        display: flex; align-items: center; justify-content: center;
-        max-width: 520px; margin: 0 auto 52px; padding: 0 20px;
+      body {
+        background: var(--aura-bg);
+        font-family: 'Manrope', sans-serif;
+        color: var(--aura-ink);
+        -webkit-font-smoothing: antialiased;
       }
-      .co-progress .step { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-      .co-progress .step .dot {
-        width: 14px; height: 14px; border-radius: 50%;
-        background: #ddd; border: 2px solid #ddd; transition: all .3s;
+
+      .co-shell { padding: 40px 0 80px; }
+
+      /* ─── Breadcrumb ───────────────────── */
+      .co-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--aura-muted);
+        margin-bottom: 25px;
       }
-      .co-progress .step.done .dot { background: #2ecc71; border-color: #2ecc71; }
-      .co-progress .step.active .dot { background: #1a1a1a; border-color: #1a1a1a; }
-      .co-progress .step .lbl {
-        font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
-        color: #aaa; white-space: nowrap; font-weight: 600;
-      }
-      .co-progress .step.done .lbl,
-      .co-progress .step.active .lbl { color: #1a1a1a; }
-      .co-progress .line { flex: 1; height: 1px; background: #e0e0e0; min-width: 30px; margin-bottom: 20px; }
+      .co-breadcrumb a { color: inherit; text-decoration: none; }
+      .co-breadcrumb .active { color: var(--aura-ink); font-weight: 700; }
 
       .co-grid {
         display: grid;
-        grid-template-columns: 1.4fr 1fr;
-        gap: 40px;
+        grid-template-columns: 1.6fr 1fr;
+        gap: 30px;
         align-items: start;
       }
-      @media(max-width:900px) { .co-grid { grid-template-columns: 1fr; } }
+      @media(max-width:992px) { .co-grid { grid-template-columns: 1fr; gap: 30px; } }
 
       /* ─── Cards ────────────────────────── */
       .co-card {
-        background: #fff; border: 1px solid #eee;
-        border-radius: 4px; padding: 30px; margin-bottom: 24px;
+        background: #fff;
+        border: 1px solid var(--aura-line);
+        padding: 25px;
+        margin-bottom: 20px;
       }
       .co-card-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 18px; font-weight: 700;
-        margin-bottom: 22px; padding-bottom: 14px;
-        border-bottom: 1px solid #f0f0f0;
-        display: flex; align-items: center; gap: 10px;
+        font-size: 18px;
+        font-weight: 800;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
-      .co-card-title .step-num {
-        width: 28px; height: 28px; border-radius: 50%; background: #1a1a1a;
-        color: #fff; font-size: 12px; font-weight: 700;
-        display: flex; align-items: center; justify-content: center;
-        font-family: sans-serif;
+      .login-prompt {
+         font-size: 13px;
+         color: var(--aura-muted);
+         margin-bottom: 20px;
+         display: block;
       }
+      .login-prompt a { color: var(--aura-red); font-weight: 700; }
 
       /* ─── Form ─────────────────────────── */
-      .form-group { margin-bottom: 16px; }
+      .form-group { margin-bottom: 20px; position: relative; }
       .form-group label {
-        display: block; font-size: 11px; font-weight: 700;
-        letter-spacing: 1px; text-transform: uppercase; color: #555; margin-bottom: 6px;
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--aura-ink);
+        margin-bottom: 6px;
       }
-      .form-group input, .form-group select, .form-group textarea {
-        width: 100%; padding: 11px 14px; border: 1px solid #ddd; border-radius: 2px;
-        font-size: 14px; outline: none; transition: border-color .2s;
-        font-family: inherit; box-sizing: border-box; color: #1a1a1a;
+      .form-group input, 
+      .form-group select, 
+      .form-group textarea {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.2s;
+        font-family: inherit;
+        box-sizing: border-box;
       }
-      .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-        border-color: #1a1a1a;
+      
+      .form-group input:focus, 
+      .form-group select:focus, 
+      .form-group textarea:focus {
+        border-color: var(--aura-red);
+        box-shadow: 0 0 0 3px rgba(175, 46, 46, 0.05);
       }
-      .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      .form-group input.is-invalid, 
+      .form-group select.is-invalid, 
+      .form-group textarea.is-invalid {
+        border-color: #e74c3c !important;
+        background-color: #fff5f5 !important;
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1) !important;
+      }
+      .co-form-error-msg { 
+        color: #e74c3c; font-size: 13px; font-weight: 700; 
+        margin-top: 15px; display: none; align-items: center; gap: 8px; 
+      }
+      
+      /* New Popover Style */
+      .co-tooltip {
+          position: absolute;
+          bottom: calc(100% - 10px); left: 10px;
+          background: #e74c3c; color: #fff;
+          padding: 8px 14px; border-radius: 6px;
+          font-size: 11px; font-weight: 700;
+          white-space: nowrap; pointer-events: none;
+          z-index: 100;
+          box-shadow: 0 4px 12px rgba(231,76,60,0.3);
+          animation: coBounceIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      }
+      .co-tooltip::after {
+          content: '';
+          position: absolute;
+          bottom: -6px; left: 15px;
+          border-left: 6px solid transparent;
+          border-right: 6px solid transparent;
+          border-top: 6px solid #e74c3c;
+      }
+      @keyframes coBounceIn {
+          from { opacity: 0; transform: translateY(10px) scale(0.9); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      
+      .form-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
       /* ─── Payment Options ──────────────── */
-      .payment-options { display: flex; flex-direction: column; gap: 10px; }
       .payment-opt {
-        border: 2px solid #eee; border-radius: 4px; padding: 14px 16px;
-        cursor: pointer; transition: all .2s;
-        display: flex; align-items: center; gap: 12px; font-size: 13px;
+        border: 1px solid var(--aura-line);
+        padding: 15px 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 10px;
       }
-      .payment-opt:hover { border-color: #ccc; }
-      .payment-opt.selected { border-color: #1a1a1a; background: #fafafa; }
-      .payment-opt input[type="radio"] { accent-color: #1a1a1a; width: 16px; height: 16px; }
-      .payment-opt-icon { font-size: 20px; flex-shrink: 0; }
-      .payment-opt-body strong { display: block; font-size: 14px; font-weight: 700; }
-      .payment-opt-body span { font-size: 12px; color: #888; }
+      .payment-opt.selected { border-color: var(--aura-red); background: rgba(175, 46, 46, 0.02); }
+      
+      .payment-radio {
+          width: 18px; height: 18px; border: 2px solid #ddd; border-radius: 50%;
+          display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      }
+      .payment-opt.selected .payment-radio { border-color: var(--aura-red); }
+      .payment-radio::after {
+          content: ''; width: 8px; height: 8px; background: var(--aura-red);
+          border-radius: 50%; transform: scale(0); transition: 0.2s;
+      }
+      .payment-opt.selected .payment-radio::after { transform: scale(1); }
 
-      /* CC form */
-      .cc-fields {
-        margin-top: 14px; padding: 14px; background: #fafafa;
-        border-radius: 2px; border: 1px dashed #ddd; display: none;
-      }
-      .cc-fields.visible { display: block; }
+      .payment-opt-body strong { display: block; font-size: 14px; font-weight: 800; }
+      .payment-opt-body span { font-size: 12px; color: var(--aura-muted); }
 
       /* ─── Sidebar ──────────────────────── */
-      .co-sidebar { position: sticky; top: 100px; }
-
-      /* Order Items */
-      .order-item-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
-      .order-item { display: flex; gap: 12px; align-items: center; }
-      .order-item-img {
-        width: 60px; height: 76px; object-fit: cover; border-radius: 2px;
-        background: #f5f5f5; flex-shrink: 0;
-      }
-      .order-item-info { flex: 1; }
-      .order-item-info h5 { margin: 0 0 3px; font-size: 13px; font-weight: 600; color: #1a1a1a; }
-      .order-item-info p { margin: 0; font-size: 11px; color: #888; }
-      .order-item-price { font-size: 13px; font-weight: 700; white-space: nowrap; }
+      .co-sidebar { position: sticky; top: 20px; }
+      .order-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 15px; }
+      .order-item-img { width: 60px; aspect-ratio: 3/4; object-fit: cover; background: #f5f5f5; flex-shrink: 0; }
+      .order-item-info h5 { margin: 0 0 4px; font-size: 13px; font-weight: 800; line-height: 1.4; text-transform: none; color: #1a1a1a; }
+      .oi-meta { font-size: 11px; color: #888; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-weight: 500; }
+      .oi-size-tag { background: #f5f5f5; border: 1px solid #eee; padding: 1px 6px; border-radius: 2px; color: #555; }
+      .oi-bottom { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 4px; }
+      .oi-price { font-size: 14px; font-weight: 800; color: #af2e2e; font-family: 'Inter', sans-serif; }
+      .oi-edit { font-size: 11px; color: #aaa; text-decoration: underline; margin-bottom: 2px; }
+      .oi-edit:hover { color: var(--aura-red); }
 
       /* Voucher */
-      .voucher-section { margin: 16px 0; padding: 16px 0; border-top: 1px solid #f0f0f0; }
-      .voucher-section label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #555; display: block; margin-bottom: 8px; }
+      .voucher-section { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--aura-line); }
       .voucher-row { display: flex; gap: 8px; }
-      .voucher-row input {
-        flex: 1; padding: 9px 12px; border: 1px solid #ddd; border-radius: 2px;
-        font-size: 13px; font-family: 'Space Mono', monospace; text-transform: uppercase;
-        letter-spacing: 1px; outline: none; transition: border-color .2s;
-      }
-      .voucher-row input:focus { border-color: #1a1a1a; }
-      .voucher-row input.ok { border-color: #27ae60; }
-      .voucher-row input.err { border-color: #e74c3c; }
-      .btn-voucher {
-        padding: 9px 14px; background: #1a1a1a; color: #fff;
-        border: none; border-radius: 2px; font-size: 11px;
-        font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: background .2s;
+      .voucher-row input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; font-weight: 600; outline: none; transition: border-color 0.2s; }
+      .voucher-row input:focus { border-color: var(--aura-ink); }
+      .btn-voucher { 
+        padding: 0 20px; background: var(--aura-ink); color: #fff; border: none; 
+        font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 4px;
+        font-family: 'Manrope', sans-serif; transition: background 0.2s;
       }
       .btn-voucher:hover { background: #333; }
-      .btn-voucher:disabled { background: #ccc; cursor: not-allowed; }
-      .voucher-msg { font-size: 12px; margin-top: 6px; min-height: 16px; }
-      .voucher-msg.ok { color: #27ae60; }
-      .voucher-msg.err { color: #e74c3c; }
 
       /* Totals */
-      .totals-table { border-top: 1px solid #f0f0f0; padding-top: 14px; }
-      .totals-row {
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 7px 0; font-size: 13px; color: #555;
-      }
-      .totals-row.grand {
-        border-top: 1px solid #1a1a1a; margin-top: 8px; padding-top: 14px;
-        font-size: 17px; font-weight: 800; color: #1a1a1a;
-      }
-      .totals-row.grand span:last-child { color: #e74c3c; }
-      .totals-row .discount-val { color: #e74c3c; font-weight: 600; }
-      .totals-row .free-ship { color: #27ae60; font-weight: 600; }
+      .totals-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 12px; font-weight: 700; color: #000; }
+      .totals-row span:last-child { color: var(--aura-ink); font-weight: 700; }
+      .totals-row.grand { margin-top: 10px; padding-top: 15px; border-top: 1px solid #eee; font-size: 16px; font-weight: 800; color: var(--aura-ink); }
+      .totals-row.grand span:last-child { color: var(--aura-red); font-size: 20px; }
 
       /* Submit btn */
       .btn-place-order {
-        width: 100%; padding: 16px; background: #1a1a1a; color: #fff;
-        border: none; border-radius: 2px; font-size: 13px; font-weight: 700;
-        letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
-        transition: background .3s; margin-top: 20px;
+        width: 100%; padding: 16px; background: var(--aura-ink); color: #fff;
+        border: none; font-size: 13px; font-weight: 700; letter-spacing: 2px; 
+        text-transform: uppercase; cursor: pointer; border-radius: 4px;
+        font-family: 'Manrope', sans-serif; transition: all 0.3s;
       }
-      .btn-place-order:hover { background: #333; }
-      .btn-place-order:disabled { background: #ccc; cursor: not-allowed; }
-      .btn-place-order.loading { position: relative; color: transparent; }
-      .btn-place-order.loading::after {
-        content: ''; position: absolute; top: 50%; left: 50%;
-        width: 20px; height: 20px; margin: -10px 0 0 -10px;
-        border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
-        border-radius: 50%; animation: spin .7s linear infinite;
-      }
-      @keyframes spin { to { transform: rotate(360deg); } }
+      .btn-place-order:hover { background: #000; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+      .btn-place-order:active { transform: translateY(0); }
 
-      /* Back link */
-      .back-link {
-        display: inline-flex; align-items: center; gap: 6px;
-        font-size: 12px; color: #888; text-decoration: none;
-        margin-bottom: 28px; transition: color .2s;
-      }
-      .back-link:hover { color: #1a1a1a; }
-
-      /* Success overlay */
-      .success-overlay {
-        position: fixed; inset: 0; background: rgba(0,0,0,.6);
-        z-index: 9999; display: flex; align-items: center; justify-content: center;
-        opacity: 0; pointer-events: none; transition: opacity .3s;
-      }
-      .success-overlay.open { opacity: 1; pointer-events: auto; }
-      .success-box {
-        background: #fff; border-radius: 4px; width: 90%; max-width: 460px;
-        padding: 54px 40px; text-align: center;
-        transform: scale(.9); transition: transform .3s;
-      }
-      .success-overlay.open .success-box { transform: scale(1); }
-      .success-icon { font-size: 52px; margin-bottom: 20px; }
-      .success-box h2 { font-family: 'Playfair Display', serif; font-size: 26px; margin-bottom: 10px; }
-      .success-box p { color: #777; font-size: 14px; line-height: 1.8; margin-bottom: 6px; }
-      .order-badge {
-        display: inline-block; background: #f5f5f5; border-radius: 2px;
-        padding: 7px 18px; font-family: 'Space Mono', monospace;
-        font-size: 14px; font-weight: 700; margin: 14px 0 26px; letter-spacing: 1px;
-      }
-
-      /* Loading state */
-      .skeleton { background: linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 4px; }
-      @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
-      /* Notice */
-      .co-notice { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #999; margin-top: 14px; }
-      .co-notice svg { flex-shrink: 0; }
+      .footer-note { font-size: 12px; color: var(--aura-muted); margin-top: 25px; text-align: center; }
+      .skeleton { background: #f0f0f0; border-radius: 2px; animation: pulse 1.5s infinite; }
+      @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
     </style>
   </head>
   <body>
@@ -207,195 +213,168 @@
 
     <main class="co-shell">
       <div class="container" style="max-width:1160px;">
-        <!-- Progress -->
+        <!-- Progress Steps -->
         <div class="co-progress">
-          <div class="step done" id="step-cart">
-            <span class="dot"></span>
-            <span class="lbl">Giỏ hàng</span>
-          </div>
-          <div class="line"></div>
-          <div class="step active" id="step-info">
-            <span class="dot"></span>
-            <span class="lbl">Đặt hàng</span>
-          </div>
-          <div class="line"></div>
-          <div class="step" id="step-payment">
-            <span class="dot"></span>
-            <span class="lbl">Thanh toán</span>
-          </div>
-          <div class="line"></div>
-          <div class="step" id="step-done">
-            <span class="dot"></span>
-            <span class="lbl">Hoàn thành</span>
-          </div>
+          <a href="cart.html" class="step done">
+            <div class="dot">1</div>
+            <div class="lbl">Giỏ hàng</div>
+            <div class="line"></div>
+          </a>
+          <a href="checkout.html" class="step active">
+            <div class="dot">2</div>
+            <div class="lbl">Đặt hàng</div>
+            <div class="line"></div>
+          </a>
+          <a href="#" class="step" id="step-payment" style="pointer-events: none;">
+            <div class="dot">3</div>
+            <div class="lbl">Thanh toán</div>
+            <div class="line"></div>
+          </a>
+          <a href="#" class="step" id="step-done" style="pointer-events: none;">
+            <div class="dot">4</div>
+            <div class="lbl">Hoàn thành</div>
+            <div class="line"></div>
+          </a>
         </div>
 
-        <a href="cart.html" class="back-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          Quay lại giỏ hàng
-        </a>
+        <!-- Breadcrumb -->
+        <nav class="co-breadcrumb">
+          <a href="../index.html">Trang chủ</a>
+          <span>/</span>
+          <span class="active">Thanh toán</span>
+        </nav>
 
         <div class="co-grid">
           <!-- LEFT: Forms -->
           <div class="co-forms">
-            <!-- Section 1: Shipping -->
             <div class="co-card">
-              <h2 class="co-card-title">
-                <span class="step-num">1</span>
-                Thông tin giao hàng
-              </h2>
-              <div class="form-row">
+              <h2 class="co-card-title">Thông tin giao hàng</h2>
+              <span class="login-prompt">
+                Bạn đã có tài khoản? <a href="login.html">Đăng nhập</a> ngay để nhận ưu đãi.
+              </span>
+              
+              <div class="form-row-2">
                 <div class="form-group">
-                  <label for="co-name">Họ và tên *</label>
-                  <input type="text" id="co-name" placeholder="Nguyễn Văn A">
+                  <label for="co-name">Họ và tên</label>
+                  <input type="text" id="co-name" placeholder="Họ và tên" required>
                 </div>
                 <div class="form-group">
-                  <label for="co-phone">Số điện thoại *</label>
-                  <input type="tel" id="co-phone" placeholder="0901 234 567">
+                  <label for="co-phone">Điện thoại</label>
+                  <input type="tel" id="co-phone" placeholder="Số điện thoại" required>
                 </div>
               </div>
+
               <div class="form-group">
-                <label for="co-street">Số nhà, tên đường *</label>
-                <input type="text" id="co-street" placeholder="123 Đường Lê Lợi">
+                <label for="co-email">Địa chỉ Email</label>
+                <input type="email" id="co-email" placeholder="Địa chỉ Email" required>
               </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="co-city">Thành phố / Tỉnh *</label>
-                  <input type="text" id="co-city" placeholder="TP. Hồ Chí Minh">
-                </div>
-                <div class="form-group">
-                  <label for="co-state">Quận / Huyện *</label>
-                  <input type="text" id="co-state" placeholder="Quận 1">
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="co-zip">Mã bưu điện</label>
-                  <input type="text" id="co-zip" placeholder="70000" value="70000">
-                </div>
-                <div class="form-group">
-                  <label for="co-country">Quốc gia</label>
-                  <input type="text" id="co-country" value="Việt Nam">
-                </div>
-              </div>
+
               <div class="form-group">
-                <label for="co-note">Ghi chú đơn hàng</label>
-                <input type="text" id="co-note" placeholder="Giao giờ hành chính, gọi trước khi giao...">
+                <label for="co-street">Địa chỉ</label>
+                <input type="text" id="co-street" placeholder="Địa chỉ (Số nhà, tên đường...)" required>
+              </div>
+
+              <div class="form-row-3">
+                <div class="form-group">
+                  <label for="co-city">Tỉnh / TP</label>
+                  <select id="co-city" required>
+                    <option value="" disabled selected>Tỉnh / TP</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="co-state">Quận / Huyện</label>
+                  <select id="co-state" required disabled>
+                    <option value="" disabled selected>Quận / Huyện</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="co-ward">Phường / Xã</label>
+                  <select id="co-ward" required disabled>
+                    <option value="" disabled selected>Phường / Xã</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="co-note">Lời nhắn</label>
+                <textarea id="co-note" rows="3" placeholder="Ghi chú thêm (Ví dụ: Giao hàng giờ hành chính)"></textarea>
+              </div>
+
+              <div id="coFormError" class="co-form-error-msg">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>Vui lòng điền đầy đủ thông tin giao hàng để tiếp tục.</span>
               </div>
             </div>
 
-            <!-- Section 2: Payment -->
+            <!-- Payment -->
             <div class="co-card">
-              <h2 class="co-card-title">
-                <span class="step-num">2</span>
-                Phương thức thanh toán
-              </h2>
+              <h2 class="co-card-title">Phương thức thanh toán</h2>
               <div class="payment-options">
                 <label class="payment-opt selected" id="pm-cod">
-                  <input type="radio" name="payment" value="COD" checked>
-                  <span class="payment-opt-icon">💵</span>
+                  <div class="payment-radio"></div>
+                  <span class="payment-opt-icon">🚚</span>
                   <div class="payment-opt-body">
-                    <strong>Tiền mặt khi nhận hàng (COD)</strong>
-                    <span>Trả tiền trực tiếp cho người giao hàng.</span>
+                    <strong>Thanh toán khi nhận hàng (COD)</strong>
+                    <span>Miễn phí vận chuyển cho mọi đơn hàng trên 500.000đ</span>
                   </div>
+                  <input type="radio" name="payment" value="COD" checked style="display:none;">
                 </label>
 
-                <label class="payment-opt" id="pm-banking">
-                  <input type="radio" name="payment" value="Banking">
-                  <span class="payment-opt-icon">🏦</span>
-                  <div class="payment-opt-body">
-                    <strong>Chuyển khoản ngân hàng</strong>
-                    <span>Vietcombank, Techcombank, MB Bank...</span>
-                  </div>
-                </label>
-
-                <label class="payment-opt" id="pm-card">
-                  <input type="radio" name="payment" value="CreditCard">
-                  <span class="payment-opt-icon">💳</span>
-                  <div class="payment-opt-body">
-                    <strong>Thẻ tín dụng / ghi nợ</strong>
-                    <span>Visa, Mastercard, JCB</span>
-                  </div>
-                </label>
-                <!-- Mock CC fields -->
-                <div class="cc-fields" id="cc-fields">
-                  <div class="form-group">
-                    <label>Số thẻ</label>
-                    <input type="text" placeholder="0000 0000 0000 0000" maxlength="19">
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Hết hạn (MM/YY)</label>
-                      <input type="text" placeholder="MM/YY" maxlength="5">
-                    </div>
-                    <div class="form-group">
-                      <label>CVV</label>
-                      <input type="text" placeholder="123" maxlength="3">
-                    </div>
-                  </div>
-                  <p style="font-size:11px;color:#aaa;margin:0;">* Giao diện mô phỏng — không lưu thông tin thẻ thật.</p>
-                </div>
-
-                <label class="payment-opt" id="pm-momo">
-                  <input type="radio" name="payment" value="MoMo">
-                  <span class="payment-opt-icon">💜</span>
-                  <div class="payment-opt-body">
-                    <strong>Ví điện tử MoMo</strong>
-                    <span>Quét mã QR qua ứng dụng MoMo.</span>
-                  </div>
-                </label>
               </div>
             </div>
 
-            <button class="btn-place-order" id="placeOrderBtn">XÁC NHẬN ĐẶT HÀNG</button>
+            <p class="footer-note">
+                Nếu bạn không hài lòng về sản phẩm của chúng tôi. Bạn hoàn toàn có thể trả lại sản phẩm. Tìm hiểu thêm <a href="#">Tại đây</a>
+            </p>
+
           </div>
 
           <!-- RIGHT: Summary -->
           <aside class="co-sidebar">
             <div class="co-card">
-              <h2 class="co-card-title" style="margin-bottom:16px;">
-                Đơn hàng của bạn
-                <span id="coItemCount" style="font-size:13px;font-weight:400;color:#888;margin-left:auto;font-family:sans-serif;"></span>
-              </h2>
-
               <div class="order-item-list" id="coItemList">
-                <div class="skeleton" style="height:60px;border-radius:4px;"></div>
-                <div class="skeleton" style="height:60px;border-radius:4px;margin-top:8px;"></div>
+                <!-- Items will be injected here -->
+                <div class="skeleton" style="height:80px;"></div>
+                <div class="skeleton" style="height:80px;margin-top:15px;"></div>
               </div>
 
               <!-- Voucher -->
               <div class="voucher-section">
-                <label>Mã giảm giá</label>
                 <div class="voucher-row">
-                  <input type="text" id="voucherInput" placeholder="Nhập mã voucher..." maxlength="30" autocomplete="off">
-                  <button class="btn-voucher" id="applyVoucherBtn">ÁP DỤNG</button>
+                  <input type="text" id="voucherInput" placeholder="Mã giảm giá">
+                  <button class="btn-voucher" id="applyVoucherBtn">Áp dụng</button>
                 </div>
                 <div class="voucher-msg" id="voucherMsg"></div>
               </div>
 
               <!-- Totals -->
               <div class="totals-table">
+                <h4 style="font-size:16px; margin-bottom: 20px;">TỔNG CỘNG</h4>
                 <div class="totals-row">
-                  <span>Tạm tính</span>
-                  <span id="coSubtotal">—</span>
+                  <span>Tổng tiền hàng:</span>
+                  <span id="coSubtotal" style="color: #000;">—</span>
                 </div>
                 <div class="totals-row" id="coDiscountRow" style="display:none;">
-                  <span>Giảm giá <button id="removeVoucherBtn" style="background:none;border:none;cursor:pointer;color:#e74c3c;font-size:11px;text-decoration:underline;padding:0;">✕ Bỏ</button></span>
-                  <span class="discount-val" id="coDiscount">—</span>
+                  <span>Giảm giá:</span>
+                  <span id="coDiscount" style="color: var(--aura-red);">—</span>
                 </div>
                 <div class="totals-row">
-                  <span>Phí vận chuyển</span>
-                  <span id="coShipping" class="free-ship">Miễn phí</span>
+                  <span>Tạm tính:</span>
+                  <span id="coSubtotalActual">—</span>
+                </div>
+                <div class="totals-row">
+                  <span>Phí ship:</span>
+                  <span id="coShipping">—</span>
                 </div>
                 <div class="totals-row grand">
-                  <span>Tổng thanh toán</span>
+                  <span>Cần thanh toán:</span>
                   <span id="coTotal">—</span>
                 </div>
               </div>
 
-              <div class="co-notice">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                Thông tin của bạn được bảo mật tuyệt đối.
+              <!-- Action Button moved here -->
+              <div style="margin-top: 25px;">
+                <button class="btn-place-order" id="placeOrderBtn" style="border-radius: 4px; transition: transform 0.2s;">ĐẶT HÀNG NGAY</button>
               </div>
             </div>
           </aside>

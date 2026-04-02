@@ -89,13 +89,8 @@ function renderCartItems() {
   items.forEach((item) => {
     const product = item.product || {};
     const price = product.price || 0;
-    const origPrice = product.originalPrice || 0;
     const itemTotal = price * item.quantity;
     const itemId = item._id;
-
-    const hasSale = origPrice > price;
-    const discountVal = hasSale ? (origPrice - price) * item.quantity : 0;
-    const discountPct = hasSale ? Math.round((1 - price / origPrice) * 100) : 0;
 
     html += `
       <div class="cart-item-row" data-item-id="${itemId}">
@@ -105,13 +100,8 @@ function renderCartItems() {
           <div class="cart-item-info">
             <h4>${product.name || 'Sản phẩm'}</h4>
             <p>Size: ${item.size || 'M'}</p>
-            <p style="font-weight:700;color:#1a1a1a;margin-top:4px;">${formatVnd(price)}</p>
+            <div class="cart-item-price-unit">${formatVnd(price)}</div>
           </div>
-        </div>
-        <div class="cart-item-disc">
-          ${hasSale
-            ? `-${formatVnd(discountVal)}<span class="percent">(-${discountPct}%)</span>`
-            : '<span style="color:#ccc;font-size:12px;">—</span>'}
         </div>
         <div class="cart-item-qty">
           <button class="qty-btn minus" data-item-id="${itemId}" aria-label="Giảm">−</button>

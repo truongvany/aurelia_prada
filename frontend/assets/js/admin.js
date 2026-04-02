@@ -396,10 +396,16 @@ async function renderCustomers() {
   
   try {
     const users = await fetchAllUsers();
+    const rankMap = { 'Basic': 'Thường', 'Premium': 'Cao cấp', 'VVIP': 'Kim cương' };
+
     body.innerHTML = users.map((c) => `
       <tr>
         <td><strong>${c.name}</strong></td>
         <td>${c.email}<br><small style="color:var(--admin-text-muted);">${c.phone || 'Chưa cung cấp SĐT'}</small></td>
+        <td>
+           <span style="font-weight: 800; color: #1a1a1a;">${rankMap[c.membershipLevel] || 'Cơ bản'}</span><br>
+           <small style="color: #2ecc71; font-weight: 600;">${(c.points || 0).toLocaleString()} điểm</small>
+        </td>
         <td><span class="status-pill ${c.role === 'admin' ? 'info' : 'success'}">${c.role === 'admin' ? 'QUẢN TRỊ VIÊN' : 'NGƯỜI DÙNG'}</span></td>
         <td>${c.createdAt ? new Date(c.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
         <td>
@@ -482,6 +488,7 @@ async function renderVouchers() {
         <td>${formatVnd(v.minOrderValue)}</td>
         <td>${new Date(v.expirationDate).toLocaleDateString('vi-VN')}</td>
         <td><span class="status-pill ${v.isActive ? 'success' : 'danger'}">${v.isActive ? 'Hoạt động' : 'Tạm ngưng'}</span></td>
+        <td><span style="font-weight: 700; color: ${v.pointsCost > 0 ? '#d35400' : '#999'}">${v.pointsCost > 0 ? v.pointsCost + ' pts' : '—'}</span></td>
         <td>
           <button class="btn-admin-action edit edit-voucher" data-id="${v._id}" data-v='${JSON.stringify(v).replace(/'/g, "&apos;")}'>SỬA</button>
           <button class="btn-admin-action delete delete-voucher" data-id="${v._id}">XÓA</button>
@@ -537,6 +544,7 @@ function setupVoucherModal() {
         maxUsage: Number(document.getElementById('v-max').value) || undefined,
         expirationDate: document.getElementById('v-expiry').value,
         isActive: document.getElementById('v-active').checked,
+        pointsCost: Number(document.getElementById('v-points').value) || 0,
       };
 
       try {
@@ -566,12 +574,14 @@ function openVoucherModal(v = null) {
     document.getElementById('v-desc').value = v.description;
     document.getElementById('v-min').value = v.minOrderValue;
     document.getElementById('v-max').value = v.maxUsage || '';
+    document.getElementById('v-points').value = v.pointsCost || 0;
     document.getElementById('v-expiry').value = v.expirationDate.split('T')[0];
     document.getElementById('v-active').checked = v.isActive;
   } else {
     title.textContent = 'Thêm Voucher mới';
     form.reset();
     document.getElementById('edit-voucher-id').value = '';
+    document.getElementById('v-points').value = 0;
     document.getElementById('v-expiry').value = new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0];
   }
   modal.style.display = 'flex';

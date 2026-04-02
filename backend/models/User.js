@@ -46,6 +46,15 @@ const userSchema = new mongoose.Schema(
         ref: 'Product',
       },
     ],
+    points: {
+      type: Number,
+      default: 0,
+    },
+    membershipLevel: {
+      type: String,
+      enum: ['Basic', 'Premium', 'VVIP'],
+      default: 'Basic',
+    },
     loginHistory: [
       {
         device: String,

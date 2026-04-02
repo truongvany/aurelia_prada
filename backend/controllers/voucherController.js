@@ -1,4 +1,5 @@
 const Voucher = require('../models/Voucher');
+const User = require('../models/User');
 
 // @desc    Fetch all vouchers
 // @route   GET /api/vouchers
@@ -26,6 +27,7 @@ const createVoucher = async (req, res) => {
       maxUsage,
       expirationDate,
       isActive,
+      pointsCost,
     } = req.body;
 
     const voucherExists = await Voucher.findOne({ code: code.toUpperCase() });
@@ -43,6 +45,7 @@ const createVoucher = async (req, res) => {
       maxUsage,
       expirationDate,
       isActive,
+      pointsCost: pointsCost || 0,
     });
 
     const createdVoucher = await voucher.save();
@@ -66,6 +69,7 @@ const updateVoucher = async (req, res) => {
       maxUsage,
       expirationDate,
       isActive,
+      pointsCost,
     } = req.body;
 
     const voucher = await Voucher.findById(req.params.id);
@@ -86,6 +90,7 @@ const updateVoucher = async (req, res) => {
       voucher.maxUsage = maxUsage !== undefined ? maxUsage : voucher.maxUsage;
       voucher.expirationDate = expirationDate || voucher.expirationDate;
       voucher.isActive = isActive !== undefined ? isActive : voucher.isActive;
+      voucher.pointsCost = pointsCost !== undefined ? pointsCost : voucher.pointsCost;
 
       const updatedVoucher = await voucher.save();
       res.json(updatedVoucher);
@@ -143,10 +148,66 @@ const getVoucherByCode = async (req, res) => {
   }
 };
 
+// @desc    Get active vouchers for points redemption
+// @route   GET /api/vouchers/rewards
+// @access  Private
+const getAvailableRewards = async (req, res) => {
+  try {
+    const vouchers = await Voucher.find({ 
+      isActive: true, 
+      pointsCost: { $gt: 0 },
+      expirationDate: { $gt: new Date() }
+    }).sort({ pointsCost: 1 });
+    res.json(vouchers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Redeem points for voucher
+// @route   POST /api/vouchers/redeem
+// @access  Private
+const redeemVoucher = async (req, res) => {
+  try {
+    const { voucherId } = req.body;
+    const user = await User.findById(req.user._id);
+    const voucher = await Voucher.findById(voucherId);
+
+    if (!user || !voucher) {
+      return res.status(404).json({ message: 'Không tìm thấy người dùng hoặc voucher.' });
+    }
+
+    if (voucher.pointsCost <= 0) {
+      return res.status(400).json({ message: 'Voucher này không thể đổi bằng điểm.' });
+    }
+
+    if (user.points < voucher.pointsCost) {
+      return res.status(400).json({ message: 'Bạn không đủ điểm để đổi voucher này.' });
+    }
+
+    // Deduct points
+    user.points -= voucher.pointsCost;
+    await user.save();
+
+    // Reward: In a real system, we might create a UserVoucher record.
+    // For now, we simply return the code to let them copy it.
+    res.json({ 
+      message: 'Đổi điểm thành công!', 
+      code: voucher.code,
+      remainingPoints: user.points 
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getVouchers,
   createVoucher,
   updateVoucher,
   deleteVoucher,
   getVoucherByCode,
+  redeemVoucher,
+  getAvailableRewards,
 };
+
