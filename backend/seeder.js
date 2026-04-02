@@ -36,7 +36,7 @@ const seedData = async () => {
             { name: 'Áo len', slug: 'ao-len', group: 'ÁO' },
             { name: 'Áo vest / Blazer', slug: 'ao-vest-blazer', group: 'ÁO' },
             { name: 'Áo khoác dạ', slug: 'ao-khoac-da', group: 'ÁO KHOÁC' },
-            
+
             // THEO DỊP / SỰ KIỆN
             { name: 'Tết / Holiday Collection', slug: 'holiday-tet', group: 'THEO DỊP' },
             { name: 'Valentine / Noel / Halloween', slug: 'seasonal-events', group: 'THEO DỊP' },
@@ -58,7 +58,12 @@ const seedData = async () => {
             // PHỤ KIỆN
             { name: 'Giày dép', slug: 'giay-dep', group: 'PHỤ KIỆN' },
             { name: 'Túi xách', slug: 'tui-xach', group: 'PHỤ KIỆN' },
-            { name: 'Kính mắt', slug: 'kinh-mat', group: 'PHỤ KIỆN' }
+            { name: 'Ví', slug: 'vi', group: 'PHỤ KIỆN' },
+            { name: 'Thắt lưng', slug: 'that-lung', group: 'PHỤ KIỆN' },
+            { name: 'Kính mắt', slug: 'kinh-mat', group: 'PHỤ KIỆN' },
+            { name: 'Mũ', slug: 'mu', group: 'PHỤ KIỆN' },
+            { name: 'Trang sức', slug: 'trang-suc', group: 'PHỤ KIỆN' },
+            { name: 'Khăn', slug: 'khan', group: 'PHỤ KIỆN' }
         ];
 
         const createdCats = await Category.insertMany(categoriesData);
@@ -67,35 +72,46 @@ const seedData = async () => {
 
         const materials = ['Silk', 'Linen', 'Wool', 'Cashmere', 'Polyester', 'Soft Cotton'];
         const collections = ['Premium Silk by Format', 'First Class', 'No.11 Être Douce', 'Urban Glow 2026'];
-        
-        // Reliable Unsplash Fashion Image pool for high quality display (Avoids CORS/Opaque blocking)
+
+        // Luxury Fashion & Accessories Image pool
         const images = [
-            'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80',
-            'https://images.unsplash.com/photo-1539109132314-34a936ee5530?auto=format&fit=crop&w=600&q=80',
-            'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80',
-            'https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=600&q=80',
-            'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=600&q=80',
-            'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=600&q=80',
-            'https://images.unsplash.com/photo-1111663110294-f73c1d9361a9?auto=format&fit=crop&w=600&q=80',
-            'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=600&q=80', // Bag
+            'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80', // Bag
+            'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=600&q=80', // Wallet
+            'https://images.unsplash.com/photo-1596704017254-9b121067307b?auto=format&fit=crop&w=600&q=80', // Sunglasses
+            'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80', // Backpack
+            'https://images.unsplash.com/photo-1509191434302-021e9ed736c0?auto=format&fit=crop&w=600&q=80', // Belt
+            'https://images.unsplash.com/photo-1521335629791-ce4aec67dd16?auto=format&fit=crop&w=600&q=80', // Hat
+            'https://images.unsplash.com/photo-1535633302703-9420414421aa?auto=format&fit=crop&w=600&q=80', // Jewelry
+            'https://images.unsplash.com/photo-1590548784585-645d89030875?auto=format&fit=crop&w=600&q=80', // Perfume/Misc
+            'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80', // Watch
         ];
 
         const productsToCreate = [];
 
-        // Generate 32 products to cover all 16 sub-categories (2 each)
-        for (let i = 0; i < 32; i++) {
+        // Generate 48 products to cover more items including all accessories
+        for (let i = 0; i < 48; i++) {
             const catNames = Object.keys(catMap);
             const catName = catNames[i % catNames.length]; // Cycle through all sub-categories
-            const randomPrice = Math.floor(Math.random() * (1200000 - 350000) + 350000); // Mostly 350k - 1.2M
+            const randomPrice = Math.floor(Math.random() * (1500000 - 350000) + 350000); // 350k - 1.5M
             const randomBadge = Math.random() > 0.5 ? 'Sale' : (Math.random() > 0.5 ? 'New' : 'Best Seller');
-            
+
+            // Special image selection for accessory categories
+            let itemImage = images[i % images.length];
+            const accImgMap = {
+                'Túi xách': 0, 'Ví': 2, 'Kính mắt': 3, 'Thắt lưng': 5, 'Mũ': 6, 'Trang sức': 7, 'Giày dép': 4
+            };
+            if (accImgMap[catName] !== undefined) {
+                itemImage = images[accImgMap[catName]];
+            }
+
             productsToCreate.push({
                 name: `${catName} ${collections[Math.floor(Math.random() * collections.length)]}`,
                 price: randomPrice,
-                originalPrice: Math.random() > 0.7 ? Math.floor(randomPrice * 1.5) : null,
+                originalPrice: Math.random() > 0.7 ? Math.floor(randomPrice * 1.3) : null,
                 category: catMap[catName],
-                color: ['Black', 'Cream', 'Pearl', 'Midnight', 'Sand'][i % 5],
-                image: images[i % images.length],
+                color: ['Black', 'Cream', 'Caramel', 'Midnight', 'Sand'][i % 5],
+                image: itemImage,
                 badge: randomBadge,
                 stock: 20 + Math.floor(Math.random() * 80),
                 material: materials[Math.floor(Math.random() * materials.length)],

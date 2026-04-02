@@ -16,7 +16,8 @@ export default defineConfig({
         adminProducts: 'pages/admin/products.html',
         adminOrders: 'pages/admin/orders.html',
         adminCustomers: 'pages/admin/customers.html',
-        adminSettings: 'pages/admin/settings.html'
+        adminSettings: 'pages/admin/settings.html',
+        accessories: 'pages/accessories.html'
       }
     }
   },
