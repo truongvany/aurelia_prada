@@ -1,33 +1,127 @@
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const bcrypt = require('bcryptjs');
 
 const User = require('./models/User');
 const Product = require('./models/Product');
 const Category = require('./models/Category');
 const Order = require('./models/Order');
+const Cart = require('./models/Cart');
+const Voucher = require('./models/Voucher');
 
 const connectDB = require('./config/db');
 
 dotenv.config();
 connectDB();
 
+function pick(list, index) {
+    return list[index % list.length];
+}
+
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function sampleUnique(list, count) {
+    const cloned = [...list];
+    const result = [];
+    const take = Math.min(count, cloned.length);
+
+    for (let i = 0; i < take; i++) {
+        const idx = randomInt(0, cloned.length - 1);
+        result.push(cloned[idx]);
+        cloned.splice(idx, 1);
+    }
+
+    return result;
+}
+
+function randomDateWithinDays(daysBack) {
+    const now = Date.now();
+    const offset = randomInt(0, daysBack) * 24 * 60 * 60 * 1000;
+    return new Date(now - offset);
+}
+
+function getStatusByStock(stock) {
+    if (stock <= 0) return 'Out of Stock';
+    if (stock <= 20) return 'Low Stock';
+    return 'Active';
+}
+
 const seedData = async () => {
     try {
+        await Cart.deleteMany();
         await Order.deleteMany();
         await Product.deleteMany();
         await Category.deleteMany();
+        await Voucher.deleteMany();
         await User.deleteMany();
 
         console.log('🗑️  Data cleared.');
 
-        await User.create({
-            name: 'Aurelia Admin',
-            email: 'admin@aurelia.com',
-            password: 'admin123',
-            role: 'admin',
-            phone: '+84 898 123 456'
+        const cities = ['Hà Nội', 'TP Hồ Chí Minh', 'Đà Nẵng', 'Hải Phòng', 'Cần Thơ'];
+        const districts = ['Ba Đình', 'Cầu Giấy', 'Quận 1', 'Thủ Đức', 'Sơn Trà', 'Ninh Kiều'];
+        const userNames = [
+            'Nguyễn Minh Anh',
+            'Trần Thu Trang',
+            'Lê Hoàng Nam',
+            'Phạm Quỳnh Chi',
+            'Đỗ Khánh Linh',
+            'Vũ Tuấn Kiệt',
+            'Bùi Phương Thảo',
+            'Mai Gia Huy',
+            'Phan Ngọc Lan',
+            'Đặng Đức Anh',
+            'Lý Bảo Trân',
+            'Ngô Thành Đạt',
+            'Tạ Mỹ Linh',
+            'Trịnh Hải Yến',
+            'Hoàng Quốc Bảo',
+            'Dương Gia Hân',
+            'Nguyễn Đức Trí',
+            'Lâm Tuệ Nhi'
+        ];
+
+        const usersToCreate = [
+            {
+                name: 'Aurelia Admin',
+                email: 'admin@aurelia.com',
+                password: 'admin123',
+                role: 'admin',
+                phone: '+84 898 123 456',
+                address: 'Aurelia Prada HQ, Quận 1, TP Hồ Chí Minh',
+                gender: 'other',
+                membershipLevel: 'VVIP',
+                points: 9999
+            },
+            {
+                name: 'Test User',
+                email: 'user@example.com',
+                password: 'password123',
+                role: 'user',
+                phone: '+84 123 456 789',
+                address: 'Cầu Giấy, Hà Nội',
+                gender: 'female',
+                membershipLevel: 'Premium',
+                points: 350
+            }
+        ];
+
+        userNames.forEach((name, index) => {
+            usersToCreate.push({
+                name,
+                email: `customer${index + 1}@example.com`,
+                password: 'password123',
+                role: 'user',
+                phone: `+84 90${String(1000000 + index)}`,
+                address: `${pick(districts, index)}, ${pick(cities, index)}`,
+                gender: pick(['male', 'female', 'other'], index),
+                membershipLevel: pick(['Basic', 'Basic', 'Premium', 'VVIP'], index),
+                points: randomInt(0, 5000),
+                dob: `${randomInt(1988, 2004)}-${String(randomInt(1, 12)).padStart(2, '0')}-${String(randomInt(1, 28)).padStart(2, '0')}`
+            });
         });
+
+        const createdUsers = await User.create(usersToCreate);
+        const customerUsers = createdUsers.filter((u) => u.role === 'user');
 
         const categoriesData = [
             // ÁO & ÁO KHOÁC (Exist)
@@ -36,6 +130,11 @@ const seedData = async () => {
             { name: 'Áo len', slug: 'ao-len', group: 'ÁO' },
             { name: 'Áo vest / Blazer', slug: 'ao-vest-blazer', group: 'ÁO' },
             { name: 'Áo khoác dạ', slug: 'ao-khoac-da', group: 'ÁO KHOÁC' },
+
+            // QUẦN
+            { name: 'Quần tây', slug: 'quan-tay', group: 'QUẦN' },
+            { name: 'Quần jeans', slug: 'quan-jeans', group: 'QUẦN' },
+            { name: 'Quần kaki', slug: 'quan-kaki', group: 'QUẦN' },
 
             // THEO DỊP / SỰ KIỆN
             { name: 'Tết / Holiday Collection', slug: 'holiday-tet', group: 'THEO DỊP' },
@@ -71,7 +170,47 @@ const seedData = async () => {
         createdCats.forEach(c => catMap[c.name] = c._id);
 
         const materials = ['Silk', 'Linen', 'Wool', 'Cashmere', 'Polyester', 'Soft Cotton'];
-        const collections = ['Premium Silk by Format', 'First Class', 'No.11 Être Douce', 'Urban Glow 2026'];
+        const sizeOptions = ['XS', 'S', 'M', 'L', 'XL'];
+        const colorOptions = [
+            { color: 'Black', colorCode: '#111111' },
+            { color: 'White', colorCode: '#F8F8F8' },
+            { color: 'Navy', colorCode: '#1C2E4A' },
+            { color: 'Beige', colorCode: '#D8C3A5' },
+            { color: 'Brown', colorCode: '#8B5E3B' },
+            { color: 'Wine', colorCode: '#7C1F3D' },
+            { color: 'Olive', colorCode: '#596B3B' }
+        ];
+        const collections = ['Premium Silk by Format', 'First Class', 'No.11 Etre Douce', 'Urban Glow 2026'];
+        const shirtCategories = ['Áo sơ mi', 'Áo thun', 'Áo len', 'Áo vest / Blazer'];
+        const pantsCategories = ['Quần tây', 'Quần jeans', 'Quần kaki'];
+        const weightedCategoryPool = [
+            ...shirtCategories,
+            ...shirtCategories,
+            ...shirtCategories,
+            ...pantsCategories,
+            ...pantsCategories,
+            'Áo khoác dạ',
+            'Tết / Holiday Collection',
+            'Valentine / Noel / Halloween',
+            'Tiệc cưới & Dạ hội',
+            'Du lịch & Nghỉ hè',
+            'Đầm & Váy (Dress Edit)',
+            'Áo khoác (Outerwear)',
+            'Đồ Denim',
+            'Đồ cơ bản (Essentials)',
+            'Xuân Hè 2026',
+            'Thu Đông 2025',
+            'Pre-Fall Collection',
+            'Holiday Capsule',
+            'Giày dép',
+            'Túi xách',
+            'Ví',
+            'Thắt lưng',
+            'Kính mắt',
+            'Mũ',
+            'Trang sức',
+            'Khăn'
+        ];
 
         // Luxury Fashion & Accessories Image pool
         const images = [
@@ -89,10 +228,9 @@ const seedData = async () => {
 
         const productsToCreate = [];
 
-        // Generate 48 products to cover more items including all accessories
-        for (let i = 0; i < 48; i++) {
-            const catNames = Object.keys(catMap);
-            const catName = catNames[i % catNames.length]; // Cycle through all sub-categories
+        // Generate larger catalog with mixed single and variant products.
+        for (let i = 0; i < 180; i++) {
+            const catName = pick(weightedCategoryPool, i);
             const randomPrice = Math.floor(Math.random() * (1500000 - 350000) + 350000); // 350k - 1.5M
             const randomBadge = Math.random() > 0.5 ? 'Sale' : (Math.random() > 0.5 ? 'New' : 'Best Seller');
 
@@ -105,23 +243,248 @@ const seedData = async () => {
                 itemImage = images[accImgMap[catName]];
             }
 
+            const isShirt = shirtCategories.includes(catName);
+            const isPants = pantsCategories.includes(catName);
+            const namePrefix = isShirt ? 'Áo' : (isPants ? 'Quần' : catName);
+
+            const shouldHaveVariants = i % 3 === 0;
+            const variantColors = shouldHaveVariants ? sampleUnique(colorOptions, randomInt(2, 3)) : [];
+            const variants = variantColors.map((variantColor, variantIndex) => {
+                const sizes = sampleUnique(sizeOptions, randomInt(3, 5));
+                const stock = randomInt(8, 35);
+                return {
+                    color: variantColor.color,
+                    colorCode: variantColor.colorCode,
+                    images: [
+                        images[(i + variantIndex) % images.length],
+                        images[(i + variantIndex + 2) % images.length]
+                    ],
+                    sizes,
+                    stock
+                };
+            });
+
+            const totalVariantStock = variants.reduce((sum, variant) => sum + variant.stock, 0);
+            const productStock = shouldHaveVariants ? totalVariantStock : randomInt(15, 120);
+            const productStatus = getStatusByStock(productStock);
+
             productsToCreate.push({
-                name: `${catName} ${collections[Math.floor(Math.random() * collections.length)]}`,
+                name: `${namePrefix} ${collections[Math.floor(Math.random() * collections.length)]} ${i + 1}`,
                 price: randomPrice,
                 originalPrice: Math.random() > 0.7 ? Math.floor(randomPrice * 1.3) : null,
                 category: catMap[catName],
                 color: ['Black', 'Cream', 'Caramel', 'Midnight', 'Sand'][i % 5],
                 image: itemImage,
+                images: [itemImage, images[(i + 3) % images.length], images[(i + 6) % images.length]],
+                variants,
                 badge: randomBadge,
-                stock: 20 + Math.floor(Math.random() * 80),
+                stock: productStock,
                 material: materials[Math.floor(Math.random() * materials.length)],
-                collectionName: collections[Math.floor(Math.random() * collections.length)]
+                collectionName: collections[Math.floor(Math.random() * collections.length)],
+                status: productStatus,
+                rating: Number((Math.random() * 0.8 + 4.2).toFixed(1)),
+                numReviews: randomInt(8, 250),
+                totalSold: randomInt(10, 1200)
             });
         }
 
-        await Product.insertMany(productsToCreate);
+        const createdProducts = await Product.insertMany(productsToCreate);
 
-        console.log('✅ Accurate categories and 32 items seeded (Price < 2M).');
+        const createdVouchers = await Voucher.insertMany([
+            {
+                code: 'AURELIA10',
+                description: 'Giảm 10% cho đơn hàng đầu tiên',
+                discountType: 'percent',
+                discountAmount: 10,
+                minOrderValue: 0,
+                expirationDate: new Date('2026-12-31'),
+                isActive: true
+            },
+            {
+                code: 'LUXURY500K',
+                description: 'Giảm 500,000đ cho đơn hàng từ 5,000,000đ',
+                discountType: 'fixed',
+                discountAmount: 500000,
+                minOrderValue: 5000000,
+                expirationDate: new Date('2026-12-31'),
+                isActive: true
+            },
+            {
+                code: 'FREESHIP',
+                description: 'Giảm 30,000đ phí vận chuyển',
+                discountType: 'fixed',
+                discountAmount: 30000,
+                minOrderValue: 500000,
+                expirationDate: new Date('2026-12-31'),
+                isActive: true
+            },
+            {
+                code: 'ATOMIC',
+                description: 'Giảm giá cực mạnh - 50%',
+                discountType: 'percent',
+                discountAmount: 50,
+                minOrderValue: 1000000,
+                expirationDate: new Date('2026-12-31'),
+                isActive: true
+            },
+            {
+                code: 'SPRING15',
+                description: 'Giảm 15% cho BST Xuân Hè',
+                discountType: 'percent',
+                discountAmount: 15,
+                minOrderValue: 800000,
+                expirationDate: new Date('2026-10-31'),
+                isActive: true
+            },
+            {
+                code: 'VIP1M',
+                description: 'Giảm 1,000,000đ cho đơn từ 8,000,000đ',
+                discountType: 'fixed',
+                discountAmount: 1000000,
+                minOrderValue: 8000000,
+                expirationDate: new Date('2026-12-31'),
+                isActive: true
+            }
+        ]);
+
+        const cartsToCreate = [];
+        const cartUsers = sampleUnique(customerUsers, 12);
+        cartUsers.forEach((user, index) => {
+            const selectedProducts = sampleUnique(createdProducts, randomInt(1, 4));
+            const items = selectedProducts.map((product) => {
+                let size = '';
+                let color = '';
+                let colorCode = '';
+                let maxQty = Math.max(1, Math.min(4, product.stock || 1));
+
+                if (Array.isArray(product.variants) && product.variants.length > 0) {
+                    const variant = product.variants[randomInt(0, product.variants.length - 1)];
+                    size = variant.sizes?.length ? variant.sizes[randomInt(0, variant.sizes.length - 1)] : '';
+                    color = variant.color || '';
+                    colorCode = variant.colorCode || '';
+                    maxQty = Math.max(1, Math.min(4, variant.stock || 1));
+                }
+
+                return {
+                    product: product._id,
+                    quantity: randomInt(1, maxQty),
+                    size,
+                    color,
+                    colorCode
+                };
+            });
+
+            cartsToCreate.push({
+                user: user._id,
+                items,
+                createdAt: randomDateWithinDays(30 - (index % 5)),
+                updatedAt: new Date()
+            });
+        });
+
+        await Cart.insertMany(cartsToCreate);
+
+        const orderStatuses = ['Processing', 'Processing', 'Confirmed', 'Shipped', 'Delivered', 'Delivered', 'Cancelled'];
+        const paymentMethods = ['COD', 'Banking', 'Momo', 'VNPay'];
+        const shippingTemplates = [
+            { street: '12 Nguyễn Huệ', city: 'TP Hồ Chí Minh', state: 'TP Hồ Chí Minh', ward: 'Bến Nghé', country: 'Vietnam' },
+            { street: '89 Trần Duy Hưng', city: 'Hà Nội', state: 'Hà Nội', ward: 'Trung Hòa', country: 'Vietnam' },
+            { street: '25 Võ Văn Kiệt', city: 'Đà Nẵng', state: 'Đà Nẵng', ward: 'An Hải Bắc', country: 'Vietnam' },
+            { street: '203 Lê Lợi', city: 'Hải Phòng', state: 'Hải Phòng', ward: 'Máy Tơ', country: 'Vietnam' }
+        ];
+
+        const ordersToCreate = [];
+        for (let i = 0; i < 60; i++) {
+            const user = pick(customerUsers, i);
+            const status = pick(orderStatuses, i + randomInt(0, 2));
+            const chosenProducts = sampleUnique(createdProducts, randomInt(1, 3));
+
+            const orderItems = chosenProducts.map((product) => {
+                let size = '';
+                let color = '';
+                let colorCode = '';
+                let maxQty = Math.max(1, Math.min(3, product.stock || 1));
+                let image = product.image;
+
+                if (Array.isArray(product.variants) && product.variants.length > 0) {
+                    const variant = product.variants[randomInt(0, product.variants.length - 1)];
+                    size = variant.sizes?.length ? variant.sizes[randomInt(0, variant.sizes.length - 1)] : '';
+                    color = variant.color || '';
+                    colorCode = variant.colorCode || '';
+                    image = variant.images?.length ? variant.images[0] : product.image;
+                    maxQty = Math.max(1, Math.min(3, variant.stock || 1));
+                }
+
+                return {
+                    name: product.name,
+                    qty: randomInt(1, maxQty),
+                    image,
+                    price: product.price,
+                    size,
+                    color,
+                    colorCode,
+                    product: product._id
+                };
+            });
+
+            const itemsPrice = orderItems.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const shippingPrice = itemsPrice >= 2000000 ? 0 : 30000;
+            const taxPrice = Math.round(itemsPrice * 0.08);
+            const shouldUseVoucher = i % 4 === 0;
+            const voucher = shouldUseVoucher ? pick(createdVouchers, i) : null;
+            let discountPrice = 0;
+
+            if (voucher && itemsPrice >= (voucher.minOrderValue || 0)) {
+                if (voucher.discountType === 'percent') {
+                    discountPrice = Math.round(itemsPrice * (voucher.discountAmount / 100));
+                } else {
+                    discountPrice = voucher.discountAmount;
+                }
+            }
+
+            const totalPrice = Math.max(0, itemsPrice + shippingPrice + taxPrice - discountPrice);
+            const createdAt = randomDateWithinDays(120);
+            const paidAt = status === 'Processing' || status === 'Cancelled'
+                ? null
+                : new Date(createdAt.getTime() + randomInt(2, 48) * 60 * 60 * 1000);
+            const deliveredAt = status === 'Delivered' && paidAt
+                ? new Date(paidAt.getTime() + randomInt(1, 6) * 24 * 60 * 60 * 1000)
+                : null;
+
+            ordersToCreate.push({
+                user: user._id,
+                orderItems,
+                shippingAddress: pick(shippingTemplates, i),
+                paymentMethod: pick(paymentMethods, i),
+                paymentResult: paidAt
+                    ? {
+                        id: `PAY-${String(100000 + i)}`,
+                        status: 'COMPLETED',
+                        update_time: paidAt.toISOString(),
+                        email_address: user.email
+                    }
+                    : undefined,
+                itemsPrice,
+                taxPrice,
+                shippingPrice,
+                totalPrice,
+                voucherCode: voucher ? voucher.code : undefined,
+                discountPrice,
+                isPaid: !!paidAt,
+                paidAt,
+                isDelivered: status === 'Delivered',
+                deliveredAt,
+                status,
+                createdAt,
+                updatedAt: new Date()
+            });
+        }
+
+        await Order.insertMany(ordersToCreate);
+
+        console.log('✅ Unified seed completed: users, categories, products, vouchers.');
+        console.log('📦 Added QUẦN categories and increased ÁO product density.');
+        console.log(`👥 Users: ${createdUsers.length} | 🛍️ Products: ${createdProducts.length} | 🧾 Orders: ${ordersToCreate.length} | 🛒 Carts: ${cartsToCreate.length}`);
         process.exit();
     } catch (error) {
         console.error(`❌ Errors: ${error.message}`);

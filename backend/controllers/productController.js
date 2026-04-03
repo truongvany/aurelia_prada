@@ -1,6 +1,20 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 
+const uploadProductImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      res.status(400).json({ message: 'Khong tim thay tep anh de upload.' });
+      return;
+    }
+
+    const url = `/uploads/products/${req.file.filename}`;
+    res.status(201).json({ url });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // @desc    Fetch all products
 // @route   GET /api/products
 // @access  Public
@@ -137,4 +151,5 @@ module.exports = {
   deleteProduct,
   createProduct,
   updateProduct,
+  uploadProductImage,
 };

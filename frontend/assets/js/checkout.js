@@ -29,6 +29,43 @@ const getTotal = () => {
   return afterDisc + getShipping(afterDisc);
 };
 
+function resolveItemAvailableStock(item) {
+  const product = item.product || {};
+  const variants = Array.isArray(product.variants) ? product.variants : [];
+
+  if (variants.length > 0) {
+    const selectedColor = String(item.color || '').trim().toLowerCase();
+    const selectedColorCode = String(item.colorCode || '').trim().toLowerCase();
+    const matched = variants.find((variant) => {
+      const variantColor = String(variant.color || '').trim().toLowerCase();
+      const variantColorCode = String(variant.colorCode || '').trim().toLowerCase();
+      return (
+        (selectedColor && variantColor === selectedColor) ||
+        (selectedColorCode && variantColorCode === selectedColorCode)
+      );
+    });
+
+    return Math.max(0, Number(matched?.stock || 0));
+  }
+
+  return Math.max(0, Number(product.stock || 0));
+}
+
+function validateCheckoutStock() {
+  const items = cartData?.items || [];
+  for (const item of items) {
+    const maxStock = resolveItemAvailableStock(item);
+    if (Number(item.quantity || 0) > maxStock) {
+      return {
+        ok: false,
+        message: `San pham ${item.product?.name || ''} chi con ${maxStock} trong kho. Vui long cap nhat gio hang.`,
+      };
+    }
+  }
+
+  return { ok: true };
+}
+
 // ─── Auth guard ────────────────────────────────────────────────────────────
 // ─── Location API ────────────────────────────────────────────────────────
 async function initLocationSelectors() {
@@ -145,9 +182,12 @@ async function initCheckout() {
             name: product.name,
             price: product.price,
             image: product.image,
+            stock: product.stock || 0,
           },
           quantity: product.quantity,
           size: product.size,
+          color: product.color || '',
+          colorCode: product.colorCode || '',
         }],
       };
     } else {
@@ -183,6 +223,8 @@ function renderItems() {
 
   list.innerHTML = items.map(item => {
     const p = item.product || {};
+    const maxStock = resolveItemAvailableStock(item);
+    const colorLine = item.color ? `<span>Mau: ${item.color}</span>` : '';
     return `
       <div class="order-item">
         <img src="${p.image || ''}" alt="${p.name || ''}" class="order-item-img"
@@ -190,8 +232,10 @@ function renderItems() {
         <div class="order-item-info">
           <h5>${p.name || 'Sản phẩm'}</h5>
           <div class="oi-meta">
+            ${colorLine}
             <span class="oi-size-tag">Size: ${item.size || 'M'}</span>
             <span>Số lượng: ${item.quantity}</span>
+            <span>Con lai: ${maxStock}</span>
           </div>
           <div class="oi-bottom">
             <span class="oi-price">${formatVnd(p.price || 0)}</span>
@@ -332,11 +376,21 @@ async function placeOrder() {
     qty: item.quantity,
     image: item.product.image,
     price: item.product.price,
+    size: item.size || '',
+    color: item.color || '',
+    colorCode: item.colorCode || '',
     product: item.product._id,
   }));
 
   if (orderItems.length === 0) {
     alert('Giỏ hàng đang trống.'); return;
+  }
+
+  const stockCheck = validateCheckoutStock();
+  if (!stockCheck.ok) {
+    alert(stockCheck.message);
+    window.location.href = 'cart.html';
+    return;
   }
 
   const orderData = {

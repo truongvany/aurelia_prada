@@ -1,24 +1,185 @@
 // Lớp API hỗ trợ giao tiếp với backend
 export const API_URL = '/api';
 
-function getAuthHeaders() {
+function getApiOrigin() {
+  if (typeof window === 'undefined') return '';
+
+  if (/^https?:\/\//i.test(API_URL)) {
+    try {
+      return new URL(API_URL).origin;
+    } catch {
+      return window.location.origin;
+    }
+  }
+
+  // Vite dev server usually runs on :3000 while backend serves uploads on :5000.
+  if (window.location.port === '3000') {
+    return `${window.location.protocol}//${window.location.hostname}:5000`;
+  }
+
+  return window.location.origin;
+}
+
+function resolveMediaUrl(url) {
+  if (!url || typeof url !== 'string') return url;
+  if (/^https?:\/\//i.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
+    return url;
+  }
+
+  const origin = getApiOrigin();
+  if (!origin) return url;
+
+  if (url.startsWith('/')) {
+    return `${origin}${url}`;
+  }
+  return `${origin}/${url}`;
+}
+
+function normalizeProductMedia(product) {
+  if (!product || typeof product !== 'object') return product;
+
+  const normalized = { ...product };
+  normalized.image = resolveMediaUrl(normalized.image);
+
+  if (Array.isArray(normalized.images)) {
+    normalized.images = normalized.images.map((img) => resolveMediaUrl(img));
+  }
+
+  if (Array.isArray(normalized.variants)) {
+    normalized.variants = normalized.variants.map((variant) => ({
+      ...variant,
+      images: Array.isArray(variant.images)
+        ? variant.images.map((img) => resolveMediaUrl(img))
+        : variant.images,
+    }));
+  }
+
+  if (normalized.sizeGuideImage) {
+    normalized.sizeGuideImage = resolveMediaUrl(normalized.sizeGuideImage);
+  }
+
+  return normalized;
+}
+
+function normalizeCartMedia(cart) {
+  if (!cart || !Array.isArray(cart.items)) return cart;
+
+  return {
+    ...cart,
+    items: cart.items.map((item) => ({
+      ...item,
+      product: normalizeProductMedia(item.product),
+    })),
+  };
+}
+
+function normalizeOrderMedia(order) {
+  if (!order || !Array.isArray(order.orderItems)) return order;
+
+  return {
+    ...order,
+    orderItems: order.orderItems.map((item) => ({
+      ...item,
+      image: resolveMediaUrl(item.image),
+    })),
+  };
+}
+
+function parseUserInfo() {
   const userInfoStr = localStorage.getItem('userInfo');
+  if (!userInfoStr) return null;
+
+  try {
+    return JSON.parse(userInfoStr);
+  } catch {
+    localStorage.removeItem('userInfo');
+    return null;
+  }
+}
+
+function redirectToLoginWithReturnUrl() {
+  const redirectTo = `${window.location.pathname}${window.location.search}`;
+  window.location.href = `/pages/login.html?redirect=${encodeURIComponent(redirectTo)}`;
+}
+
+async function buildApiError(res, fallbackMessage) {
+  let message = fallbackMessage;
+  try {
+    const data = await res.json();
+    message = data?.message || data?.error || fallbackMessage;
+  } catch {
+    // Keep fallback message when response body is empty or invalid JSON.
+  }
+
+  const err = new Error(message);
+  err.status = res.status;
+  return err;
+}
+
+function getAuthHeaders() {
+  const userInfo = parseUserInfo();
   let headers = {
     'Content-Type': 'application/json',
   };
-  if (userInfoStr) {
-    const userInfo = JSON.parse(userInfoStr);
-    if (userInfo.token) {
-      headers['Authorization'] = `Bearer ${userInfo.token}`;
-    }
+
+  if (userInfo?.token) {
+    headers['Authorization'] = `Bearer ${userInfo.token}`;
   }
+
   return headers;
+}
+
+function getAuthHeadersWithoutContentType() {
+  const userInfo = parseUserInfo();
+  const headers = {};
+
+  if (userInfo?.token) {
+    headers['Authorization'] = `Bearer ${userInfo.token}`;
+  }
+
+  return headers;
+}
+
+export async function ensureAdminSession() {
+  const userInfo = parseUserInfo();
+
+  if (!userInfo?.token || userInfo.role !== 'admin') {
+    localStorage.removeItem('userInfo');
+    redirectToLoginWithReturnUrl();
+    return false;
+  }
+
+  const res = await fetch(`${API_URL}/auth/profile`, {
+    headers: getAuthHeaders(),
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    localStorage.removeItem('userInfo');
+    redirectToLoginWithReturnUrl();
+    return false;
+  }
+
+  if (!res.ok) {
+    throw await buildApiError(res, 'Không thể xác thực phiên đăng nhập.');
+  }
+
+  const profile = await res.json();
+  if (profile?.role !== 'admin') {
+    localStorage.removeItem('userInfo');
+    redirectToLoginWithReturnUrl();
+    return false;
+  }
+
+  return true;
 }
 
 export async function fetchProducts() {
   const res = await fetch(`${API_URL}/products`);
   if (!res.ok) throw new Error('Failed to fetch products');
-  return res.json();
+  const products = await res.json();
+  return Array.isArray(products)
+    ? products.map((product) => normalizeProductMedia(product))
+    : [];
 }
 
 export async function fetchCategories() {
@@ -30,7 +191,8 @@ export async function fetchCategories() {
 export async function fetchProductById(id) {
   const res = await fetch(`${API_URL}/products/${id}`);
   if (!res.ok) throw new Error('Failed to fetch product');
-  return res.json();
+  const product = await res.json();
+  return normalizeProductMedia(product);
 }
 
 export async function getVoucherByCode(code) {
@@ -80,8 +242,7 @@ export function logoutUser() {
 }
 
 export function getUserInfo() {
-  const str = localStorage.getItem('userInfo');
-  return str ? JSON.parse(str) : null;
+  return parseUserInfo();
 }
 
 // Giỏ hàng (Cart)
@@ -90,17 +251,19 @@ export async function fetchCart() {
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error('Failed to load cart');
-  return res.json();
+  const cart = await res.json();
+  return normalizeCartMedia(cart);
 }
 
-export async function addToCart(productId, quantity, size) {
+export async function addToCart(productId, quantity, size, color = '', colorCode = '') {
   const res = await fetch(`${API_URL}/cart`, {
     method: 'POST',
     headers: getAuthHeaders(),
-    body: JSON.stringify({ productId, quantity, size }),
+    body: JSON.stringify({ productId, quantity, size, color, colorCode }),
   });
-  if (!res.ok) throw new Error('Failed to add to cart');
-  return res.json();
+  if (!res.ok) throw await buildApiError(res, 'Failed to add to cart');
+  const cart = await res.json();
+  return normalizeCartMedia(cart);
 }
 
 export async function removeFromCart(itemId) {
@@ -109,7 +272,8 @@ export async function removeFromCart(itemId) {
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error('Failed to remove from cart');
-  return res.json();
+  const cart = await res.json();
+  return normalizeCartMedia(cart);
 }
 
 export async function clearCart() {
@@ -127,8 +291,9 @@ export async function updateCartItemQuantity(itemId, quantity) {
     headers: getAuthHeaders(),
     body: JSON.stringify({ quantity }),
   });
-  if (!res.ok) throw new Error('Failed to update cart item quantity');
-  return res.json();
+  if (!res.ok) throw await buildApiError(res, 'Failed to update cart item quantity');
+  const cart = await res.json();
+  return normalizeCartMedia(cart);
 }
 
 // User Profile
@@ -189,7 +354,8 @@ export async function getOrderById(id) {
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error('Failed to fetch order');
-  return res.json();
+  const order = await res.json();
+  return normalizeOrderMedia(order);
 }
 
 
@@ -198,7 +364,10 @@ export async function getMyOrders() {
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error('Failed to load orders');
-  return res.json();
+  const orders = await res.json();
+  return Array.isArray(orders)
+    ? orders.map((order) => normalizeOrderMedia(order))
+    : [];
 }
 
 // Admin APIs
@@ -207,7 +376,10 @@ export async function fetchAllOrders() {
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error('Failed to load orders');
-  return res.json();
+  const orders = await res.json();
+  return Array.isArray(orders)
+    ? orders.map((order) => normalizeOrderMedia(order))
+    : [];
 }
 
 export async function fetchAllUsers() {
@@ -232,7 +404,24 @@ export async function fetchDashboardStats() {
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error('Failed to load dashboard stats');
-  return res.json();
+  const data = await res.json();
+
+  if (!data || !Array.isArray(data.recentSales)) {
+    return data;
+  }
+
+  return {
+    ...data,
+    recentSales: data.recentSales.map((sale) => ({
+      ...sale,
+      orderItems: Array.isArray(sale.orderItems)
+        ? sale.orderItems.map((item) => ({
+            ...item,
+            image: resolveMediaUrl(item.image),
+          }))
+        : sale.orderItems,
+    })),
+  };
 }
 
 // Product CRUD
@@ -242,7 +431,7 @@ export async function createProduct(productData) {
     headers: getAuthHeaders(),
     body: JSON.stringify(productData),
   });
-  if (!res.ok) throw new Error('Failed to create product');
+  if (!res.ok) throw await buildApiError(res, 'Failed to create product');
   return res.json();
 }
 
@@ -252,7 +441,21 @@ export async function updateProduct(id, productData) {
     headers: getAuthHeaders(),
     body: JSON.stringify(productData),
   });
-  if (!res.ok) throw new Error('Failed to update product');
+  if (!res.ok) throw await buildApiError(res, 'Failed to update product');
+  return res.json();
+}
+
+export async function uploadProductImage(file) {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const res = await fetch(`${API_URL}/products/upload`, {
+    method: 'POST',
+    headers: getAuthHeadersWithoutContentType(),
+    body: formData,
+  });
+
+  if (!res.ok) throw await buildApiError(res, 'Failed to upload image');
   return res.json();
 }
 

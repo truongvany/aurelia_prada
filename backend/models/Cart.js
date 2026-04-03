@@ -23,6 +23,14 @@ const cartSchema = new mongoose.Schema(
         size: {
           type: String, // E.g: S, M, L...
         },
+        color: {
+          type: String,
+          default: '',
+        },
+        colorCode: {
+          type: String,
+          default: '',
+        },
       },
     ],
   },

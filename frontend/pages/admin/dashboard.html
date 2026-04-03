@@ -14,95 +14,123 @@
     <div id="admin-app">
       <!-- Dashboard Main -->
       <main class="dashboard-main">
-        <div class="dashboard-title-row">
-          <div>
-            <h2>Chào buổi tối, Admin</h2>
-            <p>Dưới đây là một số cập nhật về hiệu suất hoạt động của hệ thống hôm nay.</p>
+        <section class="dashboard-hero">
+          <div class="dashboard-title-row">
+            <div>
+              <h2>Chào buổi tối, Admin</h2>
+              <p>Dưới đây là một số cập nhật về hiệu suất hoạt động của hệ thống hôm nay.</p>
+            </div>
+            <div class="dashboard-hero-actions">
+              <small id="dashboard-updated-at">Cập nhật lúc: --:--</small>
+              <button class="btn-export">Xuất báo cáo</button>
+            </div>
           </div>
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <small style="color: var(--admin-text-muted); font-weight: 600;">Cập nhật lúc: 20:06</small>
-            <button class="btn-export">XUẤT BÁO CÁO</button>
+
+          <div class="dashboard-hero-chips">
+            <span class="hero-chip">Realtime</span>
+            <span class="hero-chip">Revenue Tracking</span>
+            <span class="hero-chip">Order Flow</span>
           </div>
-        </div>
+        </section>
 
         <!-- KPI Grid -->
-        <div class="kpi-grid">
-          <!-- Revenue -->
-          <div class="kpi-card">
-            <div class="kpi-label">
-              TỔNG DOANH THU
+        <section class="kpi-grid">
+          <article class="kpi-card kpi-card--revenue">
+            <div class="kpi-top-row">
+              <div class="kpi-label">Tổng doanh thu</div>
+              <div class="kpi-icon" aria-hidden="true">₫</div>
             </div>
             <div class="kpi-value-row">
               <span class="kpi-value" id="stat-revenue">0đ</span>
-              <span class="kpi-trend up">+12.5%</span>
+              <span class="kpi-trend up" id="trend-revenue">+0%</span>
             </div>
+            <p class="kpi-note" id="stat-revenue-note">Doanh thu trung bình: 0đ / tháng</p>
             <div class="kpi-progress">
-              <div class="kpi-progress-bar" style="width: 75%"></div>
+              <div class="kpi-progress-bar" id="revenue-progress" style="width: 0%"></div>
             </div>
-          </div>
-          <!-- Orders -->
-          <div class="kpi-card">
-            <div class="kpi-label">
-              TỔNG ĐƠN HÀNG
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-top-row">
+              <div class="kpi-label">Tổng đơn hàng</div>
+              <div class="kpi-icon" aria-hidden="true">#</div>
             </div>
             <div class="kpi-value-row">
               <span class="kpi-value" id="stat-orders">0</span>
-              <span class="kpi-trend up">+3.2%</span>
+              <span class="kpi-trend up" id="trend-orders">+0%</span>
             </div>
-            <p style="font-size: 10px; margin-top: 5px;">98 đơn hàng chờ xử lý</p>
-          </div>
-          <!-- Customers -->
-          <div class="kpi-card">
-            <div class="kpi-label">
-              KHÁCH HÀNG
+            <p class="kpi-note" id="stat-orders-note">Không có dữ liệu đơn hàng</p>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-top-row">
+              <div class="kpi-label">Khách hàng</div>
+              <div class="kpi-icon" aria-hidden="true">👤</div>
             </div>
             <div class="kpi-value-row">
               <span class="kpi-value" id="stat-customers">0</span>
-              <span class="kpi-trend up">+18.1%</span>
+              <span class="kpi-trend up" id="trend-customers">+0%</span>
             </div>
-          </div>
-          <!-- Products -->
-          <div class="kpi-card">
-            <div class="kpi-label">
-              SẢN PHẨM HOẠT ĐỘNG
+            <p class="kpi-note" id="stat-customers-note">Tập khách hàng đang hoạt động</p>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-top-row">
+              <div class="kpi-label">Sản phẩm hoạt động</div>
+              <div class="kpi-icon" aria-hidden="true">✦</div>
             </div>
             <div class="kpi-value-row">
               <span class="kpi-value" id="stat-products">0</span>
-              <span style="font-size: 11px; color: var(--muted); font-weight: 700; margin-left: 5px;">Stable</span>
+              <span class="kpi-trend up" id="trend-products">Stable</span>
             </div>
-            <p style="font-size: 10px; margin-top: 5px;">12 mã sắp hết hàng</p>
-          </div>
-        </div>
+            <p class="kpi-note" id="stat-products-note">Danh mục đang hiển thị tốt</p>
+          </article>
+        </section>
 
         <!-- Charts + Sales -->
-        <div class="dashboard-layout">
-          <!-- Chart -->
-          <div class="chart-card">
-            <div class="card-header">
+        <section class="dashboard-layout">
+          <article class="chart-card chart-card--premium">
+            <div class="card-header card-header--tight">
               <h3>Tổng quan doanh số</h3>
-              <div style="display: flex; gap: 8px;">
-                <small style="color: var(--admin-sidebar); font-weight: 800; border-bottom: 2px solid var(--admin-sidebar);">TUẦN</small>
-                <small style="color: var(--admin-text-muted); font-weight: 800;">THÁNG</small>
+              <small class="chart-heading-note">6 tháng gần nhất</small>
+            </div>
+
+            <div class="chart-meta-strip">
+              <div class="chart-meta-item">
+                <span>Tổng doanh thu 6 tháng</span>
+                <strong id="chart-total-revenue">0đ</strong>
+              </div>
+              <div class="chart-meta-item">
+                <span>Tháng cao nhất</span>
+                <strong id="chart-best-month">-</strong>
+              </div>
+              <div class="chart-meta-item">
+                <span>Mức tăng gần nhất</span>
+                <strong id="chart-last-growth">0%</strong>
               </div>
             </div>
-            <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">DỮ LIỆU HIỆU SUẤT THEO THÁNG</p>
-            <div class="bar-chart" id="dashboard-chart">
-              <!-- JS Injected Bars -->
-            </div>
-          </div>
 
-          <!-- List -->
-          <div class="list-card">
-            <div class="card-header">
-              <h3>Đơn hàng gần đây</h3>
+            <div class="chart-shell">
+              <div class="chart-grid-lines" aria-hidden="true"></div>
+              <svg class="dashboard-line-chart" id="dashboard-line-chart" viewBox="0 0 1000 240" preserveAspectRatio="none"></svg>
+              <div class="bar-chart" id="dashboard-chart"></div>
             </div>
+
+            <div class="chart-axis" id="dashboard-chart-axis"></div>
+          </article>
+
+          <aside class="list-card">
+            <div class="card-header card-header--tight">
+              <h3>Đơn hàng gần đây</h3>
+              <small class="chart-heading-note" id="recent-orders-count">0 giao dịch</small>
+            </div>
+
             <div class="sales-list" id="recent-sales-list">
               <!-- JS Injected Sales -->
             </div>
-            <button class="btn-view-all-trans">XEM TẤT CẢ GIAO DỊCH</button>
-          </div>
-        </div>
-
+            <button class="btn-view-all-trans">Xem tất cả giao dịch</button>
+          </aside>
+        </section>
       </main>
     </div>
 

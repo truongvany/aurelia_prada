@@ -6,6 +6,28 @@ let cartData = null;          // Cart from API: { _id, items: [{_id, product, qu
 let appliedVoucher = null;    // { code, discountType, discountAmount, minOrderValue }
 let isLoading = false;
 
+function resolveItemAvailableStock(item) {
+  const product = item.product || {};
+  const variants = Array.isArray(product.variants) ? product.variants : [];
+
+  if (variants.length > 0) {
+    const selectedColor = String(item.color || '').trim().toLowerCase();
+    const selectedColorCode = String(item.colorCode || '').trim().toLowerCase();
+    const matched = variants.find((variant) => {
+      const variantColor = String(variant.color || '').trim().toLowerCase();
+      const variantColorCode = String(variant.colorCode || '').trim().toLowerCase();
+      return (
+        (selectedColor && variantColor === selectedColor) ||
+        (selectedColorCode && variantColorCode === selectedColorCode)
+      );
+    });
+
+    return Math.max(0, Number(matched?.stock || 0));
+  }
+
+  return Math.max(0, Number(product.stock || 0));
+}
+
 // ─── Computed ─────────────────────────────────────────────────────────────────
 function getItemsTotal() {
   if (!cartData || !cartData.items) return 0;
@@ -91,6 +113,8 @@ function renderCartItems() {
     const price = product.price || 0;
     const itemTotal = price * item.quantity;
     const itemId = item._id;
+    const maxStock = resolveItemAvailableStock(item);
+    const colorLabel = item.color ? `Mau: ${item.color} | ` : '';
 
     html += `
       <div class="cart-item-row" data-item-id="${itemId}">
@@ -99,14 +123,14 @@ function renderCartItems() {
                onerror="this.style.background='#f0f0f0'">
           <div class="cart-item-info">
             <h4>${product.name || 'Sản phẩm'}</h4>
-            <p>Size: ${item.size || 'M'}</p>
+            <p>${colorLabel}Size: ${item.size || 'M'} | Con: ${maxStock}</p>
             <div class="cart-item-price-unit">${formatVnd(price)}</div>
           </div>
         </div>
         <div class="cart-item-qty">
           <button class="qty-btn minus" data-item-id="${itemId}" aria-label="Giảm">−</button>
           <span class="qty-val">${item.quantity}</span>
-          <button class="qty-btn plus" data-item-id="${itemId}" data-product-id="${product._id || ''}" aria-label="Tăng">+</button>
+          <button class="qty-btn plus" data-item-id="${itemId}" data-product-id="${product._id || ''}" ${item.quantity >= maxStock ? 'disabled' : ''} aria-label="Tăng">+</button>
         </div>
         <div class="cart-item-total">
           ${formatVnd(itemTotal)}
@@ -180,13 +204,22 @@ function setupItemListeners() {
         const productId = btn.dataset.productId;
         const item = cartData.items.find(i => i._id === itemId);
         if (item && productId) {
-          cartData = await addToCart(productId, 1, item.size);
+          const maxStock = resolveItemAvailableStock(item);
+          if (item.quantity >= maxStock) {
+            alert(`So luong toi da cho bien the nay la ${maxStock}.`);
+            return;
+          }
+
+          cartData = await addToCart(productId, 1, item.size, item.color, item.colorCode);
           renderCartItems();
           updateSummary();
           updateCheckoutBtn();
         }
       } catch (e) { console.error(e); }
-      finally { isLoading = false; }
+      finally {
+        isLoading = false;
+        if (document.body.contains(btn)) btn.disabled = false;
+      }
     });
   });
 
@@ -208,7 +241,7 @@ function setupItemListeners() {
         try {
           await removeFromCart(itemId);
           if (item.quantity - 1 > 0) {
-            cartData = await addToCart(item.product._id, item.quantity - 1, item.size);
+            cartData = await addToCart(item.product._id, item.quantity - 1, item.size, item.color, item.colorCode);
           } else {
             cartData = await fetchCart();
           }

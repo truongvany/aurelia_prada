@@ -1,6 +1,74 @@
 const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const Voucher = require('../models/Voucher');
+const Product = require('../models/Product');
+const User = require('../models/User');
+
+function toLower(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function createHttpError(statusCode, message) {
+  const error = new Error(message);
+  error.statusCode = statusCode;
+  return error;
+}
+
+function findMatchingVariant(product, color, colorCode) {
+  const variants = product.variants || [];
+  if (!variants.length) return { variant: null, index: -1 };
+
+  const colorKey = toLower(color);
+  const colorCodeKey = toLower(colorCode);
+
+  const index = variants.findIndex((variant) => {
+    const variantColor = toLower(variant.color);
+    const variantColorCode = toLower(variant.colorCode);
+    return (
+      (colorKey && variantColor === colorKey) ||
+      (colorCodeKey && variantColorCode === colorCodeKey)
+    );
+  });
+
+  if (index < 0) return { variant: null, index: -1 };
+  return { variant: variants[index], index };
+}
+
+function resolveItemStock(product, item) {
+  const variants = product.variants || [];
+  if (variants.length > 0) {
+    if (!toLower(item.color) && !toLower(item.colorCode)) {
+      return {
+        ok: false,
+        message: `San pham ${product.name} can chon mau truoc khi dat hang.`,
+      };
+    }
+
+    const match = findMatchingVariant(product, item.color, item.colorCode);
+    if (!match.variant) {
+      return {
+        ok: false,
+        message: `Khong tim thay bien the mau cho san pham ${product.name}.`,
+      };
+    }
+
+    return {
+      ok: true,
+      availableStock: Math.max(0, Number(match.variant.stock || 0)),
+      variantIndex: match.index,
+      color: match.variant.color || item.color || '',
+      colorCode: match.variant.colorCode || item.colorCode || '',
+    };
+  }
+
+  return {
+    ok: true,
+    availableStock: Math.max(0, Number(product.stock || 0)),
+    variantIndex: -1,
+    color: '',
+    colorCode: '',
+  };
+}
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -19,31 +87,87 @@ const addOrderItems = async (req, res) => {
       discountPrice,
     } = req.body;
 
-    if (orderItems && orderItems.length === 0) {
+    if (!orderItems || orderItems.length === 0) {
       res.status(400).json({ message: 'No order items' });
       return;
     }
 
-    // Process Voucher if provided
+    const normalizedItems = [];
+    const updates = [];
+
+    for (const item of orderItems) {
+      const product = await Product.findById(item.product);
+      if (!product) {
+        throw createHttpError(404, `San pham khong ton tai: ${item.name || item.product}`);
+      }
+
+      const qty = Number(item.qty || item.quantity || 0);
+      if (!Number.isFinite(qty) || qty <= 0) {
+        throw createHttpError(400, `So luong khong hop le cho san pham ${product.name}.`);
+      }
+
+      const resolved = resolveItemStock(product, item);
+      if (!resolved.ok) {
+        throw createHttpError(400, resolved.message);
+      }
+
+      if (qty > resolved.availableStock) {
+        throw createHttpError(
+          400,
+          `San pham ${product.name} chi con ${resolved.availableStock} trong kho cho bien the da chon.`
+        );
+      }
+
+      updates.push({ product, qty, resolved });
+      normalizedItems.push({
+        name: item.name || product.name,
+        qty,
+        image: item.image || product.image || '',
+        price: Number(item.price || product.price || 0),
+        size: item.size || '',
+        color: resolved.color,
+        colorCode: resolved.colorCode,
+        product: product._id,
+      });
+    }
+
+    for (const { product, qty, resolved } of updates) {
+      if (resolved.variantIndex > -1) {
+        product.variants[resolved.variantIndex].stock = Math.max(
+          0,
+          Number(product.variants[resolved.variantIndex].stock || 0) - qty
+        );
+        product.stock = product.variants.reduce(
+          (sum, variant) => sum + Math.max(0, Number(variant.stock || 0)),
+          0
+        );
+      } else {
+        product.stock = Math.max(0, Number(product.stock || 0) - qty);
+      }
+
+      product.totalSold = Math.max(0, Number(product.totalSold || 0) + qty);
+      await product.save();
+    }
+
     if (voucherCode) {
-      const voucher = await Voucher.findOne({ code: voucherCode.toUpperCase(), isActive: true });
+      const voucher = await Voucher.findOne({
+        code: String(voucherCode).toUpperCase(),
+        isActive: true,
+      });
+
       if (voucher) {
-        // Double check validity before finalizing order
         const isExpired = new Date(voucher.expirationDate) < new Date();
         const isMaxed = voucher.maxUsage && voucher.usageCount >= voucher.maxUsage;
-        
+
         if (!isExpired && !isMaxed) {
           voucher.usageCount += 1;
           await voucher.save();
-        } else {
-           console.warn(`Attempted to use invalid/expired voucher: ${voucherCode}`);
-           // Optionally throw error or just proceed without discount if you want to be strict
         }
       }
     }
 
     const order = new Order({
-      orderItems,
+      orderItems: normalizedItems,
       user: req.user._id,
       shippingAddress,
       paymentMethod,
@@ -51,7 +175,7 @@ const addOrderItems = async (req, res) => {
       taxPrice,
       shippingPrice,
       totalPrice,
-      voucherCode, // Store used voucher
+      voucherCode,
       discountPrice: discountPrice || 0,
       status: 'Processing',
     });
@@ -59,7 +183,7 @@ const addOrderItems = async (req, res) => {
     const createdOrder = await order.save();
     res.status(201).json(createdOrder);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -105,20 +229,20 @@ const getMyOrders = async (req, res) => {
   }
 };
 
-// @desc    Tra cứu đơn hàng (khách không đăng nhập): mã đơn + email khớp tài khoản đặt hàng
+// @desc    Tra cuu don hang (khach khong dang nhap): ma don + email khop tai khoan dat hang
 // @route   POST /api/orders/lookup
 // @access  Public
 const lookupOrder = async (req, res) => {
   try {
     const { orderId, email } = req.body || {};
     if (!orderId || !email || typeof email !== 'string') {
-      res.status(400).json({ message: 'Vui lòng nhập mã đơn hàng và email.' });
+      res.status(400).json({ message: 'Vui long nhap ma don hang va email.' });
       return;
     }
 
     const trimmedId = String(orderId).trim();
     if (!mongoose.Types.ObjectId.isValid(trimmedId)) {
-      res.status(400).json({ message: 'Mã đơn hàng không hợp lệ.' });
+      res.status(400).json({ message: 'Ma don hang khong hop le.' });
       return;
     }
 
@@ -128,14 +252,14 @@ const lookupOrder = async (req, res) => {
     );
 
     if (!order || !order.user) {
-      res.status(404).json({ message: 'Không tìm thấy đơn hàng.' });
+      res.status(404).json({ message: 'Khong tim thay don hang.' });
       return;
     }
 
     const orderEmail = (order.user.email || '').toLowerCase().trim();
     const inputEmail = email.toLowerCase().trim();
     if (orderEmail !== inputEmail) {
-      res.status(404).json({ message: 'Không tìm thấy đơn hàng.' });
+      res.status(404).json({ message: 'Khong tim thay don hang.' });
       return;
     }
 
@@ -209,8 +333,6 @@ const updateOrderToDelivered = async (req, res) => {
   }
 };
 
-const User = require('../models/User');
-
 // @desc    Update order status (Admin)
 // @route   PUT /api/orders/:id/status
 // @access  Private/Admin
@@ -219,7 +341,7 @@ const updateOrderStatus = async (req, res) => {
     const { status } = req.body;
     const validStatuses = ['Processing', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
     if (!validStatuses.includes(status)) {
-      return res.status(400).json({ message: 'Trạng thái không hợp lệ.' });
+      return res.status(400).json({ message: 'Trang thai khong hop le.' });
     }
 
     const order = await Order.findById(req.params.id);
@@ -230,22 +352,20 @@ const updateOrderStatus = async (req, res) => {
     if (status === 'Delivered') {
       order.isDelivered = true;
       order.deliveredAt = Date.now();
-      
-      // Calculate and award points if transitioned from not delivered to delivered
+
       if (oldStatus !== 'Delivered') {
         const pointsAwarded = Math.floor(order.totalPrice / 10000);
         if (pointsAwarded > 0) {
           const user = await User.findById(order.user);
           if (user) {
             user.points = (user.points || 0) + pointsAwarded;
-            
-            // Auto Update Membership Level
+
             if (user.points >= 5000) {
               user.membershipLevel = 'VVIP';
             } else if (user.points >= 1000) {
               user.membershipLevel = 'Premium';
             }
-            
+
             await user.save();
           }
         }
@@ -272,4 +392,3 @@ module.exports = {
   updateOrderToDelivered,
   updateOrderStatus,
 };
-

@@ -16,6 +16,12 @@ function setupAuth() {
         if (submitBtn) submitBtn.disabled = true;
         await loginUser(email, password);
         const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        const redirectTarget = new URLSearchParams(window.location.search).get('redirect');
+
+        if (redirectTarget) {
+          window.location.href = redirectTarget;
+          return;
+        }
         
         if (userInfo.role === 'admin') {
           window.location.href = 'admin/dashboard.html';

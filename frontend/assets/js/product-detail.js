@@ -70,6 +70,15 @@ async function initDetail() {
     sizes: ['S', 'M', 'L'] 
   };
 
+  let selectedVariant = currentVariant;
+
+  const qtyInput = document.getElementById('qty-value');
+  const qtyPlus = document.getElementById('qty-plus');
+  const qtyMinus = document.getElementById('qty-minus');
+  const addCartBtn = document.getElementById('add-to-cart-btn');
+  const buyNowBtn = document.getElementById('btn-buy-now-main');
+  const stockState = document.getElementById('product-stock-state');
+
   const allImages = Array.from(new Set([
     product.image,
     ...(product.images || []),
@@ -94,9 +103,49 @@ async function initDetail() {
     if (selectedSizeText) selectedSizeText.textContent = sizes[0] || 'N/A';
   }
 
+  function getAvailableStock() {
+    if (product.variants && product.variants.length > 0) {
+      return Math.max(0, Number(selectedVariant?.stock || 0));
+    }
+    return Math.max(0, Number(product.stock || 0));
+  }
+
+  function updateStockUI() {
+    const availableStock = getAvailableStock();
+
+    if (stockState) {
+      stockState.classList.toggle('out', availableStock <= 0);
+      stockState.textContent = availableStock <= 0
+        ? 'San pham da het hang'
+        : `Con lai: ${availableStock} san pham`;
+    }
+
+    if (qtyInput) {
+      const currentQty = Number(qtyInput.value || 1);
+      const safeQty = availableStock <= 0
+        ? 0
+        : Math.min(Math.max(currentQty, 1), availableStock);
+      qtyInput.value = String(safeQty);
+    }
+
+    if (qtyPlus && qtyInput) {
+      const currentQty = Number(qtyInput.value || 0);
+      qtyPlus.disabled = availableStock <= 0 || currentQty >= availableStock;
+    }
+
+    if (qtyMinus && qtyInput) {
+      const currentQty = Number(qtyInput.value || 0);
+      qtyMinus.disabled = availableStock <= 0 || currentQty <= 1;
+    }
+
+    if (addCartBtn) addCartBtn.disabled = availableStock <= 0;
+    if (buyNowBtn) buyNowBtn.disabled = availableStock <= 0;
+  }
+
   // Initial Render
   renderGallery(allImages, currentVariant.images[0] || product.image);
   renderSizes(currentVariant.sizes);
+  updateStockUI();
 
   if (product.variants && product.variants.length > 0) {
     colorContainer.innerHTML = product.variants.map((v, i) => `
@@ -115,6 +164,7 @@ async function initDetail() {
         dot.classList.add('active');
         
         const variant = product.variants ? product.variants[index] : currentVariant;
+        selectedVariant = variant;
         if (selectedColorText) selectedColorText.textContent = variant.color;
         
         const firstVariantImg = (variant.images && variant.images.length > 0) ? variant.images[0] : product.image;
@@ -125,6 +175,7 @@ async function initDetail() {
         });
 
         renderSizes(variant.sizes);
+        updateStockUI();
     });
   });
 
@@ -135,6 +186,7 @@ async function initDetail() {
         document.querySelectorAll('.size-option').forEach(o => o.classList.remove('active'));
         opt.classList.add('active');
         if (selectedSizeText) selectedSizeText.textContent = opt.getAttribute('data-size');
+      updateStockUI();
     }
   };
 
@@ -149,17 +201,17 @@ async function initDetail() {
     }
   };
 
-  // Quantity control
-  const qtyInput = document.getElementById('qty-value');
-  const qtyPlus = document.getElementById('qty-plus');
-  const qtyMinus = document.getElementById('qty-minus');
   if (qtyPlus && qtyMinus && qtyInput) {
     qtyPlus.onclick = () => {
-        qtyInput.value = parseInt(qtyInput.value) + 1;
+        const next = Number(qtyInput.value || 0) + 1;
+        const maxQty = getAvailableStock();
+        qtyInput.value = String(Math.min(next, maxQty));
+        updateStockUI();
     };
     qtyMinus.onclick = () => {
-        let val = parseInt(qtyInput.value);
-        if (val > 1) qtyInput.value = val - 1;
+        let val = Number(qtyInput.value || 0);
+        if (val > 1) qtyInput.value = String(val - 1);
+        updateStockUI();
     };
   }
 
@@ -173,13 +225,19 @@ async function initDetail() {
     }
 
     // 2. Get selected size and quantity
-    const sizeSelect = document.getElementById('size-select');
-    const qtyInput = document.getElementById('qty-value');
-    const selectedSize = sizeSelect?.value || 'M';
-    const selectedQty = parseInt(qtyInput?.value || '1');
+    const selectedSize = document.querySelector('.size-option.active')?.getAttribute('data-size') || 'M';
+    const selectedQty = Number(qtyInput?.value || '1');
+    const selectedColor = selectedVariant?.color || 'Mac dinh';
+    const selectedColorCode = selectedVariant?.colorCode || '';
+    const availableStock = getAvailableStock();
 
     if (selectedQty < 1) {
       alert('Vui lòng chọn số lượng');
+      return;
+    }
+
+    if (selectedQty > availableStock) {
+      alert(`So luong toi da co the mua la ${availableStock}.`);
       return;
     }
 
@@ -189,8 +247,11 @@ async function initDetail() {
       name: product.name,
       price: product.price,
       image: product.image,
+      stock: availableStock,
       quantity: selectedQty,
       size: selectedSize,
+      color: selectedColor,
+      colorCode: selectedColorCode,
     }));
 
     const inPages = window.location.pathname.includes('/pages/');
@@ -198,7 +259,6 @@ async function initDetail() {
   }
 
   // Buy now click
-  const buyNowBtn = document.getElementById('btn-buy-now-main');
   if (buyNowBtn) {
     buyNowBtn.addEventListener('click', buyNowProduct);
   }
@@ -383,28 +443,37 @@ async function initDetail() {
   }
 
   // Add to cart
-  const addCartBtn = document.getElementById('add-to-cart-btn');
   if (addCartBtn) {
     addCartBtn.onclick = async () => {
       const activeSize = document.querySelector('.size-option.active')?.getAttribute('data-size') || 'L';
-      const activeColor = document.querySelector('.color-dot.active')?.getAttribute('data-color') || 'Mặc định';
+      const activeColor = selectedVariant?.color || document.querySelector('.color-dot.active')?.getAttribute('data-color') || 'Mac dinh';
+      const activeColorCode = selectedVariant?.colorCode || '';
       const qtyStr = qtyInput ? qtyInput.value : '1';
+      const qty = Number(qtyStr);
+      const availableStock = getAvailableStock();
+
+      if (qty > availableStock) {
+        const { showToast } = await import('./common.js');
+        showToast('Thong bao', `Chi con ${availableStock} san pham cho lua chon nay.`, 'error');
+        return;
+      }
       
       addCartBtn.disabled = true;
       const originalText = addCartBtn.textContent;
       addCartBtn.textContent = 'Đang xử lý...';
 
       try {
-        await addToCart(product._id, Number(qtyStr), activeSize);
+        await addToCart(product._id, qty, activeSize, activeColor, activeColorCode);
         updateCartBadge();
         const { showToast } = await import('./common.js');
         showToast('Thành công', `Đã thêm ${qtyStr} sản phẩm (${activeColor} - Size ${activeSize}) vào giỏ hàng!`);
       } catch (error) {
         const { showToast } = await import('./common.js');
-        showToast('Lỗi', 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.', 'error');
+        showToast('Lỗi', error.message || 'Khong the them san pham vao gio.', 'error');
       } finally {
         addCartBtn.disabled = false;
         addCartBtn.textContent = originalText;
+        updateStockUI();
       }
     };
   }

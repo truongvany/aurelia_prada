@@ -1,10 +1,19 @@
-import { fetchAllPromotions, createPromotion, updatePromotion, deletePromotion, fetchProducts } from './api.js';
+import { fetchAllPromotions, createPromotion, updatePromotion, deletePromotion, fetchProducts, ensureAdminSession } from './api.js';
 import { renderAdminLayout } from './admin-layout.js';
 import { formatVnd } from './common.js';
 
 let allProducts = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const isAllowed = await ensureAdminSession();
+    if (!isAllowed) return;
+  } catch (err) {
+    console.error('Không thể xác thực phiên admin:', err);
+    alert(err.message || 'Không thể xác thực phiên đăng nhập.');
+    return;
+  }
+
   renderAdminLayout();
   await loadProducts();
   await renderPromotions();
