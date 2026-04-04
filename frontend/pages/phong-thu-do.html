@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phòng Thử Đồ AI | AURELIA</title>
+    <meta
+      name="description"
+      content="Phòng thử đồ AI: tải ảnh áo và ảnh người mẫu để tạo ảnh thử đồ trực tuyến."
+    />
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/phong-thu-do.css" />
+  </head>
+  <body>
+    <header class="top-nav"></header>
+
+    <main class="tryon-main">
+      <section class="tryon-hero">
+        <div class="container">
+          <p class="tryon-kicker">AURELIA LABS</p>
+          <h1>Phòng Thử Đồ AI</h1>
+          <p class="tryon-subtext">
+            Tải ảnh áo và ảnh người mẫu. FitRoom sẽ tự xử lý tách nền áo khi tạo bản thử đồ.
+          </p>
+          <div class="tryon-badges" aria-label="Try-on highlights">
+            <span>AI Auto Cutout</span>
+            <span>FitRoom Powered</span>
+            <span>Asynchronous Rendering</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="tryon-workspace container">
+        <div class="tryon-card tryon-inputs">
+          <div class="card-head">
+            <h2>Đầu vào</h2>
+            <p>Chuẩn ảnh càng tốt, kết quả càng đẹp.</p>
+          </div>
+
+          <form id="tryon-form" class="tryon-form" novalidate>
+            <div class="upload-grid">
+              <label class="upload-panel" for="garment-image-input">
+                <div class="upload-text">
+                  <strong>Ảnh áo (JPG/PNG/WEBP)</strong>
+                  <span>Có thể dùng ảnh thường, ưu tiên chụp rõ form áo.</span>
+                </div>
+                <input id="garment-image-input" type="file" accept="image/jpeg,image/png,image/webp" required />
+                <div class="preview-wrap" id="garment-preview-wrap">
+                  <img id="garment-preview" alt="Garment preview" />
+                  <div class="empty-state" id="garment-empty">Chưa có ảnh áo</div>
+                </div>
+              </label>
+
+              <label class="upload-panel" for="model-image-input">
+                <div class="upload-text">
+                  <strong>Ảnh người mẫu</strong>
+                  <span>Ảnh chân dung/toàn thân rõ, đủ sáng.</span>
+                </div>
+                <input id="model-image-input" type="file" accept="image/jpeg,image/png,image/webp" required />
+                <div class="preview-wrap" id="model-preview-wrap">
+                  <img id="model-preview" alt="Model preview" />
+                  <div class="empty-state" id="model-empty">Chưa có ảnh người mẫu</div>
+                </div>
+              </label>
+            </div>
+
+            <div class="actions-row">
+              <button id="tryon-submit" class="btn-tryon" type="submit">Tạo ảnh thử đồ</button>
+              <span class="status-pill" id="tryon-status">Sẵn sàng</span>
+            </div>
+          </form>
+
+          <ul class="tips-list">
+            <li>Ảnh áo không bắt buộc tách nền, FitRoom sẽ tự xử lý background.</li>
+            <li>Ảnh người mẫu nên có nền đơn giản để AI nhận dáng chính xác hơn.</li>
+            <li>Bản MVP hiện hỗ trợ xử lý bất đồng bộ, thời gian thường từ 5-30 giây.</li>
+          </ul>
+        </div>
+
+        <div class="tryon-card tryon-output">
+          <div class="card-head">
+            <h2>Kết quả AI</h2>
+            <p id="result-note">Ảnh đầu ra sẽ xuất hiện tại đây sau khi xử lý.</p>
+          </div>
+
+          <div class="result-stage" id="result-stage">
+            <img id="result-image" alt="Try-on result" />
+            <div class="result-placeholder" id="result-placeholder">
+              <h3>Chưa có kết quả</h3>
+              <p>Tải đủ 2 ảnh và bấm Tạo ảnh thử đồ để bắt đầu.</p>
+            </div>
+          </div>
+
+          <div class="job-meta" id="job-meta"></div>
+
+          <div class="history-block">
+            <div class="history-head">
+              <h3>Lịch sử thử đồ</h3>
+              <button class="history-refresh" type="button" id="history-refresh-btn">Làm mới</button>
+            </div>
+            <div class="history-list" id="tryon-history-list">
+              <div class="history-empty">Chưa có lịch sử thử đồ.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer"></footer>
+
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module" src="../assets/js/phong-thu-do.js"></script>
+  </body>
+</html>

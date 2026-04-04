@@ -85,6 +85,17 @@ function normalizeOrderMedia(order) {
   };
 }
 
+function normalizeTryOnJobMedia(job) {
+  if (!job || typeof job !== 'object') return job;
+
+  return {
+    ...job,
+    garmentImageUrl: resolveMediaUrl(job.garmentImageUrl),
+    modelImageUrl: resolveMediaUrl(job.modelImageUrl),
+    resultImageUrl: resolveMediaUrl(job.resultImageUrl),
+  };
+}
+
 function parseUserInfo() {
   const userInfoStr = localStorage.getItem('userInfo');
   if (!userInfoStr) return null;
@@ -243,6 +254,56 @@ export function logoutUser() {
 
 export function getUserInfo() {
   return parseUserInfo();
+}
+
+// AI Try-on
+export async function createTryOnJob({ garmentImage, modelImage, productId = '' }) {
+  const formData = new FormData();
+  formData.append('garmentImage', garmentImage);
+  formData.append('modelImage', modelImage);
+  if (productId) formData.append('productId', productId);
+
+  const res = await fetch(`${API_URL}/tryon/jobs`, {
+    method: 'POST',
+    headers: getAuthHeadersWithoutContentType(),
+    body: formData,
+  });
+
+  if (!res.ok) throw await buildApiError(res, 'Failed to create try-on job');
+
+  const data = await res.json();
+  return {
+    ...data,
+    job: normalizeTryOnJobMedia(data.job),
+  };
+}
+
+export async function fetchTryOnJob(jobId) {
+  const res = await fetch(`${API_URL}/tryon/jobs/${jobId}`, {
+    headers: getAuthHeaders(),
+  });
+
+  if (!res.ok) throw await buildApiError(res, 'Failed to fetch try-on job');
+
+  const data = await res.json();
+  return {
+    ...data,
+    job: normalizeTryOnJobMedia(data.job),
+  };
+}
+
+export async function fetchMyTryOnJobs(limit = 10) {
+  const res = await fetch(`${API_URL}/tryon/jobs/my?limit=${encodeURIComponent(limit)}`, {
+    headers: getAuthHeaders(),
+  });
+
+  if (!res.ok) throw await buildApiError(res, 'Failed to fetch try-on jobs');
+
+  const data = await res.json();
+  return {
+    ...data,
+    jobs: Array.isArray(data.jobs) ? data.jobs.map((job) => normalizeTryOnJobMedia(job)) : [],
+  };
 }
 
 // Giỏ hàng (Cart)

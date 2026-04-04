@@ -17,7 +17,8 @@ export default defineConfig({
         adminOrders: 'pages/admin/orders.html',
         adminCustomers: 'pages/admin/customers.html',
         adminSettings: 'pages/admin/settings.html',
-        accessories: 'pages/accessories.html'
+        accessories: 'pages/accessories.html',
+        phongThuDo: 'pages/phong-thu-do.html'
       }
     }
   },

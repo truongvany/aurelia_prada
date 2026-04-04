@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 const connectDB = require('./config/db');
+const { startTryOnCleanupScheduler } = require('./services/tryOnCleanupService');
 
 // Connect to MongoDB
 connectDB();
@@ -24,6 +25,7 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const voucherRoutes = require('./routes/voucherRoutes');
 const promotionRoutes = require('./routes/promotionRoutes');
+const tryOnRoutes = require('./routes/tryOnRoutes');
 
 // Mount Routes
 app.use('/api/auth', authRoutes);
@@ -35,6 +37,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/vouchers', voucherRoutes);
 app.use('/api/promotions', promotionRoutes);
+app.use('/api/tryon', tryOnRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
@@ -62,4 +65,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`\n✨ Server is running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
   console.log(`📍 API Base URL: http://localhost:${PORT}/api\n`);
+  startTryOnCleanupScheduler();
 });
