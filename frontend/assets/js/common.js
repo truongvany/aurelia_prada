@@ -714,7 +714,11 @@ async function initMegaMenu() {
 
     // 1. Populate Fashion Menu
     if (fashionContainer) {
-        const fashionGroups = ['ÁO', 'ÁO KHOÁC', 'QUẦN & VÁY'];
+        const fashionGroups = [
+            { label: 'ÁO', aliases: ['ÁO'] },
+            { label: 'ÁO KHOÁC', aliases: ['ÁO KHOÁC'] },
+            { label: 'QUẦN', aliases: ['QUẦN', 'QUẦN & VÁY'] }
+        ];
         let fashionHtml = `
           <div class="mega-column">
             <h5>TẤT CẢ SẢN PHẨM</h5>
@@ -727,12 +731,12 @@ async function initMegaMenu() {
           </div>
         `;
 
-        fashionGroups.forEach(groupName => {
-            const groupCats = categories.filter(c => c.group === groupName);
+        fashionGroups.forEach(groupConfig => {
+            const groupCats = categories.filter(c => groupConfig.aliases.includes(c.group));
             if (groupCats.length > 0) {
                 fashionHtml += `
                   <div class="mega-column">
-                    <h5>${groupName}</h5>
+                    <h5>${groupConfig.label}</h5>
                     <div class="mega-links-stack">
                       ${groupCats.map(c => `<a href="${shopHref}?category=${c.name}" class="mega-item-link">${c.name}</a>`).join('')}
                     </div>

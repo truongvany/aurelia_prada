@@ -225,6 +225,13 @@ const seedData = async () => {
             'https://images.unsplash.com/photo-1590548784585-645d89030875?auto=format&fit=crop&w=600&q=80', // Perfume/Misc
             'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80', // Watch
         ];
+        const pantsImages = [
+            'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1604176424472-9d4d0f7f6f6f?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?auto=format&fit=crop&w=600&q=80'
+        ];
 
         const productsToCreate = [];
 
@@ -233,19 +240,21 @@ const seedData = async () => {
             const catName = pick(weightedCategoryPool, i);
             const randomPrice = Math.floor(Math.random() * (1500000 - 350000) + 350000); // 350k - 1.5M
             const randomBadge = Math.random() > 0.5 ? 'Sale' : (Math.random() > 0.5 ? 'New' : 'Best Seller');
+            const isShirt = shirtCategories.includes(catName);
+            const isPants = pantsCategories.includes(catName);
+            const namePrefix = isShirt ? 'Áo' : (isPants ? 'Quần' : catName);
 
             // Special image selection for accessory categories
             let itemImage = images[i % images.length];
+            if (isPants) {
+                itemImage = pantsImages[i % pantsImages.length];
+            }
             const accImgMap = {
                 'Túi xách': 0, 'Ví': 2, 'Kính mắt': 3, 'Thắt lưng': 5, 'Mũ': 6, 'Trang sức': 7, 'Giày dép': 4
             };
             if (accImgMap[catName] !== undefined) {
                 itemImage = images[accImgMap[catName]];
             }
-
-            const isShirt = shirtCategories.includes(catName);
-            const isPants = pantsCategories.includes(catName);
-            const namePrefix = isShirt ? 'Áo' : (isPants ? 'Quần' : catName);
 
             const shouldHaveVariants = i % 3 === 0;
             const variantColors = shouldHaveVariants ? sampleUnique(colorOptions, randomInt(2, 3)) : [];
@@ -285,6 +294,46 @@ const seedData = async () => {
                 rating: Number((Math.random() * 0.8 + 4.2).toFixed(1)),
                 numReviews: randomInt(8, 250),
                 totalSold: randomInt(10, 1200)
+            });
+        }
+
+        // Add dedicated pants products so THỜI TRANG page always has rich QUẦN inventory.
+        const pantsNameSeries = ['Tailored Fit', 'Straight Cut', 'Relaxed Wide Leg', 'Slim Tapered'];
+        for (let i = 0; i < 24; i++) {
+            const catName = pick(pantsCategories, i);
+            const mainImage = pantsImages[i % pantsImages.length];
+            const accentColor = pick(colorOptions, i);
+            const stock = randomInt(18, 90);
+
+            productsToCreate.push({
+                name: `Quần ${pick(pantsNameSeries, i)} ${i + 1}`,
+                price: Math.floor(Math.random() * (1450000 - 390000) + 390000),
+                originalPrice: Math.random() > 0.65 ? Math.floor(Math.random() * (1850000 - 1200000) + 1200000) : null,
+                category: catMap[catName],
+                color: accentColor.color,
+                image: mainImage,
+                images: [
+                    mainImage,
+                    pantsImages[(i + 1) % pantsImages.length],
+                    pantsImages[(i + 2) % pantsImages.length]
+                ],
+                variants: [
+                    {
+                        color: accentColor.color,
+                        colorCode: accentColor.colorCode,
+                        images: [mainImage, pantsImages[(i + 1) % pantsImages.length]],
+                        sizes: sampleUnique(sizeOptions, randomInt(3, 5)),
+                        stock
+                    }
+                ],
+                badge: i % 4 === 0 ? 'Best Seller' : (i % 3 === 0 ? 'Sale' : 'New'),
+                stock,
+                material: pick(materials, i),
+                collectionName: pick(collections, i),
+                status: getStatusByStock(stock),
+                rating: Number((Math.random() * 0.7 + 4.3).toFixed(1)),
+                numReviews: randomInt(20, 260),
+                totalSold: randomInt(80, 1600)
             });
         }
 
@@ -483,7 +532,7 @@ const seedData = async () => {
         await Order.insertMany(ordersToCreate);
 
         console.log('✅ Unified seed completed: users, categories, products, vouchers.');
-        console.log('📦 Added QUẦN categories and increased ÁO product density.');
+        console.log('📦 Added dedicated QUẦN seed products for the THỜI TRANG page.');
         console.log(`👥 Users: ${createdUsers.length} | 🛍️ Products: ${createdProducts.length} | 🧾 Orders: ${ordersToCreate.length} | 🛒 Carts: ${cartsToCreate.length}`);
         process.exit();
     } catch (error) {

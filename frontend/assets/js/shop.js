@@ -96,16 +96,22 @@ async function initShop() {
     const colFilter = document.getElementById('col-filter');
 
     if (catFilter || colFilter) {
-      const catGroups = ['ÁO', 'ÁO KHOÁC', 'QUẦN & VÁY', 'PHỤ KIỆN'];
-      const colGroups = ['SẢN PHẨM ĐẶC TRƯNG', 'THEO DỊP', 'THEO MÙA'];
+      const categoryGroupConfig = [
+        { label: 'ÁO', aliases: ['ÁO'] },
+        { label: 'ÁO KHOÁC', aliases: ['ÁO KHOÁC'] },
+        { label: 'QUẦN', aliases: ['QUẦN', 'QUẦN & VÁY'] },
+        { label: 'PHỤ KIỆN', aliases: ['PHỤ KIỆN'] }
+      ];
+      const collectionGroups = ['SẢN PHẨM ĐẶC TRƯNG', 'THEO DỊP', 'THEO MÙA'];
+      const collectionGroupConfig = collectionGroups.map(groupName => ({ label: groupName, aliases: [groupName] }));
 
-      const generateFilterHtml = (targetGroups) => {
-        return targetGroups.map(groupName => {
-          const groupCats = categories.filter(c => c.group === groupName);
+      const generateFilterHtml = (groupConfigList) => {
+        return groupConfigList.map(groupConfig => {
+          const groupCats = categories.filter(c => groupConfig.aliases.includes(c.group));
           if (groupCats.length === 0) return '';
           return `
             <div class="filter-group-section" style="margin-bottom: 16px;">
-              <h6 class="filter-section-title">${groupName}</h6>
+              <h6 class="filter-section-title">${groupConfig.label}</h6>
               <div class="filter-links-list">
                 ${groupCats.map(c => `
                   <label class="filter-item">
@@ -120,8 +126,8 @@ async function initShop() {
         }).join('');
       };
 
-      if (catFilter) catFilter.innerHTML = generateFilterHtml(catGroups);
-      if (colFilter) colFilter.innerHTML = generateFilterHtml(colGroups);
+      if (catFilter) catFilter.innerHTML = generateFilterHtml(categoryGroupConfig);
+      if (colFilter) colFilter.innerHTML = generateFilterHtml(collectionGroupConfig);
     }
 
     // 2. Initialize Price Slider
