@@ -78,10 +78,12 @@ function buildUserShell() {
   const shopHref = inPagesFolder ? 'shop.html' : 'pages/shop.html';
   const profileHref = inPagesFolder ? 'profile.html' : 'pages/profile.html';
   const cartHref = inPagesFolder ? 'cart.html' : 'pages/cart.html';
+  const adminDashboardHref = inPagesFolder ? 'admin/dashboard.html' : 'pages/admin/dashboard.html';
   const favHref = `${profileHref}?tab=wishlist`;
   const loginHref = inPagesFolder ? 'login.html' : 'pages/login.html';
   const registerHref = inPagesFolder ? 'register.html' : 'pages/register.html';
   const membershipHref = inPagesFolder ? 'membership.html' : 'pages/membership.html';
+  const aboutHref = inPagesFolder ? 'about.html' : 'pages/about.html';
   const salePageHref = inPagesFolder ? 'sale.html' : 'pages/sale.html';
   const collectionsHref = inPagesFolder ? 'collections.html' : 'pages/collections.html';
   const tryOnHref = inPagesFolder ? 'phong-thu-do.html' : 'pages/phong-thu-do.html';
@@ -92,6 +94,14 @@ function buildUserShell() {
   const storesHref = inPagesFolder ? 'stores.html' : 'pages/stores.html';
   const storeHref = shopHref; // Keep for other uses if any
   const accessoriesHref = inPagesFolder ? 'accessories.html' : 'pages/accessories.html';
+  const userInfo = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('userInfo') || 'null');
+    } catch {
+      return null;
+    }
+  })();
+  const isAdmin = (userInfo?.role || '').toLowerCase() === 'admin' && Boolean(userInfo?.token);
 
   const header = `
     <!-- Info Bar -->
@@ -136,6 +146,12 @@ function buildUserShell() {
           </a>
           
           <div class="aura-nav-actions">
+            ${isAdmin ? `
+            <a class="aura-action-item aura-admin-shortcut" href="${adminDashboardHref}" aria-label="Trang quản trị">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h3"></path><path d="M14 14h2"></path><path d="M8 18h8"></path></svg>
+              <span>QUẢN TRỊ</span>
+            </a>
+            ` : ''}
             <a class="aura-action-item" href="${storesHref}" data-nav-link>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
               <span>CỬA HÀNG</span>
@@ -263,6 +279,8 @@ function buildUserShell() {
             <a href="${tryOnHref}" class="aura-nav-link-new" data-nav-link>PHÒNG THỬ ĐỒ</a>
 
             <a href="${membershipHref}" class="aura-nav-link-new" data-nav-link>THÀNH VIÊN</a>
+
+            <a href="${aboutHref}" class="aura-nav-link-new" data-nav-link>ABOUT</a>
           </nav>
         </div>
       </div>
@@ -372,6 +390,8 @@ function buildUserShell() {
           <div class="footer-col">
             <h5>Hỗ trợ</h5>
             <ul class="footer-links">
+              <li><a href="${aboutHref}">Giới thiệu thương hiệu</a></li>
+              <li><a href="${aboutHref}#about-contact">Liên hệ</a></li>
               <li><a href="#">Hướng dẫn đặt hàng</a></li>
               <li><a href="#">Phương thức thanh toán</a></li>
               <li><a href="#">Blogs thời trang</a></li>

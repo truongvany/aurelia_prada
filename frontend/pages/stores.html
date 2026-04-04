@@ -370,7 +370,7 @@
     <footer class="site-footer" style="display: none;"></footer> <!-- Hidden for this layout or stick to bottom -->
 
     <script type="module">
-      import { initBaseUI } from '../assets/js/common.js';
+      import '../assets/js/common.js';
       
       const stores = [
         {
@@ -557,7 +557,6 @@
       });
 
       document.addEventListener('DOMContentLoaded', () => {
-        initBaseUI();
         renderList(stores);
       });
     </script>

@@ -26,6 +26,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const voucherRoutes = require('./routes/voucherRoutes');
 const promotionRoutes = require('./routes/promotionRoutes');
 const tryOnRoutes = require('./routes/tryOnRoutes');
+const settingsRoutes = require('./routes/settingsRoutes');
 
 // Mount Routes
 app.use('/api/auth', authRoutes);
@@ -38,6 +39,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/vouchers', voucherRoutes);
 app.use('/api/promotions', promotionRoutes);
 app.use('/api/tryon', tryOnRoutes);
+app.use('/api/settings', settingsRoutes);
 
 // Basic route
 app.get('/', (req, res) => {

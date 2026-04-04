@@ -74,15 +74,26 @@ function normalizeCartMedia(cart) {
 }
 
 function normalizeOrderMedia(order) {
-  if (!order || !Array.isArray(order.orderItems)) return order;
+  if (!order || typeof order !== 'object') return order;
 
-  return {
+  const normalized = {
     ...order,
-    orderItems: order.orderItems.map((item) => ({
+    orderItems: Array.isArray(order.orderItems)
+      ? order.orderItems.map((item) => ({
       ...item,
       image: resolveMediaUrl(item.image),
-    })),
+      }))
+      : order.orderItems,
   };
+
+  if (normalized.paymentResult && typeof normalized.paymentResult === 'object') {
+    normalized.paymentResult = {
+      ...normalized.paymentResult,
+      proofImageUrl: resolveMediaUrl(normalized.paymentResult.proofImageUrl),
+    };
+  }
+
+  return normalized;
 }
 
 function normalizeTryOnJobMedia(job) {
@@ -410,6 +421,56 @@ export async function updateOrderStatus(id, status) {
   return res.json();
 }
 
+export async function updateOrderToPaid(id, paymentPayload = {}) {
+  const res = await fetch(`${API_URL}/orders/${id}/pay`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(paymentPayload),
+  });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.message || 'Failed to update order to paid');
+  }
+  const order = await res.json();
+  return normalizeOrderMedia(order);
+}
+
+export async function uploadOrderPaymentProof(id, imageFile) {
+  if (!imageFile) {
+    throw new Error('Vui lòng chọn ảnh chứng minh thanh toán');
+  }
+
+  const formData = new FormData();
+  formData.append('paymentProof', imageFile);
+
+  const res = await fetch(`${API_URL}/orders/${id}/payment-proof`, {
+    method: 'PUT',
+    headers: getAuthHeadersWithoutContentType(),
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.message || 'Không thể upload ảnh thanh toán');
+  }
+
+  const order = await res.json();
+  return normalizeOrderMedia(order);
+}
+
+export async function confirmOrderCod(id) {
+  const res = await fetch(`${API_URL}/orders/${id}/confirm-cod`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.message || 'Failed to confirm COD order');
+  }
+  const order = await res.json();
+  return normalizeOrderMedia(order);
+}
+
 export async function getOrderById(id) {
   const res = await fetch(`${API_URL}/orders/${id}`, {
     headers: getAuthHeaders(),
@@ -483,6 +544,33 @@ export async function fetchDashboardStats() {
         : sale.orderItems,
     })),
   };
+}
+
+export async function fetchAdminSettings() {
+  const res = await fetch(`${API_URL}/settings/admin`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to load settings');
+  return res.json();
+}
+
+export async function updateAdminSettings(settingsData) {
+  const res = await fetch(`${API_URL}/settings/admin`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(settingsData),
+  });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.message || 'Failed to update settings');
+  }
+  return res.json();
+}
+
+export async function fetchPublicPaymentSettings() {
+  const res = await fetch(`${API_URL}/settings/payment`);
+  if (!res.ok) throw new Error('Failed to load payment settings');
+  return res.json();
 }
 
 // Product CRUD

@@ -22,6 +22,56 @@
           <button class="btn-export">XUẤT FILE CSV</button>
         </div>
 
+        <div class="orders-toolbar">
+          <div class="orders-filter-group">
+            <label for="orders-date-range">Theo ngày</label>
+            <select id="orders-date-range" class="orders-filter">
+              <option value="all">Toàn bộ</option>
+              <option value="today">Hôm nay</option>
+              <option value="yesterday">Hôm qua</option>
+              <option value="last7">7 ngày gần nhất</option>
+              <option value="last30">30 ngày gần nhất</option>
+              <option value="thisMonth">Tháng này</option>
+              <option value="custom">Chọn ngày cụ thể</option>
+            </select>
+            <input type="date" id="orders-custom-date" class="orders-filter" style="display:none;" />
+          </div>
+          <div class="orders-filter-group">
+            <label for="orders-status-filter">Trạng thái</label>
+            <select id="orders-status-filter" class="orders-filter">
+              <option value="all">Tất cả trạng thái</option>
+              <option value="Processing">Đang xử lý</option>
+              <option value="Confirmed">Đã xác nhận</option>
+              <option value="Shipped">Đang giao</option>
+              <option value="Delivered">Đã giao</option>
+              <option value="Cancelled">Đã hủy</option>
+            </select>
+          </div>
+          <div class="orders-filter-group orders-filter-group--search">
+            <label for="orders-search-input">Tìm đơn nhanh</label>
+            <input type="text" id="orders-search-input" class="orders-filter" placeholder="Mã đơn, tên khách, email..." />
+          </div>
+        </div>
+
+        <div class="orders-metrics">
+          <div class="orders-metric-card">
+            <span>Tổng đơn</span>
+            <strong id="orders-stat-total">0</strong>
+          </div>
+          <div class="orders-metric-card">
+            <span>Doanh thu lọc</span>
+            <strong id="orders-stat-revenue">0đ</strong>
+          </div>
+          <div class="orders-metric-card">
+            <span>Chưa thanh toán</span>
+            <strong id="orders-stat-unpaid">0</strong>
+          </div>
+          <div class="orders-metric-card">
+            <span>Đang xử lý</span>
+            <strong id="orders-stat-processing">0</strong>
+          </div>
+        </div>
+
         <div class="table-card">
           <table class="admin-table">
             <thead>

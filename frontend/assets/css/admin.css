@@ -575,6 +575,199 @@ body.admin-body h6 {
   overflow: hidden;
 }
 
+.products-hero {
+  background:
+    radial-gradient(circle at 14% 12%, rgba(17, 17, 17, 0.08), transparent 42%),
+    radial-gradient(circle at 84% 18%, rgba(17, 17, 17, 0.05), transparent 36%),
+    var(--admin-card-bg);
+}
+
+.products-toolbar {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.products-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.products-filter-group label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  color: var(--admin-text-muted);
+  font-weight: 700;
+}
+
+.products-filter-input {
+  font-weight: 600;
+}
+
+.products-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.products-metric-card {
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.products-metric-card span {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--admin-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.products-metric-card strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--admin-text-main);
+}
+
+.orders-toolbar {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1.4fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.orders-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.orders-filter-group label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  color: var(--admin-text-muted);
+  font-weight: 700;
+}
+
+.orders-filter {
+  width: 100%;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-card-bg);
+  color: var(--admin-text-main);
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Manrope', sans-serif;
+}
+
+.orders-filter:focus {
+  outline: none;
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 3px var(--admin-accent-soft);
+}
+
+.orders-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.orders-metric-card {
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.orders-metric-card span {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--admin-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.orders-metric-card strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--admin-text-main);
+}
+
+.orders-day-row td {
+  background: linear-gradient(90deg, var(--admin-accent-soft), transparent);
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-top: 1px solid var(--admin-border);
+}
+
+.orders-day-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.orders-day-head strong {
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  text-transform: capitalize;
+}
+
+.orders-day-head span {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--admin-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.orders-order-id {
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.orders-submeta {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--admin-text-muted);
+}
+
+.orders-pay-pill {
+  display: inline-flex;
+  margin-top: 8px;
+  margin-left: 8px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.orders-pay-pill.paid {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--success);
+}
+
+.orders-pay-pill.unpaid {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--danger);
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -876,6 +1069,83 @@ body.admin-body h6 {
   background-color: var(--admin-accent-soft);
 }
 
+.admin-table-empty {
+  text-align: center;
+  font-weight: 700;
+  color: var(--admin-text-muted);
+}
+
+.admin-product-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-product-thumb {
+  width: 48px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-bg);
+  flex-shrink: 0;
+}
+
+.admin-product-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-product-name {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.admin-product-sub {
+  font-size: 11px;
+  color: var(--admin-text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-price {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.admin-stock-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.admin-stock-badge.success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+.admin-stock-badge.warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning);
+}
+
+.admin-stock-badge.danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.admin-actions-cell {
+  white-space: nowrap;
+}
+
 /* Status Tags */
 .status-pill {
   padding: 6px 12px;
@@ -1071,6 +1341,22 @@ body.admin-body h6 {
     font-size: 30px;
   }
 
+  .orders-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .products-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .orders-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .products-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .dashboard-hero-actions {
     width: 100%;
     justify-content: space-between;
@@ -1086,6 +1372,11 @@ body.admin-body h6 {
 
   .kpi-grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 14px 12px;
   }
 }
 

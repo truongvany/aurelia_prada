@@ -1,13 +1,18 @@
-import { fetchCategories, fetchProducts } from './api.js';
+ import { fetchCategories, fetchProducts } from './api.js';
 import { createProductCard, syncWishlistVisuals } from './common.js';
 
 const COLLECTION_GROUPS = ['THEO DỊP', 'SẢN PHẨM ĐẶC TRƯNG', 'THEO MÙA'];
+const GROUP_COPY = {
+  'THEO DỊP': 'Nhung bo suu tap duoc phan theo dip dac biet de ban chon look nhanh va dung tinh than.',
+  'SẢN PHẨM ĐẶC TRƯNG': 'Nhung item signature noi bat nhat cua Aurelia, duoc khach hang yeu thich xuyen suot mua.',
+  'THEO MÙA': 'Bang mau va chat lieu duoc tuyen chon theo nhip mua de giup tong the mac dep nhat quan.'
+};
 const PRODUCTS_PER_PAGE = 24;
 
 let allProducts = [];
 let allCategories = [];
 let activeGroup = 'ALL';
-let categoryPageMap = {}; // Track current page for each category
+let categoryPageMap = {};
 
 function normalizeCategoryName(product) {
   if (!product) return '';
@@ -49,20 +54,44 @@ function getAvailableGroups() {
   );
 }
 
+function getGroupStats(groupName) {
+  const scopedCategories = groupName === 'ALL'
+    ? allCategories.filter((category) => COLLECTION_GROUPS.includes(category.group))
+    : allCategories.filter((category) => category.group === groupName);
+
+  const categoryNames = new Set(scopedCategories.map((category) => category.name));
+  const productsCount = allProducts.filter((product) => categoryNames.has(normalizeCategoryName(product))).length;
+
+  return {
+    categoriesCount: categoryNames.size,
+    productsCount
+  };
+}
+
+function resolveQueryGroup(queryGroup) {
+  const availableGroups = getAvailableGroups();
+  const byExact = availableGroups.find((groupName) => groupName === queryGroup);
+  if (byExact) return byExact;
+
+  const normalizedQuery = slugify(queryGroup);
+  return availableGroups.find((groupName) => slugify(groupName) === normalizedQuery) || null;
+}
+
 function renderGroupTabs() {
   const tabsContainer = document.getElementById('collections-tabs');
   if (!tabsContainer) return;
 
   const availableGroups = getAvailableGroups();
-
   const tabs = ['ALL', ...availableGroups];
 
   tabsContainer.innerHTML = tabs
     .map((groupName) => {
       const label = groupName === 'ALL' ? 'TẤT CẢ BỘ SƯU TẬP' : groupName;
+      const { categoriesCount, productsCount } = getGroupStats(groupName);
       return `
         <button class="collections-tab ${groupName === activeGroup ? 'active' : ''}" data-group="${groupName}">
-          ${label}
+          <span class="collections-tab-label">${label}</span>
+          <span class="collections-tab-meta">${categoriesCount} danh muc | ${productsCount} san pham</span>
         </button>
       `;
     })
@@ -83,7 +112,6 @@ function renderSections() {
   if (!sectionsRoot) return;
 
   const availableGroups = getAvailableGroups();
-
   const groupsToRender = activeGroup === 'ALL' ? availableGroups : [activeGroup];
 
   const groupHtml = groupsToRender
@@ -91,15 +119,16 @@ function renderSections() {
       const categories = allCategories.filter((category) => category.group === groupName);
       const categoryHtml = categories
         .map((category) => {
-          let productsInCategory = allProducts.filter((product) => normalizeCategoryName(product) === category.name);
-          
+          const productsInCategory = allProducts.filter(
+            (product) => normalizeCategoryName(product) === category.name
+          );
+
           if (productsInCategory.length === 0) return '';
 
           const isOverviewPage = activeGroup === 'ALL';
           const catSlug = slugify(category.name);
-          
+
           if (isOverviewPage) {
-            // Overview: limit to 12 products, no pagination
             const displayProducts = productsInCategory.slice(0, 12);
             return `
               <article class="collection-category" id="category-${catSlug}">
@@ -112,59 +141,65 @@ function renderSections() {
                 </div>
               </article>
             `;
-          } else {
-            // Detail page: show 24 per page with pagination
-            const currentPage = categoryPageMap[catSlug] || 1;
-            const totalPages = Math.ceil(productsInCategory.length / PRODUCTS_PER_PAGE);
-            const startIdx = (currentPage - 1) * PRODUCTS_PER_PAGE;
-            const endIdx = startIdx + PRODUCTS_PER_PAGE;
-            const displayProducts = productsInCategory.slice(startIdx, endIdx);
+          }
 
-            let paginationHtml = '';
-            if (totalPages > 1) {
-              const pageNumbers = [];
-              for (let i = 1; i <= totalPages; i++) {
-                pageNumbers.push(i);
-              }
+          const currentPage = categoryPageMap[catSlug] || 1;
+          const totalPages = Math.ceil(productsInCategory.length / PRODUCTS_PER_PAGE);
+          const startIdx = (currentPage - 1) * PRODUCTS_PER_PAGE;
+          const endIdx = startIdx + PRODUCTS_PER_PAGE;
+          const displayProducts = productsInCategory.slice(startIdx, endIdx);
 
-              paginationHtml = `
-                <div class="collection-pagination" data-category="${catSlug}">
-                  ${currentPage > 1 ? `<button class="pagination-btn pagination-prev" data-page="${currentPage - 1}">← Trước</button>` : ''}
-                  <div class="pagination-numbers">
-                    ${pageNumbers.map(page => `
-                      <button class="pagination-num ${page === currentPage ? 'active' : ''}" data-page="${page}">
-                        ${page}
-                      </button>
-                    `).join('')}
-                  </div>
-                  ${currentPage < totalPages ? `<button class="pagination-btn pagination-next" data-page="${currentPage + 1}">Sau →</button>` : ''}
-                </div>
-              `;
+          let paginationHtml = '';
+          if (totalPages > 1) {
+            const pageNumbers = [];
+            for (let i = 1; i <= totalPages; i += 1) {
+              pageNumbers.push(i);
             }
 
-            return `
-              <article class="collection-category" id="category-${catSlug}">
-                <div class="collection-category-head">
-                  <h3>${category.name}</h3>
-                  <span>${productsInCategory.length} san pham</span>
+            paginationHtml = `
+              <div class="collection-pagination" data-category="${catSlug}">
+                ${currentPage > 1 ? `<button class="pagination-btn pagination-prev" data-page="${currentPage - 1}">← Truoc</button>` : ''}
+                <div class="pagination-numbers">
+                  ${pageNumbers
+                    .map(
+                      (page) => `
+                        <button class="pagination-num ${page === currentPage ? 'active' : ''}" data-page="${page}">
+                          ${page}
+                        </button>
+                      `
+                    )
+                    .join('')}
                 </div>
-                <div class="collection-grid">
-                  ${displayProducts.map(createProductCard).join('')}
-                </div>
-                ${paginationHtml}
-              </article>
+                ${currentPage < totalPages ? `<button class="pagination-btn pagination-next" data-page="${currentPage + 1}">Sau →</button>` : ''}
+              </div>
             `;
           }
+
+          return `
+            <article class="collection-category" id="category-${catSlug}">
+              <div class="collection-category-head">
+                <h3>${category.name}</h3>
+                <span>${productsInCategory.length} san pham</span>
+              </div>
+              <div class="collection-grid">
+                ${displayProducts.map(createProductCard).join('')}
+              </div>
+              ${paginationHtml}
+            </article>
+          `;
         })
         .join('');
 
       if (!categoryHtml) return '';
 
+      const groupSummary =
+        GROUP_COPY[groupName] || 'Danh muc duoc sap xep ro rang de theo doi va chon nhanh hon.';
+
       return `
         <section class="collection-group" id="group-${slugify(groupName)}">
           <div class="collection-group-head">
             <h2>${groupName}</h2>
-            <p>Danh muc duoc sap xep ro rang</p>
+            <p>${groupSummary}</p>
           </div>
           ${categoryHtml}
         </section>
@@ -180,15 +215,14 @@ function renderSections() {
   sectionsRoot.innerHTML = groupHtml;
   syncWishlistVisuals();
 
-  // Attach pagination event listeners
-  document.querySelectorAll('.collection-pagination button').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  document.querySelectorAll('.collection-pagination button').forEach((btn) => {
+    btn.addEventListener('click', () => {
       const catSlug = btn.closest('.collection-pagination')?.getAttribute('data-category');
-      const page = parseInt(btn.getAttribute('data-page'));
-      if (catSlug) {
+      const page = Number(btn.getAttribute('data-page'));
+
+      if (catSlug && Number.isFinite(page) && page > 0) {
         categoryPageMap[catSlug] = page;
         renderSections();
-        // Scroll to category
         const target = document.getElementById(`category-${catSlug}`);
         if (target) {
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -203,8 +237,9 @@ function applyQueryDefaults() {
   const queryGroup = searchParams.get('group');
   const queryCategory = searchParams.get('category');
 
-  if (queryGroup && getAvailableGroups().includes(queryGroup)) {
-    activeGroup = queryGroup;
+  const matchedGroup = queryGroup ? resolveQueryGroup(queryGroup) : null;
+  if (matchedGroup) {
+    activeGroup = matchedGroup;
     renderGroupTabs();
     renderSections();
   }
@@ -215,6 +250,8 @@ function applyQueryDefaults() {
   if (!foundCategory) return;
 
   activeGroup = foundCategory.group;
+  renderGroupTabs();
+  renderSections();
 
   requestAnimationFrame(() => {
     const target = document.getElementById(`category-${slugify(queryCategory)}`);
@@ -232,13 +269,6 @@ async function initCollectionsPage() {
     const [categories, products] = await Promise.all([fetchCategories(), fetchProducts()]);
     allCategories = categories;
     allProducts = products;
-
-    const scrollTopBtn = document.getElementById('scroll-top');
-    if (scrollTopBtn) {
-      scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    }
 
     setStats();
     renderGroupTabs();

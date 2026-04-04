@@ -14,6 +14,21 @@ function createHttpError(statusCode, message) {
   return error;
 }
 
+function canAccessOrder(order, requester) {
+  if (!order || !requester) return false;
+  const ownerId = order.user?._id?.toString() || order.user?.toString();
+  const requesterId = requester._id?.toString();
+  return ownerId === requesterId || requester.role === 'admin';
+}
+
+function normalizePaymentResult(data) {
+  if (!data) return {};
+  if (typeof data.toObject === 'function') {
+    return data.toObject();
+  }
+  return { ...data };
+}
+
 function findMatchingVariant(product, color, colorCode) {
   const variants = product.variants || [];
   if (!variants.length) return { variant: null, index: -1 };
@@ -86,6 +101,13 @@ const addOrderItems = async (req, res) => {
       voucherCode,
       discountPrice,
     } = req.body;
+
+    const normalizedPaymentMethod = String(paymentMethod || 'COD').trim();
+    const allowedPaymentMethods = ['COD', 'QR_BANKING', 'MoMo', 'Banking', 'VNPay'];
+    if (!allowedPaymentMethods.includes(normalizedPaymentMethod)) {
+      res.status(400).json({ message: 'Phuong thuc thanh toan khong hop le.' });
+      return;
+    }
 
     if (!orderItems || orderItems.length === 0) {
       res.status(400).json({ message: 'No order items' });
@@ -170,7 +192,7 @@ const addOrderItems = async (req, res) => {
       orderItems: normalizedItems,
       user: req.user._id,
       shippingAddress,
-      paymentMethod,
+      paymentMethod: normalizedPaymentMethod,
       itemsPrice,
       taxPrice,
       shippingPrice,
@@ -202,9 +224,7 @@ const getOrderById = async (req, res) => {
       return;
     }
 
-    const ownerId = order.user?._id?.toString() || order.user?.toString();
-    const requesterId = req.user._id.toString();
-    if (ownerId !== requesterId && req.user.role !== 'admin') {
+    if (!canAccessOrder(order, req.user)) {
       res.status(403).json({ message: 'Not authorized to view this order' });
       return;
     }
@@ -275,8 +295,52 @@ const lookupOrder = async (req, res) => {
 // @access  Private/Admin
 const getOrders = async (req, res) => {
   try {
-    const orders = await Order.find({}).populate('user', 'id name');
+    const orders = await Order.find({})
+      .populate('user', 'id name email')
+      .sort({ createdAt: -1 });
     res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Upload payment proof image
+// @route   PUT /api/orders/:id/payment-proof
+// @access  Private
+const uploadOrderPaymentProof = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      res.status(404).json({ message: 'Order not found' });
+      return;
+    }
+
+    if (!canAccessOrder(order, req.user)) {
+      res.status(403).json({ message: 'Not authorized to update this order' });
+      return;
+    }
+
+    if (order.paymentMethod === 'COD') {
+      res.status(400).json({ message: 'Don COD khong can upload anh chuyen khoan.' });
+      return;
+    }
+
+    if (!req.file) {
+      res.status(400).json({ message: 'Vui long chon anh chung minh thanh toan.' });
+      return;
+    }
+
+    const current = normalizePaymentResult(order.paymentResult);
+    order.paymentResult = {
+      ...current,
+      proofImageUrl: `/uploads/payment-proofs/${req.file.filename}`,
+      update_time: new Date().toISOString(),
+      email_address: current.email_address || req.user.email || '',
+    };
+
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -289,22 +353,86 @@ const updateOrderToPaid = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
 
-    if (order) {
-      order.isPaid = true;
-      order.paidAt = Date.now();
-      order.paymentResult = {
-        id: req.body.id,
-        status: req.body.status,
-        update_time: req.body.update_time,
-        email_address: req.body.email_address,
-      };
-
-      const updatedOrder = await order.save();
-
-      res.json(updatedOrder);
-    } else {
+    if (!order) {
       res.status(404).json({ message: 'Order not found' });
+      return;
     }
+
+    if (!canAccessOrder(order, req.user)) {
+      res.status(403).json({ message: 'Not authorized to update this order' });
+      return;
+    }
+
+    if (order.paymentMethod === 'COD') {
+      res.status(400).json({ message: 'Don COD khong the danh dau da thanh toan online.' });
+      return;
+    }
+
+    if (order.isPaid) {
+      res.json(order);
+      return;
+    }
+
+    order.isPaid = true;
+    order.paidAt = Date.now();
+    if (order.status === 'Processing') {
+      order.status = 'Confirmed';
+    }
+    const existingPaymentResult = normalizePaymentResult(order.paymentResult);
+    order.paymentResult = {
+      ...existingPaymentResult,
+      id: req.body.id || `QR-${order._id}`,
+      status: req.body.status || 'COMPLETED',
+      update_time: req.body.update_time || new Date().toISOString(),
+      email_address: req.body.email_address || req.user.email || '',
+    };
+
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Confirm COD order by owner
+// @route   PUT /api/orders/:id/confirm-cod
+// @access  Private
+const confirmCodOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      res.status(404).json({ message: 'Order not found' });
+      return;
+    }
+
+    if (!canAccessOrder(order, req.user)) {
+      res.status(403).json({ message: 'Not authorized to update this order' });
+      return;
+    }
+
+    if (order.paymentMethod !== 'COD') {
+      res.status(400).json({ message: 'Don hang nay khong su dung COD.' });
+      return;
+    }
+
+    if (order.status === 'Processing') {
+      order.status = 'Confirmed';
+    }
+
+    if (!order.paymentResult?.status) {
+      const existingPaymentResult = normalizePaymentResult(order.paymentResult);
+      order.paymentResult = {
+        ...existingPaymentResult,
+        id: `COD-${order._id}`,
+        status: 'PENDING_ON_DELIVERY',
+        update_time: new Date().toISOString(),
+        email_address: req.user.email || '',
+      };
+    }
+
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -388,7 +516,9 @@ module.exports = {
   getMyOrders,
   lookupOrder,
   getOrders,
+  uploadOrderPaymentProof,
   updateOrderToPaid,
+  confirmCodOrder,
   updateOrderToDelivered,
   updateOrderStatus,
 };

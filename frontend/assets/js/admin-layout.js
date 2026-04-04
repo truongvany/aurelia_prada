@@ -29,9 +29,11 @@ export function renderAdminLayout() {
           Khách hàng
         </a>
         <a href="vouchers.html" class="admin-nav-item ${activePage === 'vouchers.html' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4V7z"></path><path d="M13 5v14"></path><path d="M9 9h.01"></path><path d="M9 15h.01"></path></svg>
           Mã giảm giá
         </a>
         <a href="sales.html" class="admin-nav-item ${activePage === 'sales.html' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7c0-2.5 1.8-4.5 4-4.5 1.8 0 3 1.4 3 3 0 2.8-3 4-7 4z"></path><path d="M12 7c0-2.5-1.8-4.5-4-4.5-1.8 0-3 1.4-3 3 0 2.8 3 4 7 4z"></path></svg>
           Khuyến mãi & Combo
         </a>
         <a href="settings.html" class="admin-nav-item ${activePage === 'settings.html' ? 'active' : ''}">

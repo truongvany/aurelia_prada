@@ -14,25 +14,51 @@
     <div id="admin-app">
       <!-- Main Section -->
       <main class="dashboard-main">
-        <div class="dashboard-title-row">
-          <div>
-            <h2>Danh sách Sản phẩm</h2>
-            <p>Quản lý kho hàng và thông tin sản phẩm.</p>
+        <section class="dashboard-hero products-hero">
+          <div class="dashboard-title-row">
+            <div>
+              <h2>Danh sách Sản phẩm</h2>
+              <p>Quản lý kho hàng, tồn kho và hiệu suất hiển thị sản phẩm theo thời gian thực.</p>
+            </div>
+            <button class="btn-export" id="add-product-btn">THÊM SẢN PHẨM MỚI</button>
           </div>
-          <button class="btn-export" id="add-product-btn">THÊM SẢN PHẨM MỚI</button>
-        </div>
 
-        <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px; flex-wrap:wrap;">
-          <select id="category-filter" class="admin-input" style="max-width:260px;">
-            <option value="">Tat ca danh muc</option>
-          </select>
-          <input
-            id="product-search"
-            class="admin-input"
-            placeholder="Tim theo ten san pham..."
-            style="max-width:320px;"
-          />
-        </div>
+          <div class="products-toolbar" aria-label="Bộ lọc sản phẩm">
+            <div class="products-filter-group">
+              <label for="category-filter">Danh mục</label>
+              <select id="category-filter" class="admin-input products-filter-input">
+                <option value="">Tất cả danh mục</option>
+              </select>
+            </div>
+            <div class="products-filter-group products-filter-group--search">
+              <label for="product-search">Tìm kiếm</label>
+              <input
+                id="product-search"
+                class="admin-input products-filter-input"
+                placeholder="Nhập tên sản phẩm..."
+              />
+            </div>
+          </div>
+
+          <div class="products-metrics">
+            <article class="products-metric-card">
+              <span>Tổng sản phẩm</span>
+              <strong id="product-total-count">0</strong>
+            </article>
+            <article class="products-metric-card">
+              <span>Đang hiển thị</span>
+              <strong id="product-visible-count">0</strong>
+            </article>
+            <article class="products-metric-card">
+              <span>Sắp hết hàng</span>
+              <strong id="product-low-stock-count">0</strong>
+            </article>
+            <article class="products-metric-card">
+              <span>Hết hàng</span>
+              <strong id="product-out-stock-count">0</strong>
+            </article>
+          </div>
+        </section>
 
         <div class="table-card">
           <table class="admin-table">
@@ -41,6 +67,7 @@
                 <th>Sản phẩm</th>
                 <th>Danh mục</th>
                 <th>Giá bán</th>
+                <th>Tồn kho</th>
                 <th>Trạng thái</th>
                 <th>Thao tác</th>
               </tr>

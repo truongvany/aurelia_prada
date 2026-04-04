@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#3f3f3f",
+                        "inverse-primary": "#ffffff",
+                        "secondary-fixed-dim": "#d5d4d4",
+                        "on-primary-container": "#525151",
+                        "tertiary-fixed-dim": "#efd0a7",
+                        "on-primary-fixed": "#403f3f",
+                        "on-error-container": "#752121",
+                        "on-secondary-fixed-variant": "#5b5b5b",
+                        "primary": "#5f5e5e",
+                        "surface-dim": "#d4dbdd",
+                        "secondary-container": "#e3e2e2",
+                        "tertiary-fixed": "#feddb4",
+                        "outline": "#757c7d",
+                        "on-primary": "#faf7f6",
+                        "surface-tint": "#5f5e5e",
+                        "on-surface": "#2d3435",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#e3e2e2",
+                        "inverse-surface": "#0c0f0f",
+                        "error-dim": "#4e0309",
+                        "on-error": "#fff7f6",
+                        "on-tertiary": "#fff8f2",
+                        "primary-container": "#e5e2e1",
+                        "tertiary-container": "#feddb4",
+                        "on-surface-variant": "#5a6061",
+                        "surface-container-high": "#e4e9ea",
+                        "primary-fixed": "#e5e2e1",
+                        "surface-container": "#ebeeef",
+                        "surface-container-low": "#f2f4f4",
+                        "on-tertiary-container": "#644e2f",
+                        "secondary": "#5f5f5f",
+                        "error": "#9f403d",
+                        "on-tertiary-fixed": "#503c1e",
+                        "primary-dim": "#535252",
+                        "tertiary": "#725b3b",
+                        "tertiary-dim": "#654f30",
+                        "outline-variant": "#adb3b4",
+                        "background": "#f9f9f9",
+                        "inverse-on-surface": "#9c9d9d",
+                        "secondary-dim": "#535353",
+                        "surface-bright": "#f9f9f9",
+                        "on-primary-fixed-variant": "#5c5b5b",
+                        "on-secondary-container": "#515252",
+                        "on-secondary": "#faf8f8",
+                        "surface": "#f9f9f9",
+                        "error-container": "#fe8983",
+                        "on-tertiary-fixed-variant": "#6f5838",
+                        "primary-fixed-dim": "#d7d4d3",
+                        "surface-variant": "#dde4e5",
+                        "surface-container-highest": "#dde4e5",
+                        "on-background": "#2d3435"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Manrope', sans-serif; background-color: #f9f9f9; }
+        h1, h2, h3 { font-family: 'Noto Serif', serif; }
+    </style>
+</head>
+<body class="text-on-surface overflow-x-hidden">
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-10 py-8 bg-[#f9f9f9]/80 backdrop-blur-xl dark:bg-[#121212]/80">
+<div class="text-3xl font-serif tracking-tighter text-neutral-900 dark:text-neutral-50">THE CURATOR</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="font-['Noto_Serif'] uppercase tracking-[0.2em] text-[12px] text-neutral-900 dark:text-neutral-50 font-semibold transition-colors duration-300" href="#">COLLECTIONS</a>
+<a class="font-['Noto_Serif'] uppercase tracking-[0.2em] text-[12px] text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-colors duration-300" href="#">NEW ARRIVALS</a>
+<a class="font-['Noto_Serif'] uppercase tracking-[0.2em] text-[12px] text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-colors duration-300" href="#">EDITORIAL</a>
+<a class="font-['Noto_Serif'] uppercase tracking-[0.2em] text-[12px] text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-colors duration-300" href="#">READY-TO-WEAR</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-neutral-700 hover:scale-110 transition-transform">favorite</button>
+<button class="material-symbols-outlined text-neutral-700 hover:scale-110 transition-transform">shopping_bag</button>
+<button class="material-symbols-outlined text-neutral-700 hover:scale-110 transition-transform">person</button>
+</div>
+</nav>
+<main class="pt-40 pb-20">
+<header class="px-10 mb-16 text-center">
+<h1 class="text-[clamp(3rem,8vw,6rem)] font-bold uppercase tracking-tight text-on-surface leading-none">COLLECTIONS</h1>
+<p class="mt-6 text-on-surface-variant font-body max-w-2xl mx-auto uppercase tracking-[0.1em] text-xs">A curated selection of seasonal essentials and timeless silhouettes.</p>
+</header>
+<section class="px-10 mb-12 overflow-x-auto scrollbar-hide">
+<ul class="flex justify-center items-center gap-12 whitespace-nowrap min-w-max mx-auto border-b border-outline-variant/15">
+<li class="relative pb-4 group">
+<a class="text-xs font-bold tracking-[0.2em] text-on-surface uppercase" href="#">ALL</a>
+<div class="absolute bottom-0 left-0 w-full h-[1px] bg-on-surface"></div>
+</li>
+<li class="relative pb-4 group">
+<a class="text-xs font-medium tracking-[0.2em] text-on-surface-variant/60 uppercase hover:text-on-surface transition-colors" href="#">HOLIDAY</a>
+<div class="absolute bottom-0 left-0 w-0 h-[1px] bg-on-surface transition-all group-hover:w-full"></div>
+</li>
+<li class="relative pb-4 group">
+<a class="text-xs font-medium tracking-[0.2em] text-on-surface-variant/60 uppercase hover:text-on-surface transition-colors" href="#">VALENTINE</a>
+<div class="absolute bottom-0 left-0 w-0 h-[1px] bg-on-surface transition-all group-hover:w-full"></div>
+</li>
+<li class="relative pb-4 group">
+<a class="text-xs font-medium tracking-[0.2em] text-on-surface-variant/60 uppercase hover:text-on-surface transition-colors" href="#">RESORT 24</a>
+<div class="absolute bottom-0 left-0 w-0 h-[1px] bg-on-surface transition-all group-hover:w-full"></div>
+</li>
+<li class="relative pb-4 group">
+<a class="text-xs font-medium tracking-[0.2em] text-on-surface-variant/60 uppercase hover:text-on-surface transition-colors" href="#">SIGNATURES</a>
+<div class="absolute bottom-0 left-0 w-0 h-[1px] bg-on-surface transition-all group-hover:w-full"></div>
+</li>
+<li class="relative pb-4 group">
+<a class="text-xs font-medium tracking-[0.2em] text-on-surface-variant/60 uppercase hover:text-on-surface transition-colors" href="#">ACCESSORIES</a>
+<div class="absolute bottom-0 left-0 w-0 h-[1px] bg-on-surface transition-all group-hover:w-full"></div>
+</li>
+</ul>
+</section>
+<section class="px-6 md:px-10">
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-12">
+<div class="flex flex-col group">
+<div class="relative aspect-[4/5] overflow-hidden bg-surface-container-low">
+<img alt="Luxury fashion model" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="High-end studio fashion photography of a model in a minimalist beige wool coat against a soft neutral grey backdrop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1nvY7Z65dtpdT_ZM53yA9Nuo0QjurKAxA1bwbvZU2vq1GDu3FORr71UzJeN2lPbj48OkiKGxjiw5fY3tBlZ-orjkYwtxyobS9HCIPph9LOp76MlT6-5knsXI23qu_hobnx5qcY-FsbFDAcvLXnghtSIoNwmRWmW-J8XSmNmpaLkm7FGoGSkcW4NbVmkpXpCveVIc8gYsLaEbl25r_F5Jn0elobHIxHunD1C_ZiH006IPiCcmd_gPSJCTWiXdsRyHyZ6ZYP4hmAg0"/>
+<div class="absolute top-4 left-4 bg-error px-2 py-1">
+<span class="text-[10px] font-bold text-on-error uppercase tracking-tighter">-20%</span>
+</div>
+<button class="absolute top-4 right-4 material-symbols-outlined text-on-surface-variant hover:text-error transition-colors">favorite</button>
+<div class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+<button class="w-full bg-primary text-on-primary py-3 text-[10px] font-bold tracking-[0.2em] uppercase flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">shopping_bag</span> Add to Cart
+                            </button>
+</div>
+</div>
+<div class="mt-4 flex flex-col gap-1">
+<h3 class="font-body text-[11px] uppercase tracking-wider text-on-surface-variant">Lumière Silk Blouse</h3>
+<div class="flex items-center gap-3">
+<span class="font-bold text-sm">$420.00</span>
+<span class="text-xs text-on-tertiary-container font-medium line-through opacity-50">$525.00</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col group">
+<div class="relative aspect-[4/5] overflow-hidden bg-surface-container-low">
+<img alt="Editorial fashion piece" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Modern high-fashion look featuring structured black blazer and gold jewelry, clean minimalist studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlnzfagobGteLzbn4IOHIbVAxY7aGhDZBREJH3YMZuD2VtPKkjvKwMh-zUdgxhmJb95xTcLIFjpw9F3fGn-S1sRyviyiSvEWeZM8MHw2auHbZ6KFSuLskEZsSB4q-k67jIlLuPssC-WJcOLH7qMGfltLMTRS56UxegkfOYhE6JFoeWZZDf7jJHM-BGRh_8sG2okEj4KwgjA8LNe9bK60yxpkEeHPA6sBxR8KqiC0adNnQq9eVyGQmfK3ABLx-90fYVBfU224vYUEg"/>
+<button class="absolute top-4 right-4 material-symbols-outlined text-on-surface-variant hover:text-error transition-colors">favorite</button>
+<div class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+<button class="w-full bg-primary text-on-primary py-3 text-[10px] font-bold tracking-[0.2em] uppercase flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">shopping_bag</span> Add to Cart
+                            </button>
+</div>
+</div>
+<div class="mt-4 flex flex-col gap-1">
+<h3 class="font-body text-[11px] uppercase tracking-wider text-on-surface-variant">Sculpted Tailored Blazer</h3>
+<span class="font-bold text-sm">$1,250.00</span>
+</div>
+</div>
+<div class="flex flex-col group">
+<div class="relative aspect-[4/5] overflow-hidden bg-surface-container-low">
+<img alt="Luxury resort wear" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Elegant flowing white linen dress on a model, soft natural shadows, minimalist aesthetic with clean lines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi8lIauDEd3veC4tlP-cSa9e3URpcK329bCj6HGsEG0Xgv1zxUs8HLDgPNeIvrgB2f7DVxu1Zwa4mdG-wDScnQQppKaYDVh0PiP_gGysOjGKD3JJl4bthWibb3fuUme8HM7TWv6aZmixhKP4Hg-ssCZMV7ugUARWZiWkwBe0Vuu802W0ByVS0UZNnsMURKPAoNG66FrX4bva2KoNhUKlQ-pfjLvffwW3Ac4vAhhMGDpNb3GsEqSQvvUX4A5kHkRXUeIggYyyoI2O8"/>
+<div class="absolute top-4 left-4 bg-error px-2 py-1">
+<span class="text-[10px] font-bold text-on-error uppercase tracking-tighter">-15%</span>
+</div>
+<button class="absolute top-4 right-4 material-symbols-outlined text-on-surface-variant hover:text-error transition-colors">favorite</button>
+<div class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+<button class="w-full bg-primary text-on-primary py-3 text-[10px] font-bold tracking-[0.2em] uppercase flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">shopping_bag</span> Add to Cart
+                            </button>
+</div>
+</div>
+<div class="mt-4 flex flex-col gap-1">
+<h3 class="font-body text-[11px] uppercase tracking-wider text-on-surface-variant">Aegean Linen Gown</h3>
+<div class="flex items-center gap-3">
+<span class="font-bold text-sm">$890.00</span>
+<span class="text-xs text-on-tertiary-container font-medium line-through opacity-50">$1,045.00</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col group">
+<div class="relative aspect-[4/5] overflow-hidden bg-surface-container-low">
+<img alt="Minimalist dress" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Editorial close up of a luxury floral print dress with fine pleats, soft morning light, museum-like quality" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmEsBZu_2M4W5eoiesdji_qRFuuGGJYqCG4spC8J-RgCu8jrB35PpNLs7RDpY41_JcsGClAQZ-ms34d9u1pjgTeVvhZE63o3qOqxPbLReN3n5UrddvIcFKSXfp1qCKFz4tqKSFuySGHgRqQHscXPTmOPkWWcleJ6W9b4nfD32HqA3s43iNGBFqwpqaLqJLknUcjyjjf58I97IMm-TDQrdg9k-ybnT3UMdRhNIGMYVRRKLBm-UF7fmAxngb36enXisGu1s2zA3-oWs"/>
+<button class="absolute top-4 right-4 material-symbols-outlined text-on-surface-variant hover:text-error transition-colors">favorite</button>
+<div class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+<button class="w-full bg-primary text-on-primary py-3 text-[10px] font-bold tracking-[0.2em] uppercase flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">shopping_bag</span> Add to Cart
+                            </button>
+</div>
+</div>
+<div class="mt-4 flex flex-col gap-1">
+<h3 class="font-body text-[11px] uppercase tracking-wider text-on-surface-variant">Atelier Pleated Midi</h3>
+<span class="font-bold text-sm">$675.00</span>
+</div>
+</div>
+<div class="flex flex-col group">
+<div class="relative aspect-[4/5] overflow-hidden bg-surface-container-low">
+<img alt="Designer accessories" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Minimalist still life of a high-end black leather handbag on a stone pedestal, dramatic shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdCj2q4SRtRjawAN29ZQwZ5SGWGkeTpdIYKKQWezMX4YVEKXwfmiLEyr8n_XHKSdsLQsWUhdOrG86qIauVeF-4jmDhlhPwEANp7HFLOM0c-SJUWuklPAYtkBI0EELgyih9OI7olWp1iUt4KAeMZZDlFFSSbaeFmCfjofsor0Siy0WezncvOfrvzvtzaGN3ZJfjHthkCELd8RzzG7D8GIQiSAKBiqmFZTmbusAf7iuZ-VgxP6b7M3Gc7NMSrmhRyp4pLYNnJ54mh5w"/>
+<button class="absolute top-4 right-4 material-symbols-outlined text-on-surface-variant hover:text-error transition-colors">favorite</button>
+<div class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+<button class="w-full bg-primary text-on-primary py-3 text-[10px] font-bold tracking-[0.2em] uppercase flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">shopping_bag</span> Add to Cart
+                            </button>
+</div>
+</div>
+<div class="mt-4 flex flex-col gap-1">
+<h3 class="font-body text-[11px] uppercase tracking-wider text-on-surface-variant">Ethereal Leather Clutch</h3>
+<span class="font-bold text-sm">$1,100.00</span>
+</div>
+</div>
+<div class="flex flex-col group">
+<div class="relative aspect-[4/5] overflow-hidden bg-surface-container-low">
+<img alt="Luxury footwear" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Elegant minimalist strap heels in brushed gold on a white surface with long cinematic shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3trVG99EjfNiEWLn1WeburAklJDUNfeJYBrjSfkjlpup6WjXamrIC4Kv_Y-XQnHIpN06FPqxTTFq0_U0yHBprfpgIRJmVULcjlP6yp5yX1hu4_zepLPnIzyKsMf-ucTOFHNJPLHCkMj3eLGGat5xZeWaAYoM6mun2Iog8x7aqFAZ36gC2Lxkz4hCMCx9ETgsWvFev1YYt6pEBfyDj07GGPPfHctAvYsfSZPA0LcUWfzEq9wjsaa4xRc5txYtqeYfOQoB5IMJTsf4"/>
+<button class="absolute top-4 right-4 material-symbols-outlined text-on-surface-variant hover:text-error transition-colors">favorite</button>
+<div class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+<button class="w-full bg-primary text-on-primary py-3 text-[10px] font-bold tracking-[0.2em] uppercase flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">shopping_bag</span> Add to Cart
+                            </button>
+</div>
+</div>
+<div class="mt-4 flex flex-col gap-1">
+<h3 class="font-body text-[11px] uppercase tracking-wider text-on-surface-variant">Auric Sandal Heel</h3>
+<span class="font-bold text-sm">$550.00</span>
+</div>
+</div>
+</div>
+</section>
+<section class="mt-32 px-10">
+<div class="flex flex-col md:flex-row gap-10 items-center bg-surface-container-high/30 p-12">
+<div class="w-full md:w-1/2 overflow-hidden">
+<img alt="Brand editorial" class="w-full grayscale hover:grayscale-0 transition-all duration-1000" data-alt="Cinematic fashion shot of a woman looking through a large window, soft architectural lines, neutral palette" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfDpTPHQlNlBu2HQlcTEaOqZAZ9lT3OtfpRFG5FwNrThYnMb2UrDQzJW7wI0Brqf7nlae5JoiMTJbzP-NR4DPZ-mLliFwPYaAEjP9tuKw11xdakAugY2khcPRI4MHSGwMpRVXVXBgfVoDw12-yuBha55KrGmZ9Pts3GHR2wXrWnCuo10jPSnMkJJAvOOQQtNNT1xkN-cjs0xXU0kdPAauiYJF8QlUlekAN0lAF2YumI4m7nZnNsGkU9u7YBHDTLYGvtNRVB_85yxQ"/>
+</div>
+<div class="w-full md:w-1/2 flex flex-col gap-6">
+<span class="text-[10px] tracking-[0.3em] font-bold text-primary uppercase">The Perspective</span>
+<h2 class="text-4xl leading-tight">Curated with intention, worn with confidence.</h2>
+<p class="text-on-surface-variant text-sm leading-relaxed max-w-md">Our philosophy remains simple: provide a framework for the modern individual to curate their own visual narrative through high-end, timeless pieces.</p>
+<a class="text-xs font-bold border-b border-on-surface w-fit pb-1 hover:opacity-60 transition-opacity" href="#">EXPLORE THE EDITORIAL</a>
+</div>
+</div>
+</section>
+</main>
+<footer class="w-full px-10 py-20 flex flex-col md:flex-row justify-between items-start gap-8 bg-[#e4e9ea] dark:bg-[#1a1a1a]">
+<div class="flex flex-col gap-6">
+<div class="font-serif text-xl text-neutral-800 dark:text-neutral-200">THE CURATOR</div>
+<p class="font-['Manrope'] text-[10px] tracking-[0.1em] text-neutral-600 dark:text-neutral-400 max-w-[200px]">DEFINING THE ESSENTIALS OF MODERN LUXURY SINCE 2024.</p>
+</div>
+<div class="flex flex-wrap gap-x-12 gap-y-6">
+<div class="flex flex-col gap-4">
+<span class="font-['Manrope'] text-[10px] tracking-[0.1em] font-bold text-neutral-900 dark:text-neutral-50 uppercase">CUSTOMER CARE</span>
+<a class="font-['Manrope'] text-[10px] tracking-[0.1em] text-neutral-500 dark:text-neutral-400 hover:opacity-70 transition-opacity" href="#">PRIVACY POLICY</a>
+<a class="font-['Manrope'] text-[10px] tracking-[0.1em] text-neutral-500 dark:text-neutral-400 hover:opacity-70 transition-opacity" href="#">TERMS OF SERVICE</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-['Manrope'] text-[10px] tracking-[0.1em] font-bold text-neutral-900 dark:text-neutral-50 uppercase">ASSISTANCE</span>
+<a class="font-['Manrope'] text-[10px] tracking-[0.1em] text-neutral-500 dark:text-neutral-400 hover:opacity-70 transition-opacity" href="#">SHIPPING &amp; RETURNS</a>
+<a class="font-['Manrope'] text-[10px] tracking-[0.1em] text-neutral-500 dark:text-neutral-400 hover:opacity-70 transition-opacity" href="#">CONTACT</a>
+</div>
+</div>
+<div class="flex flex-col items-end gap-6 w-full md:w-auto">
+<div class="flex gap-4">
+<a class="material-symbols-outlined text-neutral-600" href="#">public</a>
+<a class="material-symbols-outlined text-neutral-600" href="#">mail</a>
+</div>
+<span class="font-['Manrope'] text-[10px] tracking-[0.1em] text-neutral-600 dark:text-neutral-400">© 2024 THE CURATOR. ALL RIGHTS RESERVED.</span>
+</div>
+</footer>
+</body></html>

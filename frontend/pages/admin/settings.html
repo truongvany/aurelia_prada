@@ -25,32 +25,63 @@
           <form id="settings-form">
             <div class="admin-input-group">
               <label class="admin-label">Tên Thương Hiệu</label>
-              <input class="admin-input" value="AURELIA PRADA" />
+              <input id="setting-brand-name" class="admin-input" value="AURELIA PRADA" />
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
               <div class="admin-input-group">
                 <label class="admin-label">Email hỗ trợ</label>
-                <input class="admin-input" value="concierge@aureliaprda.com" />
+                <input id="setting-support-email" class="admin-input" value="concierge@aureliaprda.com" />
               </div>
               <div class="admin-input-group">
                 <label class="admin-label">Hotline</label>
-                <input class="admin-input" value="+84 (0) 898 123 456" />
+                <input id="setting-hotline" class="admin-input" value="+84 (0) 898 123 456" />
               </div>
             </div>
 
             <div class="admin-input-group">
               <label class="admin-label">Đơn vị tiền tệ</label>
-              <select class="admin-input" style="appearance: auto;">
-                <option>VND (đ) - Đồng Việt Nam</option>
-                <option>USD ($) - Đô la Mỹ</option>
-                <option>EUR (€) - Euro</option>
+              <select id="setting-currency" class="admin-input" style="appearance: auto;">
+                <option value="VND">VND (đ) - Đồng Việt Nam</option>
+                <option value="USD">USD ($) - Đô la Mỹ</option>
+                <option value="EUR">EUR (€) - Euro</option>
               </select>
             </div>
 
             <div class="admin-input-group">
               <label class="admin-label">Địa chỉ Trụ sở</label>
-              <textarea class="admin-input" rows="4">123 Đại lộ Cao Cấp, Quận 1, Thành phố Hồ Chí Minh, Việt Nam</textarea>
+              <textarea id="setting-head-office" class="admin-input" rows="4">123 Đại lộ Cao Cấp, Quận 1, Thành phố Hồ Chí Minh, Việt Nam</textarea>
+            </div>
+
+            <div class="admin-input-group" style="margin-top: 12px; border-top: 1px dashed #e5e7eb; padding-top: 18px;">
+              <label class="admin-label" style="font-size: 14px; letter-spacing: .3px;">Cấu hình tài khoản ngân hàng nhận tiền</label>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <div class="admin-input-group">
+                <label class="admin-label">Mã ngân hàng VietQR</label>
+                <input id="setting-bank-code" class="admin-input" placeholder="VD: VCB" value="VCB" />
+              </div>
+              <div class="admin-input-group">
+                <label class="admin-label">Tên ngân hàng</label>
+                <input id="setting-bank-name" class="admin-input" placeholder="VD: Vietcombank" value="Vietcombank" />
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <div class="admin-input-group">
+                <label class="admin-label">Tên tài khoản</label>
+                <input id="setting-bank-account-name" class="admin-input" placeholder="VD: AURELIA PRADA" value="AURELIA PRADA" />
+              </div>
+              <div class="admin-input-group">
+                <label class="admin-label">Số tài khoản</label>
+                <input id="setting-bank-account-number" class="admin-input" placeholder="VD: 1234567890" value="1234567890" />
+              </div>
+            </div>
+
+            <div class="admin-input-group">
+              <label class="admin-label">Chi nhánh</label>
+              <input id="setting-bank-branch" class="admin-input" placeholder="VD: Chi nhánh TP. Hồ Chí Minh" value="Chi nhánh TP. Hồ Chí Minh" />
             </div>
 
             <button type="submit" class="btn-admin-save">LƯU CẤU HÌNH</button>

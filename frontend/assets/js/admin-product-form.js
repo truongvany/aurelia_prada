@@ -8,7 +8,18 @@ import {
 } from './api.js';
 import { renderAdminLayout } from './admin-layout.js';
 
-let variantCount = 0;
+function updateTotalStockDisplay() {
+    const totalStockInput = document.getElementById('prod-stock-total');
+    if (!totalStockInput) return;
+
+    const variantStockInputs = document.querySelectorAll('.variant-stock');
+    const totalStock = Array.from(variantStockInputs).reduce((sum, input) => {
+        const value = Number(input.value);
+        return sum + (Number.isFinite(value) && value > 0 ? value : 0);
+    }, 0);
+
+    totalStockInput.value = String(totalStock);
+}
 
 function updateTabs() {
     const tabsContainer = document.getElementById('variant-tabs');
@@ -88,7 +99,7 @@ function createVariantCard(data = { color: '', colorCode: '#000000', stock: 10, 
         <div style="display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px;">
             <div class="admin-input-group">
                 <label class="admin-label">Số lượng tồn kho cho riêng màu này</label>
-                <input type="number" class="admin-input variant-stock" value="${normalizedData.stock}" required />
+                <input type="number" min="0" class="admin-input variant-stock" value="${normalizedData.stock}" required />
             </div>
         </div>
 
@@ -117,11 +128,16 @@ function createVariantCard(data = { color: '', colorCode: '#000000', stock: 10, 
 
     // Internal Events
     card.querySelector('.variant-color-name').oninput = updateTabs;
+
+    card.querySelector('.variant-stock').oninput = () => {
+        updateTotalStockDisplay();
+    };
     
     card.querySelector('.btn-remove-variant').onclick = () => {
         if (confirm('Xóa biến thể này?')) {
             card.remove();
             showVariant(0);
+            updateTotalStockDisplay();
         }
     };
 
@@ -206,6 +222,7 @@ async function initProductForm() {
         const card = createVariantCard();
         container.appendChild(card);
         showVariant(document.querySelectorAll('.variant-card').length - 1);
+        updateTotalStockDisplay();
     };
 
     // 3. Edit Mode
@@ -222,7 +239,6 @@ async function initProductForm() {
                 document.getElementById('prod-price').value = product.price;
                 document.getElementById('prod-original-price').value = product.originalPrice || '';
                 document.getElementById('prod-category').value = product.category?._id || product.category || '';
-                document.getElementById('prod-stock').value = product.stock;
                 document.getElementById('prod-material').value = product.material || '';
                 document.getElementById('prod-badge').value = product.badge || '';
                 document.getElementById('prod-size-guide').value = product.sizeGuideImage || '';
@@ -239,17 +255,25 @@ async function initProductForm() {
                     }));
                 }
                 showVariant(0);
+                updateTotalStockDisplay();
             }
         } catch (err) { console.error(err); }
     } else {
         container.appendChild(createVariantCard());
         showVariant(0);
+        updateTotalStockDisplay();
     }
 
     // 4. Submit
     form.onsubmit = async (e) => {
         e.preventDefault();
         const cards = document.querySelectorAll('.variant-card');
+
+        if (!cards.length) {
+            alert('Can it nhat 1 bien the mau cho san pham.');
+            return;
+        }
+
         const productVariants = Array.from(cards).map(card => {
             return {
                 color: card.querySelector('.variant-color-name').value,
@@ -268,6 +292,7 @@ async function initProductForm() {
 
         const totalStock = productVariants.reduce((sum, v) => sum + v.stock, 0);
         const allImages = productVariants.flatMap(v => v.images);
+        updateTotalStockDisplay();
 
         const data = {
             name: document.getElementById('prod-name').value,

@@ -40,6 +40,7 @@ const orderSchema = new mongoose.Schema(
       status: { type: String },
       update_time: { type: String },
       email_address: { type: String },
+      proofImageUrl: { type: String },
     },
     itemsPrice: {
       type: Number,

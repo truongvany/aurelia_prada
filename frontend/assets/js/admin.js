@@ -14,7 +14,9 @@ import {
   fetchAllVouchers,
   createVoucher,
   updateVoucher,
-  deleteVoucher
+  deleteVoucher,
+  fetchAdminSettings,
+  updateAdminSettings
 } from './api.js';
 
 import { formatVnd } from './common.js';
@@ -297,6 +299,170 @@ function getTimeAgo(date) {
 
 let adminProductCategoryFilter = '';
 let adminProductKeyword = '';
+const adminOrdersCache = new Map();
+const adminOrdersFilters = {
+  range: 'all',
+  status: 'all',
+  keyword: '',
+  customDate: '',
+};
+
+function toDateKeyLocal(input) {
+  const d = new Date(input);
+  if (Number.isNaN(d.getTime())) return '';
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function getDayStart(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function formatDayHeading(dateKey) {
+  const dateObj = new Date(`${dateKey}T00:00:00`);
+  if (Number.isNaN(dateObj.getTime())) return dateKey;
+  return dateObj.toLocaleDateString('vi-VN', {
+    weekday: 'long',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
+
+function isOrderInRange(orderDate, range, customDate) {
+  if (!orderDate || Number.isNaN(orderDate.getTime())) return false;
+  if (range === 'all') return true;
+
+  const today = new Date();
+  const todayStart = getDayStart(today);
+  const orderStart = getDayStart(orderDate);
+
+  if (range === 'today') {
+    return orderStart.getTime() === todayStart.getTime();
+  }
+
+  if (range === 'yesterday') {
+    const yesterday = new Date(todayStart);
+    yesterday.setDate(yesterday.getDate() - 1);
+    return orderStart.getTime() === yesterday.getTime();
+  }
+
+  if (range === 'last7') {
+    const threshold = new Date(todayStart);
+    threshold.setDate(threshold.getDate() - 6);
+    return orderStart >= threshold;
+  }
+
+  if (range === 'last30') {
+    const threshold = new Date(todayStart);
+    threshold.setDate(threshold.getDate() - 29);
+    return orderStart >= threshold;
+  }
+
+  if (range === 'thisMonth') {
+    return orderStart.getMonth() === todayStart.getMonth() && orderStart.getFullYear() === todayStart.getFullYear();
+  }
+
+  if (range === 'custom') {
+    if (!customDate) return true;
+    return toDateKeyLocal(orderStart) === customDate;
+  }
+
+  return true;
+}
+
+function getFilteredOrders(orders) {
+  const keyword = adminOrdersFilters.keyword.trim().toLowerCase();
+
+  return orders.filter((order) => {
+    const createdAt = new Date(order.createdAt);
+    if (!isOrderInRange(createdAt, adminOrdersFilters.range, adminOrdersFilters.customDate)) {
+      return false;
+    }
+
+    if (adminOrdersFilters.status !== 'all' && order.status !== adminOrdersFilters.status) {
+      return false;
+    }
+
+    if (!keyword) return true;
+
+    const shortId = String(order._id || '').slice(0, 8).toLowerCase();
+    const fullId = String(order._id || '').toLowerCase();
+    const customerName = String(order.user?.name || '').toLowerCase();
+    const customerEmail = String(order.user?.email || '').toLowerCase();
+
+    return shortId.includes(keyword)
+      || fullId.includes(keyword)
+      || customerName.includes(keyword)
+      || customerEmail.includes(keyword);
+  });
+}
+
+function updateOrdersStats(orders) {
+  const totalEl = document.getElementById('orders-stat-total');
+  const revenueEl = document.getElementById('orders-stat-revenue');
+  const unpaidEl = document.getElementById('orders-stat-unpaid');
+  const processingEl = document.getElementById('orders-stat-processing');
+
+  const totalOrders = orders.length;
+  const revenue = orders
+    .filter((o) => o.status !== 'Cancelled')
+    .reduce((sum, o) => sum + Number(o.totalPrice || 0), 0);
+  const unpaid = orders.filter((o) => !o.isPaid).length;
+  const processing = orders.filter((o) => o.status === 'Processing').length;
+
+  if (totalEl) totalEl.textContent = String(totalOrders);
+  if (revenueEl) revenueEl.textContent = formatVnd(revenue);
+  if (unpaidEl) unpaidEl.textContent = String(unpaid);
+  if (processingEl) processingEl.textContent = String(processing);
+}
+
+function setupOrdersControls() {
+  const rangeSelect = document.getElementById('orders-date-range');
+  const customDateInput = document.getElementById('orders-custom-date');
+  const statusSelect = document.getElementById('orders-status-filter');
+  const searchInput = document.getElementById('orders-search-input');
+
+  if (!rangeSelect || !customDateInput || !statusSelect || !searchInput) return;
+
+  const syncCustomDateVisibility = () => {
+    const showCustom = rangeSelect.value === 'custom';
+    customDateInput.style.display = showCustom ? 'block' : 'none';
+    if (!showCustom) {
+      adminOrdersFilters.customDate = '';
+      customDateInput.value = '';
+    }
+  };
+
+  rangeSelect.value = adminOrdersFilters.range;
+  statusSelect.value = adminOrdersFilters.status;
+  searchInput.value = adminOrdersFilters.keyword;
+  customDateInput.value = adminOrdersFilters.customDate;
+  syncCustomDateVisibility();
+
+  rangeSelect.addEventListener('change', () => {
+    adminOrdersFilters.range = rangeSelect.value;
+    syncCustomDateVisibility();
+    renderOrders();
+  });
+
+  customDateInput.addEventListener('change', () => {
+    adminOrdersFilters.customDate = customDateInput.value;
+    renderOrders();
+  });
+
+  statusSelect.addEventListener('change', () => {
+    adminOrdersFilters.status = statusSelect.value;
+    renderOrders();
+  });
+
+  searchInput.addEventListener('input', () => {
+    adminOrdersFilters.keyword = searchInput.value;
+    renderOrders();
+  });
+}
 
 function filterAdminProducts(products) {
   const keyword = adminProductKeyword.trim().toLowerCase();
@@ -326,7 +492,7 @@ async function initProductFilters() {
     const options = categories
       .map((category) => `<option value="${category._id}">${category.name}</option>`)
       .join('');
-    categoryFilter.innerHTML = `<option value="">Tat ca danh muc</option>${options}`;
+    categoryFilter.innerHTML = `<option value="">Tất cả danh mục</option>${options}`;
   } catch (error) {
     console.error('Khong the tai danh muc cho bo loc:', error);
   }
@@ -345,6 +511,23 @@ async function initProductFilters() {
   });
 }
 
+function updateProductMetrics(products, filteredProducts) {
+  const setMetric = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = String(value);
+  };
+
+  const totalCount = products.length;
+  const visibleCount = filteredProducts.length;
+  const lowStockCount = filteredProducts.filter((p) => Number(p.stock) > 0 && Number(p.stock) <= 20).length;
+  const outOfStockCount = filteredProducts.filter((p) => Number(p.stock) <= 0).length;
+
+  setMetric('product-total-count', totalCount);
+  setMetric('product-visible-count', visibleCount);
+  setMetric('product-low-stock-count', lowStockCount);
+  setMetric('product-out-stock-count', outOfStockCount);
+}
+
 async function renderProducts() {
   const body = document.getElementById('admin-products-body');
   if (!body) return;
@@ -352,25 +535,36 @@ async function renderProducts() {
   try {
     const products = await fetchProducts();
     const filteredProducts = filterAdminProducts(products);
+    const fallbackLogo = '../../assets/images/logo/logo.png';
+
+    updateProductMetrics(products, filteredProducts);
 
     if (filteredProducts.length === 0) {
-      body.innerHTML = `<tr><td colspan="5">Khong tim thay san pham phu hop bo loc.</td></tr>`;
+      body.innerHTML = `<tr><td colspan="6" class="admin-table-empty">Không tìm thấy sản phẩm phù hợp bộ lọc.</td></tr>`;
       return;
     }
 
     body.innerHTML = filteredProducts.map((p) => `
       <tr>
         <td>
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <img src="${p.image}" alt="${p.name}" style="width: 40px; height: 40px; object-fit: cover; border: 1px solid var(--admin-border);" />
-            <span style="font-weight: 700;">${p.name}</span>
+          <div class="admin-product-cell">
+            <img src="${p.image}" alt="${p.name}" class="admin-product-thumb" onerror="this.onerror=null;this.src='${fallbackLogo}'" />
+            <div class="admin-product-meta">
+              <strong class="admin-product-name">${p.name}</strong>
+              <span class="admin-product-sub">SKU #${String(p._id || '').slice(-8).toUpperCase()}</span>
+            </div>
           </div>
         </td>
         <td>${p.category?.name || 'Chưa phân loại'}</td>
-        <td>${formatVnd(p.price)}</td>
-        <td><span class="status-pill ${p.stock <= 0 ? 'danger' : p.stock <= 20 ? 'warning' : 'success'}">${p.stock <= 0 ? 'Hết hàng' : 'Đang bán'}</span></td>
+        <td><strong class="admin-price">${formatVnd(p.price)}</strong></td>
         <td>
-          <button class="btn-admin-action edit" data-id="${p._id}" data-prod='${JSON.stringify(p).replace(/'/g, "&apos;")}'>SỬA</button>
+          <span class="admin-stock-badge ${p.stock <= 0 ? 'danger' : p.stock <= 20 ? 'warning' : 'success'}">
+            ${Math.max(0, Number(p.stock) || 0)} sản phẩm
+          </span>
+        </td>
+        <td><span class="status-pill ${p.stock <= 0 ? 'danger' : p.stock <= 20 ? 'warning' : 'success'}">${p.stock <= 0 ? 'Hết hàng' : p.stock <= 20 ? 'Sắp hết' : 'Đang bán'}</span></td>
+        <td class="admin-actions-cell">
+          <button class="btn-admin-action edit" data-id="${p._id}">SỬA</button>
           <button class="btn-admin-action delete" data-id="${p._id}">XÓA</button>
         </td>
       </tr>
@@ -396,7 +590,7 @@ async function renderProducts() {
     });
 
   } catch (err) {
-    body.innerHTML = `<tr><td colspan="5">Lỗi tải danh sách sản phẩm</td></tr>`;
+    body.innerHTML = `<tr><td colspan="6" class="admin-table-empty">Lỗi tải danh sách sản phẩm</td></tr>`;
   }
 }
 
@@ -521,6 +715,7 @@ function openOrderModal(order) {
 
   const shipping = order.shippingAddress || {};
   const discount = order.discountPrice || 0;
+  const paymentProofUrl = order.paymentResult?.proofImageUrl || '';
 
   modal.innerHTML = `
     <div class="aom-header">
@@ -555,6 +750,10 @@ function openOrderModal(order) {
           <div class="aom-meta-row"><strong>Phương thức:</strong> ${order.paymentMethod || '—'}</div>
           <div class="aom-meta-row"><strong>Trạng thái:</strong> ${order.isPaid ? '✅ Đã thanh toán' : '⏳ Chưa thanh toán'}</div>
           ${order.isPaid ? `<div class="aom-meta-row"><strong>Ngày TT:</strong> ${new Date(order.paidAt).toLocaleDateString('vi-VN')}</div>` : ''}
+          ${paymentProofUrl ? `
+            <div class="aom-meta-row"><strong>Ảnh CK:</strong> <a href="${paymentProofUrl}" target="_blank" rel="noopener">Xem ảnh</a></div>
+            <div style="margin-top:10px;"><img src="${paymentProofUrl}" alt="Ảnh chuyển khoản" style="width:100%; max-height:180px; object-fit:contain; background:#fff; border:1px solid #eee; border-radius:2px;"></div>
+          ` : ''}
         </div>
         <div class="aom-meta-card">
           <h4>Quản lý Trạng thái</h4>
@@ -618,6 +817,16 @@ async function renderOrders() {
 
   try {
     const orders = await fetchAllOrders();
+    const sortedOrders = [...orders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const filteredOrders = getFilteredOrders(sortedOrders);
+
+    adminOrdersCache.clear();
+    filteredOrders.forEach((order) => {
+      if (order?._id) adminOrdersCache.set(order._id, order);
+    });
+
+    updateOrdersStats(filteredOrders);
+
     const statusMap = {
       Processing: ['Đang xử lý', 'warning'],
       Confirmed: ['Đã xác nhận', 'info'],
@@ -626,27 +835,73 @@ async function renderOrders() {
       Cancelled: ['Đã hủy', 'danger'],
     };
 
-    body.innerHTML = orders.map((o) => {
-      const [label, cls] = statusMap[o.status] || [o.status, 'danger'];
+    if (filteredOrders.length === 0) {
+      body.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:26px; color: var(--admin-text-muted);">Không có đơn hàng khớp bộ lọc đã chọn.</td></tr>';
+      return;
+    }
+
+    const groupedByDate = filteredOrders.reduce((acc, order) => {
+      const key = toDateKeyLocal(order.createdAt);
+      if (!key) return acc;
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(order);
+      return acc;
+    }, {});
+
+    const dayKeys = Object.keys(groupedByDate).sort((a, b) => (a < b ? 1 : -1));
+    body.innerHTML = dayKeys.map((dayKey) => {
+      const dayOrders = groupedByDate[dayKey];
+      const dayRevenue = dayOrders
+        .filter((order) => order.status !== 'Cancelled')
+        .reduce((sum, order) => sum + Number(order.totalPrice || 0), 0);
+
+      const rows = dayOrders.map((o) => {
+        const [label, cls] = statusMap[o.status] || [o.status, 'danger'];
+        return `
+          <tr>
+            <td>
+              <div class="orders-order-id">#${o._id.substring(0, 8).toUpperCase()}</div>
+              <div class="orders-submeta">${o.paymentMethod || '—'}</div>
+            </td>
+            <td>
+              <div>${o.user?.name || 'Khách vãng lai'}</div>
+              <div class="orders-submeta">${o.user?.email || '—'}</div>
+            </td>
+            <td>
+              <div>${new Date(o.createdAt).toLocaleDateString('vi-VN')}</div>
+              <div class="orders-submeta">${new Date(o.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</div>
+            </td>
+            <td>${o.orderItems?.length || 0} mục</td>
+            <td>${formatVnd(o.totalPrice)}</td>
+            <td>
+              <span class="status-pill ${cls}">${label}</span>
+              <span class="orders-pay-pill ${o.isPaid ? 'paid' : 'unpaid'}">${o.isPaid ? 'Đã TT' : 'Chờ TT'}</span>
+            </td>
+            <td>
+              <button class="btn-admin-action edit view-details" data-id="${o._id}">CHI TIẾT</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
       return `
-        <tr>
-          <td><strong>#${o._id.substring(0, 8).toUpperCase()}</strong></td>
-          <td>${o.user?.name || 'Khách vãng lai'}</td>
-          <td>${new Date(o.createdAt).toLocaleDateString('vi-VN')}</td>
-          <td>${o.orderItems?.length || 0} mục</td>
-          <td>${formatVnd(o.totalPrice)}</td>
-          <td><span class="status-pill ${cls}">${label}</span></td>
-          <td>
-            <button class="btn-admin-action edit view-details" data-order='${JSON.stringify(o).replace(/'/g, "&apos;")}'  data-id="${o._id}">CHI TIẾT</button>
+        <tr class="orders-day-row">
+          <td colspan="7">
+            <div class="orders-day-head">
+              <strong>${formatDayHeading(dayKey)}</strong>
+              <span>${dayOrders.length} đơn</span>
+              <span>Doanh thu: ${formatVnd(dayRevenue)}</span>
+            </div>
           </td>
         </tr>
+        ${rows}
       `;
     }).join('');
 
     body.querySelectorAll('.view-details').forEach(btn => {
       btn.addEventListener('click', () => {
-        const order = JSON.parse(btn.getAttribute('data-order'));
-        openOrderModal(order);
+        const order = adminOrdersCache.get(btn.getAttribute('data-id'));
+        if (order) openOrderModal(order);
       });
     });
   } catch (err) {
@@ -703,16 +958,85 @@ function setupProductRedirect() {
   }
 }
 
-function setupSettings() {
+async function setupSettings() {
     const form = document.getElementById('settings-form');
     const notice = document.getElementById('settings-notice');
-    if (form && notice) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            notice.textContent = 'Đã lưu cấu hình (Mô phỏng)';
-            setTimeout(() => { notice.textContent = ''; }, 3000);
-        });
+    if (!form || !notice) return;
+
+    const byId = (id) => document.getElementById(id);
+    const fields = {
+      brandName: byId('setting-brand-name'),
+      supportEmail: byId('setting-support-email'),
+      hotline: byId('setting-hotline'),
+      currency: byId('setting-currency'),
+      headOfficeAddress: byId('setting-head-office'),
+      bankCode: byId('setting-bank-code'),
+      bankName: byId('setting-bank-name'),
+      bankAccountName: byId('setting-bank-account-name'),
+      bankAccountNumber: byId('setting-bank-account-number'),
+      bankBranch: byId('setting-bank-branch'),
+    };
+
+    const applySettingsToForm = (settings) => {
+      if (!settings) return;
+
+      if (fields.brandName) fields.brandName.value = settings.brandName || '';
+      if (fields.supportEmail) fields.supportEmail.value = settings.supportEmail || '';
+      if (fields.hotline) fields.hotline.value = settings.hotline || '';
+      if (fields.currency) fields.currency.value = settings.currency || 'VND';
+      if (fields.headOfficeAddress) fields.headOfficeAddress.value = settings.headOfficeAddress || '';
+
+      const bankConfig = settings.bankConfig || {};
+      if (fields.bankCode) fields.bankCode.value = bankConfig.bankCode || 'VCB';
+      if (fields.bankName) fields.bankName.value = bankConfig.bankName || '';
+      if (fields.bankAccountName) fields.bankAccountName.value = bankConfig.accountName || '';
+      if (fields.bankAccountNumber) fields.bankAccountNumber.value = bankConfig.accountNumber || '';
+      if (fields.bankBranch) fields.bankBranch.value = bankConfig.branch || '';
+    };
+
+    try {
+      const settings = await fetchAdminSettings();
+      applySettingsToForm(settings);
+    } catch (error) {
+      notice.textContent = 'Không thể tải cấu hình hiện tại. Vui lòng thử lại.';
+      notice.style.color = '#C53030';
     }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      notice.textContent = 'Đang lưu cấu hình...';
+      notice.style.color = '#555';
+
+      const payload = {
+        brandName: fields.brandName?.value || '',
+        supportEmail: fields.supportEmail?.value || '',
+        hotline: fields.hotline?.value || '',
+        currency: fields.currency?.value || 'VND',
+        headOfficeAddress: fields.headOfficeAddress?.value || '',
+        bankConfig: {
+          bankCode: fields.bankCode?.value || 'VCB',
+          bankName: fields.bankName?.value || '',
+          accountName: fields.bankAccountName?.value || '',
+          accountNumber: fields.bankAccountNumber?.value || '',
+          branch: fields.bankBranch?.value || '',
+        },
+      };
+
+      try {
+        const updated = await updateAdminSettings(payload);
+        applySettingsToForm(updated);
+        notice.textContent = 'Đã lưu cấu hình thành công.';
+        notice.style.color = '#1E7E34';
+      } catch (error) {
+        notice.textContent = error.message || 'Không thể lưu cấu hình. Vui lòng thử lại.';
+        notice.style.color = '#C53030';
+      }
+
+      setTimeout(() => {
+        notice.textContent = '';
+      }, 3500);
+    });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -737,14 +1061,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderProducts();
     setupProductRedirect();
   }
-  if (path.includes('orders.html')) renderOrders();
+  if (path.includes('orders.html')) {
+    setupOrdersControls();
+    renderOrders();
+  }
   if (path.includes('customers.html')) renderCustomers();
   if (path.includes('vouchers.html')) {
     renderVouchers();
     setupVoucherModal();
   }
   
-  setupSettings();
+  await setupSettings();
 });
 
 async function renderVouchers() {
