@@ -4748,52 +4748,151 @@ th {
 }
 
 /* Info Section */
+/* Info Section Refresh 2026 */
 .aura-product-info {
-    padding: 20px 0 10px;
+    padding: 24px 28px 28px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    gap: 14px;
 }
 
-.aura-brand {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    margin-bottom: 6px;
-}
-
-.aura-ref {
-    color: #ccc;
-    font-weight: 400;
-    margin-left: 4px;
-}
-
-.aura-product-title, .aura-product-title-sm {
+.aura-product-title-sm {
     font-family: 'Manrope', sans-serif;
     font-size: 13px;
     font-weight: 500;
-    letter-spacing: -0.01em;
     line-height: 1.5;
-    margin: 0 0 10px 0;
+    margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    height: 3em; color: #444;
+    height: 3em; 
+    color: var(--site-tryon-ink);
+    text-transform: none;
+    letter-spacing: -0.01em;
 }
 
-.aura-product-title a:hover, .aura-product-title-sm a:hover {
-    color: #c5a89e;
+.aura-product-title-sm a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s;
 }
 
-.aura-price-row {
+.aura-product-title-sm a:hover {
+    color: var(--site-tryon-wine);
+}
+
+.aura-card-buy-row {
     display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-top: auto;
-    margin-bottom: 16px;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 6px; /* Added some margin for extra flow */
+    padding-top: 15px;
+    border-top: 1px solid rgba(217, 204, 185, 0.2);
+}
+
+.aura-price-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.aura-card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.aura-price-bold {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--site-tryon-wine);
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+.aura-price-old-sm {
+    font-size: 11.5px;
+    color: var(--site-tryon-soft);
+    text-decoration: line-through;
+    opacity: 0.7;
+    line-height: 1;
+}
+
+.aura-mini-cart-btn, .aura-buy-now-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    border: 1px solid var(--site-tryon-line);
+    background: #fff;
+    color: var(--site-tryon-ink);
+    padding: 0;
+}
+
+.aura-buy-now-btn {
+    background: var(--site-tryon-wine-deep);
+    border-color: var(--site-tryon-wine-deep);
+    color: #fff;
+}
+
+.aura-mini-cart-btn:hover {
+    background: var(--site-tryon-bg);
+    border-color: var(--site-tryon-wine);
+    color: var(--site-tryon-wine);
+    transform: translateY(-2px);
+}
+
+.aura-buy-now-btn:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(106, 31, 42, 0.2);
+}
+
+.aura-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.aura-card-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.aura-dot {
+    width: 22px;
+    height: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1.5px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.aura-dot.active {
+    width: 32px;
+    border-color: var(--site-tryon-line);
+}
+
+.aura-card-wishlist {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--site-tryon-soft);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.aura-card-wishlist:hover, .aura-card-wishlist.active {
+    color: var(--site-tryon-wine);
+    transform: scale(1.15);
 }
 
 .aura-current-price {
