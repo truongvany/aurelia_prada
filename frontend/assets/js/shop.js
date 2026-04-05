@@ -90,6 +90,17 @@ async function initShop() {
     const { fetchCategories } = await import('./api.js');
     const categories = await fetchCategories();
     products = await fetchProducts();
+
+    const categoryMap = {};
+    categories.forEach((category) => {
+      categoryMap[category._id] = category;
+    });
+
+    products = products.filter((product) => {
+      const catId = product.category?._id || product.category;
+      const category = categoryMap[catId] || product.category;
+      return (category?.group || '').toUpperCase() !== 'PHỤ KIỆN';
+    });
     
     // 1. Populate Dynamic Filters Grouped by Logic
     const catFilter = document.getElementById('cat-filter');
@@ -99,8 +110,7 @@ async function initShop() {
       const categoryGroupConfig = [
         { label: 'ÁO', aliases: ['ÁO'] },
         { label: 'ÁO KHOÁC', aliases: ['ÁO KHOÁC'] },
-        { label: 'QUẦN', aliases: ['QUẦN', 'QUẦN & VÁY'] },
-        { label: 'PHỤ KIỆN', aliases: ['PHỤ KIỆN'] }
+        { label: 'QUẦN', aliases: ['QUẦN', 'QUẦN & VÁY'] }
       ];
       const collectionGroups = ['SẢN PHẨM ĐẶC TRƯNG', 'THEO DỊP', 'THEO MÙA'];
       const collectionGroupConfig = collectionGroups.map(groupName => ({ label: groupName, aliases: [groupName] }));

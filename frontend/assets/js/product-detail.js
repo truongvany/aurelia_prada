@@ -267,8 +267,11 @@ async function initDetail() {
   if (tryOnBtn) {
     tryOnBtn.addEventListener('click', () => {
       const inPages = window.location.pathname.includes('/pages/');
-      const target = inPages ? `virtual-tryon.html?id=${product._id}` : `pages/virtual-tryon.html?id=${product._id}`;
-      window.location.href = target;
+      const targetBase = inPages ? 'phong-thu-do.html' : 'pages/phong-thu-do.html';
+      const query = new URLSearchParams();
+      query.set('id', product._id);
+      if (product.image) query.set('garmentImage', product.image);
+      window.location.href = `${targetBase}?${query.toString()}`;
     });
   }
 

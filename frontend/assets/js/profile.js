@@ -56,16 +56,9 @@ async function initProfile() {
 function renderUserInfo(user) {
   const nameEl = document.getElementById('userName');
   const sidebarName = document.getElementById('userNameSidebar');
-  const pointsEl = document.getElementById('profilePoints');
-  const rankEl = document.getElementById('profileRank');
 
   if (nameEl) nameEl.textContent = user.name || 'N/A';
   if (sidebarName) sidebarName.textContent = user.name || 'User';
-  
-  if (pointsEl) pointsEl.textContent = (user.points || 0).toLocaleString();
-  
-  const rankMap = { 'Basic': 'Thường', 'Premium': 'Cao cấp', 'VVIP': 'Kim cương' };
-  if (rankEl) rankEl.textContent = rankMap[user.membershipLevel] || 'Thường';
 }
 
 function renderLoginHistory(history) {

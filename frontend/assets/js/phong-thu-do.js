@@ -1,4 +1,4 @@
-import { createTryOnJob, fetchMyTryOnJobs, fetchTryOnJob, getUserInfo } from './api.js';
+import { createTryOnJob, fetchMyTryOnJobs, fetchProductById, fetchTryOnJob, getUserInfo } from './api.js';
 import { showToast } from './common.js';
 
 const POLL_INTERVAL_MS = 2500;
@@ -7,6 +7,62 @@ const POLL_TIMEOUT_MS = 2 * 60 * 1000;
 let activeJobId = '';
 let activePollTimer = null;
 let isPolling = false;
+let presetGarmentImageUrl = '';
+let presetProductId = '';
+
+function readPrefillParams() {
+  const params = new URLSearchParams(window.location.search);
+  const productId = (params.get('id') || params.get('productId') || '').trim();
+  const garmentImage = (params.get('garmentImage') || '').trim();
+
+  return {
+    productId,
+    garmentImage,
+  };
+}
+
+function applyPresetGarmentPreview(imageUrl) {
+  if (!imageUrl) return;
+
+  const garmentWrap = document.getElementById('garment-preview-wrap');
+  const garmentPreview = document.getElementById('garment-preview');
+  const garmentInput = document.getElementById('garment-image-input');
+  const prefillNote = document.getElementById('garment-prefill-note');
+  const garmentPanel = garmentInput?.closest('.upload-panel');
+
+  if (garmentPreview) garmentPreview.src = imageUrl;
+  if (garmentWrap) garmentWrap.classList.add('has-image');
+  if (garmentInput) garmentInput.required = false;
+  if (prefillNote) prefillNote.hidden = false;
+  if (garmentPanel) garmentPanel.classList.add('prefilled');
+}
+
+async function hydratePresetGarment() {
+  const { productId, garmentImage } = readPrefillParams();
+  if (productId) {
+    presetProductId = productId;
+  }
+
+  if (garmentImage) {
+    presetGarmentImageUrl = garmentImage;
+    applyPresetGarmentPreview(presetGarmentImageUrl);
+    setStatus('Đã nạp sẵn ảnh sản phẩm, chỉ cần thêm ảnh người mẫu.');
+    return;
+  }
+
+  if (!productId) return;
+
+  try {
+    const product = await fetchProductById(productId);
+    if (!product?.image) return;
+
+    presetGarmentImageUrl = product.image;
+    applyPresetGarmentPreview(presetGarmentImageUrl);
+    setStatus('Đã nạp sẵn ảnh sản phẩm, chỉ cần thêm ảnh người mẫu.');
+  } catch (error) {
+    console.error('Không thể tải ảnh sản phẩm để prefill:', error);
+  }
+}
 
 function statusLabel(status) {
   if (status === 'completed') return 'Hoàn tất';
@@ -210,11 +266,11 @@ async function handleSubmit(event) {
 
   const garmentInput = document.getElementById('garment-image-input');
   const modelInput = document.getElementById('model-image-input');
-  const garmentImage = garmentInput?.files?.[0];
+  const selectedGarmentFile = garmentInput?.files?.[0];
   const modelImage = modelInput?.files?.[0];
 
-  if (!garmentImage || !modelImage) {
-    showToast('Thiếu ảnh', 'Vui lòng chọn đủ ảnh áo và ảnh người mẫu', 'error');
+  if (!modelImage) {
+    showToast('Thiếu ảnh', 'Vui lòng thêm ảnh người mẫu để bắt đầu thử đồ', 'error');
     return;
   }
 
@@ -224,7 +280,16 @@ async function handleSubmit(event) {
     setResultImage('');
     setJobMeta('Đang tạo job thử đồ...');
 
-    const response = await createTryOnJob({ garmentImage, modelImage });
+    if (!selectedGarmentFile && !presetGarmentImageUrl) {
+      throw new Error('Thiếu ảnh áo. Vui lòng chọn ảnh áo hoặc quay lại từ trang sản phẩm.');
+    }
+
+    const response = await createTryOnJob({
+      garmentImage: selectedGarmentFile,
+      garmentImageUrl: selectedGarmentFile ? '' : presetGarmentImageUrl,
+      modelImage,
+      productId: presetProductId,
+    });
     const job = response.job;
 
     if (!job?._id) {
@@ -294,6 +359,7 @@ function initTryOnPage() {
   });
 
   form.addEventListener('submit', handleSubmit);
+  hydratePresetGarment();
   loadHistory();
 }
 

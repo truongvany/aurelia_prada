@@ -177,6 +177,19 @@
   color: #6f665b;
 }
 
+.prefill-note {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #1f7a53;
+  font-weight: 600;
+}
+
+.upload-panel.prefilled {
+  border-style: solid;
+  border-color: #96bca8;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(238, 248, 242, 0.9));
+}
+
 .preview-wrap {
   margin-top: 12px;
   border-radius: 12px;

@@ -585,3 +585,161 @@
     font-size: 12px;
     color: #666;
 }
+
+/* ------------------------------------------------------------------
+   SHOP CARD REDESIGN (spacing + clarity + premium look)
+------------------------------------------------------------------- */
+.shop-page-main .shop-grid {
+    gap: 34px 22px;
+    align-items: stretch;
+}
+
+.shop-page-main .shop-grid .aura-product-card {
+    height: 100%;
+    padding: 10px;
+    border: 1px solid #e2d6c7 !important;
+    border-radius: 14px;
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.94), rgba(246, 236, 222, 0.9)) !important;
+    box-shadow: 0 8px 22px rgba(71, 53, 34, 0.08);
+    overflow: hidden;
+}
+
+.shop-page-main .shop-grid .aura-product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 36px rgba(71, 53, 34, 0.14);
+}
+
+.shop-page-main .shop-grid .aura-product-media {
+    border-radius: 10px;
+    margin-bottom: 12px;
+    background: #f5f1ea;
+}
+
+.shop-page-main .shop-grid .aura-product-info {
+    padding: 2px 4px 4px;
+    display: flex;
+    flex-direction: column;
+    min-height: 118px;
+}
+
+.shop-page-main .shop-grid .aura-card-meta {
+    margin-bottom: 10px;
+}
+
+.shop-page-main .shop-grid .aura-card-dots {
+    gap: 6px;
+}
+
+.shop-page-main .shop-grid .aura-dot {
+    width: 12px;
+    height: 12px;
+}
+
+.shop-page-main .shop-grid .aura-dot.active {
+    width: 24px;
+    border-radius: 8px;
+}
+
+.shop-page-main .shop-grid .aura-card-wishlist {
+    padding: 3px;
+}
+
+.shop-page-main .shop-grid .aura-product-title-sm {
+    margin: 0 0 12px;
+    min-height: 2.8em;
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: #3b332b;
+    text-transform: none;
+}
+
+.shop-page-main .shop-grid .aura-product-title-sm a {
+    color: inherit;
+}
+
+.shop-page-main .shop-grid .aura-card-buy-row {
+    margin-top: auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px !important;
+}
+
+.shop-page-main .shop-grid .aura-card-buy-row > div:last-child {
+    gap: 8px !important;
+    flex-shrink: 0;
+}
+
+.shop-page-main .shop-grid .aura-price-stack {
+    gap: 2px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.shop-page-main .shop-grid .aura-price-bold {
+    font-size: 18px;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.shop-page-main .shop-grid .aura-price-old-sm {
+    font-size: 11px;
+    line-height: 1.1;
+    text-decoration: line-through;
+    white-space: nowrap;
+}
+
+.shop-page-main .shop-grid .aura-mini-cart-btn,
+.shop-page-main .shop-grid .aura-buy-now-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.shop-page-main .shop-grid .aura-mini-cart-btn svg,
+.shop-page-main .shop-grid .aura-buy-now-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+@media (max-width: 1200px) {
+    .shop-page-main .shop-grid {
+        gap: 24px 16px;
+    }
+
+    .shop-page-main .shop-grid .aura-price-bold {
+        font-size: 17px;
+    }
+}
+
+@media (max-width: 768px) {
+    .shop-page-main .shop-grid .aura-product-card {
+        padding: 8px;
+        border-radius: 12px;
+    }
+
+    .shop-page-main .shop-grid .aura-product-title-sm {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    .shop-page-main .shop-grid .aura-price-bold {
+        font-size: 16px;
+    }
+
+    .shop-page-main .shop-grid .aura-mini-cart-btn,
+    .shop-page-main .shop-grid .aura-buy-now-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 560px) {
+    .shop-grid {
+        grid-template-columns: 1fr;
+    }
+}

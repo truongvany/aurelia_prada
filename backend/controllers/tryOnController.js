@@ -1,7 +1,17 @@
 const mongoose = require('mongoose');
+const fs = require('fs/promises');
+const path = require('path');
 
+const Product = require('../models/Product');
 const TryOnJob = require('../models/TryOnJob');
+const { tryOnPaths } = require('../middleware/tryOnUploadMiddleware');
 const { queueTryOnJob } = require('../services/tryOnJobRunner');
+
+function httpError(message, statusCode = 400) {
+  const error = new Error(message);
+  error.statusCode = statusCode;
+  return error;
+}
 
 function buildPublicUploadUrl(filePath) {
   const normalized = String(filePath || '').replace(/\\/g, '/');
@@ -9,6 +19,153 @@ function buildPublicUploadUrl(filePath) {
   const idx = normalized.lastIndexOf(marker);
   if (idx === -1) return '';
   return normalized.slice(idx);
+}
+
+function extFromContentType(contentType) {
+  const value = String(contentType || '').toLowerCase();
+  if (value.includes('png')) return '.png';
+  if (value.includes('webp')) return '.webp';
+  if (value.includes('jpg') || value.includes('jpeg')) return '.jpg';
+  return '';
+}
+
+function extFromSourceUrl(sourceUrl) {
+  try {
+    const parsed = new URL(sourceUrl);
+    const ext = path.extname(parsed.pathname || '').toLowerCase();
+    if (ext === '.png' || ext === '.webp' || ext === '.jpg' || ext === '.jpeg') {
+      return ext === '.jpeg' ? '.jpg' : ext;
+    }
+  } catch {
+    // Ignore invalid URL and fallback later.
+  }
+
+  return '';
+}
+
+function normalizeUploadUrlFromAbsolute(sourceUrl) {
+  try {
+    const parsed = new URL(sourceUrl);
+    if (parsed.pathname.startsWith('/uploads/')) {
+      return parsed.pathname;
+    }
+  } catch {
+    // Ignore invalid URL.
+  }
+
+  return '';
+}
+
+function pickProductGarmentImage(product) {
+  if (!product) return '';
+
+  const variantImage = Array.isArray(product.variants)
+    ? (product.variants.find((variant) => Array.isArray(variant?.images) && variant.images.length > 0)
+      ?.images?.[0] || '')
+    : '';
+
+  if (variantImage) return variantImage;
+  if (product.image) return product.image;
+  if (Array.isArray(product.images) && product.images.length > 0) return product.images[0];
+  return '';
+}
+
+async function downloadGarmentFromUrl(sourceUrl) {
+  const timeoutMs = Number(process.env.FITROOM_TIMEOUT_MS || 45000);
+  const res = await fetch(sourceUrl, {
+    method: 'GET',
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+
+  if (!res.ok) {
+    throw httpError(`Khong tai duoc anh ao tu URL (HTTP ${res.status}).`, 400);
+  }
+
+  const contentType = String(res.headers.get('content-type') || '').toLowerCase();
+  if (contentType && !contentType.startsWith('image/')) {
+    throw httpError('Duong dan garmentImageUrl khong phai la tep anh hop le.', 400);
+  }
+
+  const ext = extFromContentType(contentType) || extFromSourceUrl(sourceUrl) || '.jpg';
+  const outputAbs = path.join(tryOnPaths.inputDir, `${Date.now()}-prefill-garment${ext}`);
+  const bytes = Buffer.from(await res.arrayBuffer());
+
+  await fs.writeFile(outputAbs, bytes);
+  return buildPublicUploadUrl(outputAbs);
+}
+
+async function resolveGarmentImage({ garmentFile, garmentImageUrl, productId }) {
+  const productIdRaw = String(productId || '').trim();
+  let product = undefined;
+  let productDoc = null;
+
+  if (productIdRaw) {
+    if (!mongoose.Types.ObjectId.isValid(productIdRaw)) {
+      throw httpError('productId khong hop le.', 400);
+    }
+
+    productDoc = await Product.findById(productIdRaw)
+      .select('image images variants.images')
+      .lean();
+
+    if (productDoc?._id) {
+      product = productDoc._id;
+    }
+  }
+
+  if (garmentFile) {
+    const uploadedGarmentUrl = buildPublicUploadUrl(garmentFile.path);
+    if (!uploadedGarmentUrl) {
+      throw httpError('Khong the xu ly duong dan anh ao upload.', 400);
+    }
+
+    return {
+      garmentImageUrl: uploadedGarmentUrl,
+      product,
+    };
+  }
+
+  let sourceUrl = String(garmentImageUrl || '').trim();
+  if (!sourceUrl && productDoc) {
+    sourceUrl = pickProductGarmentImage(productDoc);
+  }
+
+  if (!sourceUrl) {
+    throw httpError('Can upload garmentImage hoac cung cap garmentImageUrl/productId hop le.', 400);
+  }
+
+  if (sourceUrl.startsWith('uploads/')) {
+    sourceUrl = `/${sourceUrl}`;
+  }
+
+  if (sourceUrl.startsWith('/uploads/')) {
+    return {
+      garmentImageUrl: sourceUrl,
+      product,
+    };
+  }
+
+  const uploadUrlFromAbsolute = normalizeUploadUrlFromAbsolute(sourceUrl);
+  if (uploadUrlFromAbsolute) {
+    return {
+      garmentImageUrl: uploadUrlFromAbsolute,
+      product,
+    };
+  }
+
+  if (!/^https?:\/\//i.test(sourceUrl)) {
+    throw httpError('garmentImageUrl khong hop le. Chi chap nhan URL http/https.', 400);
+  }
+
+  const downloadedGarmentUrl = await downloadGarmentFromUrl(sourceUrl);
+  if (!downloadedGarmentUrl) {
+    throw httpError('Khong the xu ly garmentImageUrl.', 400);
+  }
+
+  return {
+    garmentImageUrl: downloadedGarmentUrl,
+    product,
+  };
 }
 
 function toClientJob(job) {
@@ -40,32 +197,31 @@ const createTryOnJob = async (req, res) => {
   try {
     const garmentFile = req.files?.garmentImage?.[0];
     const modelFile = req.files?.modelImage?.[0];
+    const body = req.body || {};
 
-    if (!garmentFile || !modelFile) {
-      res.status(400).json({ message: 'Can upload day du garmentImage va modelImage.' });
+    if (!modelFile) {
+      res.status(400).json({ message: 'Can upload day du modelImage.' });
       return;
     }
 
-    const garmentImageUrl = buildPublicUploadUrl(garmentFile.path);
     const modelImageUrl = buildPublicUploadUrl(modelFile.path);
 
-    if (!garmentImageUrl || !modelImageUrl) {
-      res.status(400).json({ message: 'Khong the xu ly duong dan tep upload.' });
+    if (!modelImageUrl) {
+      res.status(400).json({ message: 'Khong the xu ly duong dan anh nguoi mau upload.' });
       return;
     }
 
-    const { productId } = req.body || {};
-    let product = undefined;
-
-    if (productId && mongoose.Types.ObjectId.isValid(productId)) {
-      product = productId;
-    }
+    const resolvedGarment = await resolveGarmentImage({
+      garmentFile,
+      garmentImageUrl: body.garmentImageUrl,
+      productId: body.productId,
+    });
 
     const job = await TryOnJob.create({
       user: req.user._id,
-      product,
+      product: resolvedGarment.product,
       provider: process.env.TRYON_PROVIDER || 'mock',
-      garmentImageUrl,
+      garmentImageUrl: resolvedGarment.garmentImageUrl,
       modelImageUrl,
       status: 'pending',
       maxAttempts: Number(process.env.TRYON_MAX_ATTEMPTS || 2),
@@ -80,7 +236,7 @@ const createTryOnJob = async (req, res) => {
       pollUrl: `/api/tryon/jobs/${job._id}`,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 

@@ -372,18 +372,27 @@
 .collections-page .aura-price-stack {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  min-width: 0;
+}
+
+.collections-page .aura-price-current-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .collections-page .aura-price-bold {
-  color: var(--collection-ink);
-  font-size: 16px;
-  font-weight: 800;
+  color: #c72e31;
+  font-size: 18px;
+  font-weight: 900;
 }
 
 .collections-page .aura-price-old-sm {
   color: rgba(90, 96, 97, 0.7);
   font-size: 12px;
+  text-decoration: line-through;
 }
 
 .collections-page .aura-mini-cart-btn,

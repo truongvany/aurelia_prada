@@ -217,29 +217,6 @@ export async function fetchProductById(id) {
   return normalizeProductMedia(product);
 }
 
-/**
- * Send user image and product to AI backend
- * @param {string} productId 
- * @param {string} userImageBase64 
- */
-export async function generateVirtualTryOn(productId, userImageBase64) {
-  const res = await fetch(`${API_URL}/tryon/generate`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ 
-      productId, 
-      userImage: userImageBase64 
-    }),
-  });
-
-  if (!res.ok) {
-    const errObj = await res.json().catch(() => ({}));
-    throw new Error(errObj.message || 'Lỗi server khi render ảnh.');
-  }
-
-  return res.json();
-}
-
 export async function getVoucherByCode(code) {
   const res = await fetch(`${API_URL}/vouchers/code/${code}`, {
     headers: getAuthHeaders(),
@@ -291,9 +268,15 @@ export function getUserInfo() {
 }
 
 // AI Try-on
-export async function createTryOnJob({ garmentImage, modelImage, productId = '' }) {
+export async function createTryOnJob({ garmentImage, garmentImageUrl = '', modelImage, productId = '' }) {
   const formData = new FormData();
-  formData.append('garmentImage', garmentImage);
+  if (garmentImage) {
+    formData.append('garmentImage', garmentImage);
+  }
+  if (garmentImageUrl) {
+    formData.append('garmentImageUrl', garmentImageUrl);
+  }
+
   formData.append('modelImage', modelImage);
   if (productId) formData.append('productId', productId);
 

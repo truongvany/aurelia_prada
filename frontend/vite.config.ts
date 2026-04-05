@@ -11,14 +11,11 @@ export default defineConfig({
         login: 'pages/login.html',
         register: 'pages/register.html',
         profile: 'pages/profile.html',
-        membership: 'pages/membership.html',
-        virtualTryOn: 'pages/virtual-tryon.html',
         adminDashboard: 'pages/admin/dashboard.html',
         adminProducts: 'pages/admin/products.html',
         adminOrders: 'pages/admin/orders.html',
         adminCustomers: 'pages/admin/customers.html',
         adminSettings: 'pages/admin/settings.html',
-        accessories: 'pages/accessories.html',
         about: 'pages/about.html',
         phongThuDo: 'pages/phong-thu-do.html'
       }

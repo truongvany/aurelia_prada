@@ -915,15 +915,14 @@ async function renderCustomers() {
   
   try {
     const users = await fetchAllUsers();
-    const rankMap = { 'Basic': 'Thường', 'Premium': 'Cao cấp', 'VVIP': 'Kim cương' };
 
     body.innerHTML = users.map((c) => `
       <tr>
         <td><strong>${c.name}</strong></td>
         <td>${c.email}<br><small style="color:var(--admin-text-muted);">${c.phone || 'Chưa cung cấp SĐT'}</small></td>
         <td>
-           <span style="font-weight: 800; color: #1a1a1a;">${rankMap[c.membershipLevel] || 'Cơ bản'}</span><br>
-           <small style="color: #2ecc71; font-weight: 600;">${(c.points || 0).toLocaleString()} điểm</small>
+           <span style="font-weight: 800; color: #1a1a1a;">Mã KH: #${(c._id || '').substring(0, 6).toUpperCase()}</span><br>
+           <small style="color: var(--admin-text-muted);">${c.address?.city || 'Khách hàng trực tuyến'}</small>
         </td>
         <td><span class="status-pill ${c.role === 'admin' ? 'info' : 'success'}">${c.role === 'admin' ? 'QUẢN TRỊ VIÊN' : 'NGƯỜI DÙNG'}</span></td>
         <td>${c.createdAt ? new Date(c.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>

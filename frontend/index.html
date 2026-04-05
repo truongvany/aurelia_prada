@@ -12,36 +12,54 @@
 
     <main>
       <section class="ivy-hero">
-        <div class="ivy-side-text left-text">Beautiful</div>
-        <div class="ivy-side-text right-text">Fashion</div>
+        <div class="aura-side-curve aura-left-curve" aria-hidden="true">
+          <svg viewBox="0 0 120 600" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="curveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#ffd7e8;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#f7adc9;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#dc6f9a;stop-opacity:1" />
+              </linearGradient>
+              <filter id="whiteGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur" />
+                <feFlood flood-color="white" flood-opacity="0.8" result="color" />
+                <feComposite in="color" in2="blur" operator="in" result="glow" />
+                <feMerge>
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <!-- Moved starting X from 80 to 100 to push away from image -->
+            <path id="leftArcPath" d="M 100,50 C 10,150 10,450 100,550" fill="transparent" />
+            <text filter="url(#whiteGlow)">
+              <textPath href="#leftArcPath" startOffset="50%" text-anchor="middle" class="curved-text-item">
+                Beautiful
+              </textPath>
+            </text>
+          </svg>
+        </div>
+        <div class="aura-side-curve aura-right-curve" aria-hidden="true">
+          <svg viewBox="0 0 120 600" preserveAspectRatio="xMidYMid meet">
+            <!-- Mirror path for the right side -->
+            <path id="rightArcPath" d="M 20,50 C 110,150 110,450 20,550" fill="transparent" />
+            <text filter="url(#whiteGlow)">
+              <textPath href="#rightArcPath" startOffset="50%" text-anchor="middle" class="curved-text-item">
+                Fashion
+              </textPath>
+            </text>
+          </svg>
+        </div>
         <div class="ivy-hero-slider">
           <div class="ivy-slider-track" id="heroTrack">
             <div class="ivy-slide">
-              <img src="assets/images/hero/hero-1.png" alt="Hero 1" />
-              <div class="ivy-slide-content">
-                <div class="ivy-slide-text-box">
-                  <h2 class="ivy-slide-title">A SIP OF <br> SPRING</h2>
-                  <p class="ivy-slide-subtitle">SPRING SUMMER 2026 COLLECTION</p>
-                </div>
-              </div>
+              <img src="assets/images/hero/hero-1.png" alt="Aurelia hero look 1" />
             </div>
             <div class="ivy-slide">
-              <img src="assets/images/hero/hero-2.png" alt="Hero 2" />
-              <div class="ivy-slide-content">
-                <div class="ivy-slide-text-box">
-                  <h2 class="ivy-slide-title">TIMELESS <br> LUXURY</h2>
-                  <p class="ivy-slide-subtitle">LIMITED EDITION FW26</p>
-                </div>
-              </div>
+              <img src="assets/images/hero/hero-2.png" alt="Aurelia hero look 2" />
             </div>
             <div class="ivy-slide">
-              <img src="assets/images/hero/hero-3.png" alt="Hero 3" />
-              <div class="ivy-slide-content">
-                <div class="ivy-slide-text-box">
-                  <h2 class="ivy-slide-title">PURE <br> ESSENCE</h2>
-                  <p class="ivy-slide-subtitle">NEW ARRIVALS 2026</p>
-                </div>
-              </div>
+              <img src="assets/images/hero/hero-3.png" alt="Aurelia hero look 3" />
             </div>
           </div>
           <button class="ivy-nav-btn prev" id="heroPrev"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
@@ -78,7 +96,6 @@
              <div class="hotsummer-tabs" style="display: flex; gap: 10px;">
                 <button class="hotsummer-tab-btn active">ÁO</button>
                 <button class="hotsummer-tab-btn">ÁO KHOÁC</button>
-                <button class="hotsummer-tab-btn">PHỤ KIỆN</button>
                 <button class="hotsummer-tab-btn highlight">GIẢM GIÁ</button>
              </div>
           </div>
@@ -240,7 +257,18 @@
       async function initHomeProducts() {
         try {
           const [products, categories] = await Promise.all([fetchProducts(), fetchCategories()]);
-          const newArrivals = products.slice(0, 12);
+          const categoryMap = {};
+          categories.forEach(cat => {
+            categoryMap[cat._id] = cat;
+          });
+
+          const storefrontProducts = products.filter((product) => {
+            const catId = product.category?._id || product.category;
+            const category = categoryMap[catId] || product.category;
+            return (category?.group || '').toUpperCase() !== 'PHỤ KIỆN';
+          });
+
+          const newArrivals = storefrontProducts.slice(0, 12);
           const newArrivalsEl = document.getElementById('new-arrivals');
           if (newArrivalsEl) {
               const doubled = [...newArrivals, ...newArrivals];
@@ -249,12 +277,12 @@
           }
           
           // Hot Summer Deal Logic - Initial Active Tab (ÁO)
-          initHotSummerTabs(products, categories);
+          initHotSummerTabs(storefrontProducts, categories);
 
           // Sync Wishlist Visuals for Home Products
           syncWishlistVisuals();
 
-          const galleryImages = products.map(product => product.image);
+          const galleryImages = storefrontProducts.map(product => product.image);
           const galleryTrackEl = document.getElementById('gallery-track');
           if (galleryTrackEl && galleryImages.length > 0) {
             const seamlessImages = [...galleryImages, ...galleryImages];
@@ -283,7 +311,7 @@
                   filtered = products.filter(p => p.originalPrice && p.originalPrice > p.price);
               } else {
                   // Filter by group name derived from tabText
-                  // Mapping tab labels to groups: ÁO -> ÁO, ÁO KHOÁC -> ÁO KHOÁC, PHỤ KIỆN -> PHỤ KIỆN
+                  // Mapping tab labels to groups: ÁO -> ÁO, ÁO KHOÁC -> ÁO KHOÁC
                   filtered = products.filter(p => {
                       const catId = p.category?._id || p.category;
                       const cat = categoryMap[catId];

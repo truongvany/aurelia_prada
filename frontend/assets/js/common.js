@@ -58,10 +58,18 @@ export function createProductCard(product) {
                 ${hasSale ? `<span class="aura-price-old-sm">${formatVnd(product.originalPrice)}</span>` : ''}
             </div>
             <div style="display: flex; gap: 8px;">
-                <button class="aura-mini-cart-btn ivy-cart-btn" data-product-id="${productId}" title="Thêm vào giỏ">
+                <button class="aura-mini-cart-btn ivy-cart-btn" 
+                        data-product-id="${productId}" 
+                        data-color="${product.variants?.[0]?.color || ''}"
+                        data-color-code="${product.variants?.[0]?.colorCode || ''}"
+                        title="Thêm vào giỏ">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
                 </button>
-                <button class="aura-buy-now-btn ivy-buy-now-btn" data-product-id="${productId}" title="Mua ngay">
+                <button class="aura-buy-now-btn ivy-buy-now-btn" 
+                        data-product-id="${productId}" 
+                        data-color="${product.variants?.[0]?.color || ''}"
+                        data-color-code="${product.variants?.[0]?.colorCode || ''}"
+                        title="Mua ngay">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
             </div>
@@ -82,7 +90,6 @@ function buildUserShell() {
   const favHref = `${profileHref}?tab=wishlist`;
   const loginHref = inPagesFolder ? 'login.html' : 'pages/login.html';
   const registerHref = inPagesFolder ? 'register.html' : 'pages/register.html';
-  const membershipHref = inPagesFolder ? 'membership.html' : 'pages/membership.html';
   const aboutHref = inPagesFolder ? 'about.html' : 'pages/about.html';
   const salePageHref = inPagesFolder ? 'sale.html' : 'pages/sale.html';
   const collectionsHref = inPagesFolder ? 'collections.html' : 'pages/collections.html';
@@ -93,7 +100,6 @@ function buildUserShell() {
   const menHref = `${shopHref}?gender=men`;
   const storesHref = inPagesFolder ? 'stores.html' : 'pages/stores.html';
   const storeHref = shopHref; // Keep for other uses if any
-  const accessoriesHref = inPagesFolder ? 'accessories.html' : 'pages/accessories.html';
   const userInfo = (() => {
     try {
       return JSON.parse(localStorage.getItem('userInfo') || 'null');
@@ -121,13 +127,13 @@ function buildUserShell() {
         <!-- Scrolling Promo Text -->
         <div class="aura-promo-scroller">
           <div class="promo-text">
-            ✨ Miễn phí ship đơn từ 500k • Sản phẩm mới hôm nay • Giảm giá đến 60% • Đăng ký thành viên nhận ưu đãi • ✨ Miễn phí ship đơn từ 500k • Sản phẩm mới hôm nay • Giảm giá đến 60% • Đăng ký thành viên nhận ưu đãi •
+            ✨ Miễn phí ship đơn từ 500k • Sản phẩm mới hôm nay • Giảm giá đến 60% • Ưu đãi độc quyền cuối tuần • ✨ Miễn phí ship đơn từ 500k • Sản phẩm mới hôm nay • Giảm giá đến 60% • Ưu đãi độc quyền cuối tuần •
           </div>
         </div>
         
         <div class="info-item highlight">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"></path></svg>
-          <strong>Thành viên</strong>
+          <strong>Ưu đãi mới</strong>
         </div>
       </div>
     </div>
@@ -203,7 +209,7 @@ function buildUserShell() {
                             <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=400&q=80" alt="Sale">
                             <div class="mega-promo-overlay">
                                 <span>LIMITED OFFER</span>
-                                <h4>QUÀ TẶNG THÀNH VIÊN</h4>
+                            <h4>ƯU ĐÃI CUỐI TUẦN</h4>
                             </div>
                         </div>
                     </div>
@@ -251,36 +257,9 @@ function buildUserShell() {
               </div>
             </div>
 
-            <div class="aura-nav-item-new mega-dropdown">
-              <a href="${accessoriesHref}" class="aura-nav-link-new" data-nav-link>PHỤ KIỆN</a>
-              <div class="aura-mega-menu">
-                <div class="aura-mega-main">
-                  <div class="aura-mega-content">
-                    <div class="aura-mega-left">
-                        <div class="container-fluid aura-mega-grid">
-                            <div class="mega-column">
-                                <h5>TẤT CẢ PHỤ KIỆN</h5>
-                                <div class="mega-links-stack">
-                                    <a href="${accessoriesHref}" class="mega-item-link">Xem tất cả phụ kiện</a>
-                                    <a href="${accessoriesHref}?category=Túi xách" class="mega-item-link">Túi xách</a>
-                                    <a href="${accessoriesHref}?category=Trang sức" class="mega-item-link">Trang sức cao cấp</a>
-                                    <a href="${accessoriesHref}?category=Khăn" class="mega-item-link">Khăn lụa</a>
-                                    <a href="${accessoriesHref}?category=Mũ" class="mega-item-link">Mũ thời trang</a>
-                                    <a href="${accessoriesHref}?category=Kính mắt" class="mega-item-link">Kính mắt</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <a href="${tryOnHref}" class="aura-nav-link-new" data-nav-link>PHÒNG THỬ ĐỒ</a>
 
-            <a href="${membershipHref}" class="aura-nav-link-new" data-nav-link>THÀNH VIÊN</a>
-
-            <a href="${aboutHref}" class="aura-nav-link-new" data-nav-link>ABOUT</a>
+            <a href="${aboutHref}" class="aura-nav-link-new" data-nav-link>GIỚI THIỆU</a>
           </nav>
         </div>
       </div>
@@ -475,13 +454,18 @@ export async function buyNowDirect(productId) {
 
     // Fetch product & save to sessionStorage
     const product = await fetchProductById(productId);
+    const firstVariant = (product.variants && product.variants.length > 0) ? product.variants[0] : null;
+
     sessionStorage.setItem('buyNow_product', JSON.stringify({
       _id: product._id,
       name: product.name,
       price: product.price,
       image: product.image,
+      stock: product.stock || (firstVariant ? firstVariant.stock : 0),
       quantity: 1,
       size: 'M',
+      color: firstVariant ? firstVariant.color : (product.color || 'Mặc định'),
+      colorCode: firstVariant ? firstVariant.colorCode : (product.colorCode || ''),
     }));
 
     // Redirect to checkout with buyNow param
@@ -592,12 +576,15 @@ export function initBaseUI() {
                 return;
             }
 
-            await addToCart(productId, 1, 'M'); 
+            const color = btn.getAttribute('data-color') || '';
+            const colorCode = btn.getAttribute('data-color-code') || '';
+
+            await addToCart(productId, 1, 'M', color, colorCode); 
             updateCartBadge();
             
             showToast('Thành công', 'Đã thêm sản phẩm vào giỏ hàng');
         } catch (error) {
-            showToast('Lỗi', 'Không thể thêm vào giỏ hàng', 'error');
+            showToast('Lỗi', error.message || 'Không thể thêm vào giỏ hàng', 'error');
         } finally {
             btn.disabled = false;
             btn.innerHTML = originalContent;
