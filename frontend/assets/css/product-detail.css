@@ -377,7 +377,7 @@
 .buy-buttons {
     flex-grow: 1;
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
 
@@ -616,6 +616,25 @@
     border-radius: 50%;
     display: flex;
     align-items: center;
+.btn-try-on {
+    grid-column: 1 / -1;
+    height: 46px;
+    border: 1px solid #111;
+    background: linear-gradient(120deg, #fff 0%, #f6f0ea 100%);
+    color: #111;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-try-on:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
     justify-content: center;
 }
 

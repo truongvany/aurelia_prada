@@ -645,6 +645,9 @@ export function initBaseUI() {
           getUserProfile().then(user => {
               window.AURELIA_WISH_LIST = user.wishlist;
               syncWishlistVisuals(user.wishlist);
+          }).catch(err => {
+              console.warn('Initial profile load failed:', err.message);
+              // Already handled 401 in api.js by clearing storage
           });
       });
   }

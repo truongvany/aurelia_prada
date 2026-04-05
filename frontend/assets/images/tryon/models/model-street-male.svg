@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 900" role="img" aria-label="Street male model silhouette">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d9e4ea"/>
+      <stop offset="100%" stop-color="#f1f6f8"/>
+    </linearGradient>
+  </defs>
+  <rect width="700" height="900" fill="url(#bg2)"/>
+  <ellipse cx="350" cy="130" rx="68" ry="75" fill="#9aa8b2"/>
+  <path d="M232 252c24-64 67-98 118-98s94 34 118 98l34 160c12 58 17 123 14 188l-8 182H192l-8-182c-3-65 2-130 14-188z" fill="#788b99"/>
+  <path d="M246 331c33 15 174 15 208 0l0 56c-39 20-169 20-208 0z" fill="#5f7383" opacity="0.78"/>
+  <rect x="192" y="782" width="316" height="86" fill="#e9f0f4"/>
+</svg>

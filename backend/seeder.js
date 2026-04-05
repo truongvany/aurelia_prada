@@ -212,18 +212,18 @@ const seedData = async () => {
             'Khăn'
         ];
 
-        // Luxury Fashion & Accessories Image pool
+        // Luxury Fashion & Accessories Image pool from Real Premium Sources
         const images = [
-            'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=600&q=80', // Bag
-            'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80', // Bag
-            'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=600&q=80', // Wallet
-            'https://images.unsplash.com/photo-1596704017254-9b121067307b?auto=format&fit=crop&w=600&q=80', // Sunglasses
-            'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80', // Backpack
-            'https://images.unsplash.com/photo-1509191434302-021e9ed736c0?auto=format&fit=crop&w=600&q=80', // Belt
-            'https://images.unsplash.com/photo-1521335629791-ce4aec67dd16?auto=format&fit=crop&w=600&q=80', // Hat
-            'https://images.unsplash.com/photo-1535633302703-9420414421aa?auto=format&fit=crop&w=600&q=80', // Jewelry
-            'https://images.unsplash.com/photo-1590548784585-645d89030875?auto=format&fit=crop&w=600&q=80', // Perfume/Misc
-            'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80', // Watch
+            'https://format.vn/media/catalog/product/c/t/ct2432-5-sh_1_.jpg', // Women Suit
+            'https://format.vn/media/catalog/product/c/v/cv4176-7-sh_1_.jpg', // Dress
+            'https://format.vn/media/catalog/product/s/m/sm3809-5-sh_1_.jpg', // Shirt
+            'https://format.vn/media/catalog/product/q/n/qn2156-5-sh_1_.jpg', // Pants
+            'https://format.vn/media/catalog/product/p/k/pk3029-7-sh.jpg', // Bag
+            'https://format.vn/media/catalog/product/p/k/pk2668-5-sh_1_.jpg', // Bag 2
+            'https://format.vn/media/catalog/product/p/k/pk2138-5-sh.jpg', // Wallet
+            'https://format.vn/media/catalog/product/p/k/pk3025-5-sh.jpg', // Accessory
+            'https://format.vn/media/catalog/category/10005078_10004921_Ghi_en_1990000_1990000_2100050780025_2100049210021_2.jpg', // User provided category image
+            'https://format.vn/media/catalog/product/g/y/gy0534-5-sh_1_.jpg', // Shoes
         ];
         const pantsImages = [
             'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=600&q=80',

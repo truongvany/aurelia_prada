@@ -263,6 +263,15 @@ async function initDetail() {
     buyNowBtn.addEventListener('click', buyNowProduct);
   }
 
+  const tryOnBtn = document.getElementById('btn-try-on-main');
+  if (tryOnBtn) {
+    tryOnBtn.addEventListener('click', () => {
+      const inPages = window.location.pathname.includes('/pages/');
+      const target = inPages ? `virtual-tryon.html?id=${product._id}` : `pages/virtual-tryon.html?id=${product._id}`;
+      window.location.href = target;
+    });
+  }
+
   // NEW: Redesigned Description Section
   function renderStructuredDescription() {
     const container = document.getElementById('product-desc-structured');

@@ -217,6 +217,29 @@ export async function fetchProductById(id) {
   return normalizeProductMedia(product);
 }
 
+/**
+ * Send user image and product to AI backend
+ * @param {string} productId 
+ * @param {string} userImageBase64 
+ */
+export async function generateVirtualTryOn(productId, userImageBase64) {
+  const res = await fetch(`${API_URL}/tryon/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+      productId, 
+      userImage: userImageBase64 
+    }),
+  });
+
+  if (!res.ok) {
+    const errObj = await res.json().catch(() => ({}));
+    throw new Error(errObj.message || 'Lỗi server khi render ảnh.');
+  }
+
+  return res.json();
+}
+
 export async function getVoucherByCode(code) {
   const res = await fetch(`${API_URL}/vouchers/code/${code}`, {
     headers: getAuthHeaders(),
@@ -373,6 +396,12 @@ export async function getUserProfile() {
   const res = await fetch(`${API_URL}/auth/profile`, {
     headers: getAuthHeaders(),
   });
+  
+  if (res.status === 401) {
+    localStorage.removeItem('userInfo');
+    throw new Error('Unauthorized');
+  }
+  
   if (!res.ok) throw new Error('Failed to load profile');
   const data = await res.json();
   return data;

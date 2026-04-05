@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurelia | AI Try On Studio</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/virtual-tryon.css" />
+  </head>
+  <body>
+    <header class="top-nav"></header>
+
+    <main class="tryon-main" id="tryon-app">
+      <section class="tryon-hero">
+        <div class="tryon-fluid">
+          <p class="tryon-kicker">Powered by Generative AI</p>
+          <h1>AI Fitting Room</h1>
+          <p class="tryon-subtitle">Tải lên ảnh chân dung hoặc toàn thân của bạn để xem sản phẩm trên chính cơ thể mình.</p>
+        </div>
+      </section>
+
+      <section class="tryon-ai-shell tryon-fluid">
+        <!-- Cột trái: Sản phẩm & Form upload -->
+        <aside class="tryon-panel">
+          <div class="panel-card">
+            <h3>Sản phẩm đang thử</h3>
+            <div class="product-mini" id="tryon-product-mini">
+              <div class="skeleton"></div>
+            </div>
+            <p class="hint">Hệ thống AI sẽ phân tích form dáng sản phẩm và áp dụng lên ảnh của bạn.</p>
+          </div>
+
+          <div class="panel-card upload-card">
+            <h3>Ảnh của bạn</h3>
+            <p class="hint mb-2"><b>Lưu ý quan trọng:</b> AI sẽ giữ nguyên tỷ lệ khung hình. Để hiển thị cả body và cảnh ghép mượt nhất, hãy <b>upload ảnh chụp TOÀN THÂN</b>, đứng thẳng.</p>
+            
+            <div class="upload-area" id="upload-area">
+              <input type="file" id="user-photo-input" accept="image/*" hidden />
+              <button class="btn-outline w-full" onclick="document.getElementById('user-photo-input').click()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                Chọn ảnh tải lên
+              </button>
+              <div id="user-preview-wrap" class="user-preview-wrap hidden">
+                <img id="user-image-preview" src="" alt="User photo" />
+                <button class="btn-icon remove-photo" id="btn-remove-photo">&times;</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-card actions-card">
+            <button id="btn-generate" class="btn-primary w-full btn-large" disabled>Bắt đầu Gen AI</button>
+          </div>
+        </aside>
+
+        <!-- Cột phải: Stage Kết Quả -->
+        <section class="tryon-stage ai-stage">
+          <div id="stage-empty" class="stage-empty">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <h2>Chưa có kết quả</h2>
+            <p>Vui lòng tải ảnh của bạn lên và nhấn Bắt đầu.</p>
+          </div>
+
+          <div id="stage-loading" class="stage-loading hidden">
+            <div class="spinner-xl"></div>
+            <h3>AI đang xử lý...</h3>
+            <p>Quá trình này có thể tốn từ 10 đến 30 giây tùy thuộc vào đồ phức tạp của ảnh.</p>
+          </div>
+
+          <div id="stage-result" class="stage-result hidden">
+            <div class="result-toolbar">
+              <h3>Thành quả</h3>
+              <button id="btn-download" class="btn-outline btn-small">Tải về máy</button>
+            </div>
+            <div class="result-image-wrap">
+              <img id="result-image" src="" alt="AI Try On Result" />
+            </div>
+            <p class="disclaimer">Lưu ý: Ảnh được tạo ra bởi AI mang tính chất tham khảo form và màu sắc.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer"></footer>
+
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module" src="../assets/js/virtual-tryon.js"></script>
+  </body>
+</html>

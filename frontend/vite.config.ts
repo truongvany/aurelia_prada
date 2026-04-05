@@ -12,6 +12,7 @@ export default defineConfig({
         register: 'pages/register.html',
         profile: 'pages/profile.html',
         membership: 'pages/membership.html',
+        virtualTryOn: 'pages/virtual-tryon.html',
         adminDashboard: 'pages/admin/dashboard.html',
         adminProducts: 'pages/admin/products.html',
         adminOrders: 'pages/admin/orders.html',

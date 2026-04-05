@@ -1,6 +1,23 @@
 import { logoutUser } from './api.js';
 
 export function renderAdminLayout() {
+  const userInfoStr = localStorage.getItem('userInfo');
+  const isInAdmin = window.location.pathname.includes('/admin/');
+  const isInPages = window.location.pathname.includes('/pages/');
+  const loginPath = isInAdmin ? '../login.html' : (isInPages ? 'login.html' : 'pages/login.html');
+
+  if (!userInfoStr) {
+     window.location.href = loginPath;
+     return;
+  }
+
+  const user = JSON.parse(userInfoStr);
+  if (user.role !== 'admin') {
+      alert('Bạn không có quyền truy cập trang quản trị!');
+      window.location.href = loginPath;
+      return;
+  }
+
   const activePage = window.location.pathname.split('/').pop() || 'dashboard.html';
 
   const layoutHTML = `
@@ -91,7 +108,6 @@ export function renderAdminLayout() {
   const mainContentContainer = document.getElementById('adminMainContent');
   mainContentContainer.innerHTML = originalContent;
 
-  const userInfoStr = localStorage.getItem('userInfo');
   if(userInfoStr) {
       const userInfo = JSON.parse(userInfoStr);
       const nameEl = document.getElementById('admin-name');
