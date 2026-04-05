@@ -348,7 +348,7 @@ function buildUserShell() {
               <div class="payment-flex">
                 <img src="https://img.icons8.com/color/48/visa.png" alt="Visa">
                 <img src="https://img.icons8.com/color/48/mastercard.png" alt="Mastercard">
-                <img src="https://img.icons8.com/color/48/momo.png" alt="MoMo">
+                <img src="https://developers.momo.vn/v3/assets/images/MOMO-Logo-App-6262c3743a290ef02396a24ea2b66c35.png" alt="MoMo">
                 <img src="https://img.icons8.com/color/48/zalo.png" alt="ZaloPay">
               </div>
             </div>
