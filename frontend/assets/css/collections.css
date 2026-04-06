@@ -85,14 +85,22 @@
   margin: 0;
   background: var(--collection-surface-high);
   color: var(--collection-muted);
-  padding: 15px 14px;
+  padding: 20px 18px;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.11em;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.collections-stats p:hover {
+  transform: translateY(-4px);
+  background: var(--collection-surface-highest);
 }
 
 .collections-stats strong {
@@ -109,7 +117,9 @@
   justify-content: space-between;
   min-height: 244px;
   background: var(--collection-surface-high);
-  padding: clamp(18px, 2.8vw, 30px);
+  padding: clamp(24px, 3.2vw, 40px);
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
 }
 
 .collections-hero-aside .aside-label {
@@ -143,9 +153,10 @@
   position: sticky;
   top: 130px;
   z-index: 26;
-  padding: 8px 0 18px;
-  background: rgba(249, 249, 249, 0.8);
-  backdrop-filter: blur(18px);
+  padding: 12px 0 22px;
+  background: rgba(249, 249, 249, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 .collections-tabs {
@@ -153,23 +164,23 @@
   justify-content: center;
   align-items: stretch;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   overflow-x: visible;
-  padding-bottom: 4px;
-  scrollbar-width: thin;
+  padding: 4px 0;
 }
 
 .collections-tab {
-  flex: 1 1 clamp(220px, 24vw, 280px);
-  max-width: 290px;
+  flex: 1 1 clamp(200px, 22vw, 260px);
+  max-width: 280px;
   border: none;
-  border-radius: 0;
+  border-radius: 12px;
   background: var(--collection-surface-high);
   color: var(--collection-muted);
   text-align: center;
   cursor: pointer;
-  padding: 14px 15px;
-  transition: transform 0.22s ease, background-color 0.22s ease, color 0.22s ease;
+  padding: 16px 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .collections-tab:hover {
@@ -180,7 +191,9 @@
 
 .collections-tab.active {
   color: var(--collection-surface-low);
-  background: linear-gradient(120deg, var(--collection-primary), var(--collection-primary-dim));
+  background: linear-gradient(135deg, #2d3435, #5f5e5e);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 .collections-tab-label {
@@ -212,7 +225,9 @@
 
 .collection-group {
   background: var(--collection-surface-low);
-  padding: clamp(20px, 2.7vw, 34px);
+  padding: clamp(24px, 3.5vw, 44px);
+  border-radius: 32px;
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.02);
 }
 
 .collection-group-head {
@@ -269,13 +284,14 @@
 }
 
 .collection-category-head span {
-  background: rgba(254, 221, 180, 0.3);
+  background: rgba(114, 91, 59, 0.08);
   color: var(--collection-accent);
-  padding: 6px 9px;
+  padding: 6px 14px;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.11em;
+  border-radius: 100px;
 }
 
 .collection-grid {
@@ -397,12 +413,12 @@
 
 .collections-page .aura-mini-cart-btn,
 .collections-page .aura-buy-now-btn {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border: none;
-  border-radius: 0;
-  box-shadow: none;
-  transition: transform 0.2s ease, filter 0.2s ease;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .collections-page .aura-mini-cart-btn:hover,
@@ -422,14 +438,15 @@
 }
 
 .collection-pagination {
-  margin-top: 32px;
+  margin-top: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 8px;
-  padding: 12px;
-  background: var(--collection-surface-high);
+  gap: 12px;
+  padding: 20px;
+  background: rgba(228, 233, 234, 0.4);
+  border-radius: 16px;
 }
 
 .pagination-numbers {
@@ -442,17 +459,18 @@
 .pagination-btn,
 .pagination-num {
   border: none;
-  border-radius: 0;
-  min-width: 40px;
-  padding: 9px 12px;
-  background: rgba(255, 255, 255, 0.56);
+  border-radius: 8px;
+  min-width: 42px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.7);
   color: var(--collection-ink);
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 11px;
   font-weight: 700;
-  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .pagination-btn:hover,

@@ -6,7 +6,9 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "seed": "node seeder.js",
-    "cart:reset": "node scripts/resetCarts.js"
+    "cart:reset": "node scripts/resetCarts.js",
+    "seed:products:export": "node scripts/exportProductsSeed.js",
+    "seed:products:import": "node scripts/importProductsSeed.js"
   },
   "keywords": [],
   "author": "",

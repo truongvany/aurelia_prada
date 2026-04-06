@@ -1,0 +1,3182 @@
+{
+  "meta": {
+    "exportedAt": "2026-04-06T03:25:20.177Z",
+    "sourceDatabase": "mongodb://127.0.0.1:27017/aurelia_prada",
+    "seedFormatVersion": 1,
+    "productCount": 58,
+    "categoryCount": 25
+  },
+  "categories": [
+    {
+      "_id": "69ceaea4e38938c41714354b",
+      "name": "Áo sơ mi",
+      "slug": "ao-so-mi",
+      "description": null,
+      "group": "ÁO"
+    },
+    {
+      "_id": "69ceaea4e38938c41714354c",
+      "name": "Áo thun",
+      "slug": "ao-thun",
+      "description": null,
+      "group": "ÁO"
+    },
+    {
+      "_id": "69ceaea4e38938c41714354d",
+      "name": "Áo len",
+      "slug": "ao-len",
+      "description": null,
+      "group": "ÁO"
+    },
+    {
+      "_id": "69ceaea4e38938c41714354e",
+      "name": "Áo vest / Blazer",
+      "slug": "ao-vest-blazer",
+      "description": null,
+      "group": "ÁO"
+    },
+    {
+      "_id": "69ceaea4e38938c41714354f",
+      "name": "Áo khoác dạ",
+      "slug": "ao-khoac-da",
+      "description": null,
+      "group": "ÁO KHOÁC"
+    },
+    {
+      "_id": "69ceaea4e38938c417143550",
+      "name": "Tết / Holiday Collection",
+      "slug": "holiday-tet",
+      "description": null,
+      "group": "THEO DỊP"
+    },
+    {
+      "_id": "69ceaea4e38938c417143551",
+      "name": "Valentine / Noel / Halloween",
+      "slug": "seasonal-events",
+      "description": null,
+      "group": "THEO DỊP"
+    },
+    {
+      "_id": "69ceaea4e38938c417143552",
+      "name": "Tiệc cưới & Dạ hội",
+      "slug": "evening-bridal",
+      "description": null,
+      "group": "THEO DỊP"
+    },
+    {
+      "_id": "69ceaea4e38938c417143553",
+      "name": "Du lịch & Nghỉ hè",
+      "slug": "resort-collection",
+      "description": null,
+      "group": "THEO DỊP"
+    },
+    {
+      "_id": "69ceaea4e38938c417143554",
+      "name": "Đầm & Váy (Dress Edit)",
+      "slug": "dress-edit",
+      "description": null,
+      "group": "SẢN PHẨM ĐẶC TRƯNG"
+    },
+    {
+      "_id": "69ceaea4e38938c417143555",
+      "name": "Áo khoác (Outerwear)",
+      "slug": "outerwear",
+      "description": null,
+      "group": "SẢN PHẨM ĐẶC TRƯNG"
+    },
+    {
+      "_id": "69ceaea4e38938c417143556",
+      "name": "Đồ Denim",
+      "slug": "denim-wear",
+      "description": null,
+      "group": "SẢN PHẨM ĐẶC TRƯNG"
+    },
+    {
+      "_id": "69ceaea4e38938c417143557",
+      "name": "Đồ cơ bản (Essentials)",
+      "slug": "basics-essentials",
+      "description": null,
+      "group": "SẢN PHẨM ĐẶC TRƯNG"
+    },
+    {
+      "_id": "69ceaea4e38938c417143558",
+      "name": "Xuân Hè 2026",
+      "slug": "spring-summer-2026",
+      "description": null,
+      "group": "THEO MÙA"
+    },
+    {
+      "_id": "69ceaea4e38938c417143559",
+      "name": "Thu Đông 2025",
+      "slug": "fall-winter-2025",
+      "description": null,
+      "group": "THEO MÙA"
+    },
+    {
+      "_id": "69ceaea4e38938c41714355a",
+      "name": "Pre-Fall Collection",
+      "slug": "pre-fall",
+      "description": null,
+      "group": "THEO MÙA"
+    },
+    {
+      "_id": "69ceaea4e38938c41714355b",
+      "name": "Holiday Capsule",
+      "slug": "holiday-capsule",
+      "description": null,
+      "group": "THEO MÙA"
+    },
+    {
+      "_id": "69ceaea4e38938c41714355c",
+      "name": "Giày dép",
+      "slug": "giay-dep",
+      "description": null,
+      "group": "PHỤ KIỆN"
+    },
+    {
+      "_id": "69ceaea4e38938c41714355d",
+      "name": "Túi xách",
+      "slug": "tui-xach",
+      "description": null,
+      "group": "PHỤ KIỆN"
+    },
+    {
+      "_id": "69ceaea4e38938c41714355e",
+      "name": "Ví",
+      "slug": "vi",
+      "description": null,
+      "group": "PHỤ KIỆN"
+    },
+    {
+      "_id": "69ceaea4e38938c41714355f",
+      "name": "Thắt lưng",
+      "slug": "that-lung",
+      "description": null,
+      "group": "PHỤ KIỆN"
+    },
+    {
+      "_id": "69ceaea4e38938c417143560",
+      "name": "Kính mắt",
+      "slug": "kinh-mat",
+      "description": null,
+      "group": "PHỤ KIỆN"
+    },
+    {
+      "_id": "69ceaea4e38938c417143561",
+      "name": "Mũ",
+      "slug": "mu",
+      "description": null,
+      "group": "PHỤ KIỆN"
+    },
+    {
+      "_id": "69ceaea4e38938c417143562",
+      "name": "Trang sức",
+      "slug": "trang-suc",
+      "description": null,
+      "group": "PHỤ KIỆN"
+    },
+    {
+      "_id": "69ceaea4e38938c417143563",
+      "name": "Khăn",
+      "slug": "khan",
+      "description": null,
+      "group": "PHỤ KIỆN"
+    }
+  ],
+  "products": [
+    {
+      "_id": "69ceaea4e38938c417143565",
+      "name": "Áo sơ mi Urban Glow 2026",
+      "description": "",
+      "price": 1065803,
+      "originalPrice": 1200000,
+      "categoryId": "69ceaea4e38938c41714354b",
+      "categorySlug": "ao-so-mi",
+      "categoryName": "Áo sơ mi",
+      "variants": [
+        {
+          "color": "Xanh đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://img.vuahanghieu.com/unsafe/0x0/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/news/content/2021/08/mau-ao-so-mi-dep-nhat-3-jpg-1628560542-10082021085542.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 56
+        },
+        {
+          "color": "Xanh",
+          "colorCode": "#0000ff",
+          "images": [
+            "https://pos.nvncdn.com/6ddefc-25341/ps/20241021_Gejg6nMgE7.jpeg?v=1729483921"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "stock": 123
+        }
+      ],
+      "stock": 179,
+      "images": [
+        "https://img.vuahanghieu.com/unsafe/0x0/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/news/content/2021/08/mau-ao-so-mi-dep-nhat-3-jpg-1628560542-10082021085542.jpg",
+        "https://pos.nvncdn.com/6ddefc-25341/ps/20241021_Gejg6nMgE7.jpeg?v=1729483921"
+      ],
+      "image": "https://img.vuahanghieu.com/unsafe/0x0/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/news/content/2021/08/mau-ao-so-mi-dep-nhat-3-jpg-1628560542-10082021085542.jpg",
+      "badge": "",
+      "material": "Silk",
+      "sizeGuideImage": "",
+      "collectionName": "Premium Silk by Format",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 1,
+      "createdAt": "2026-04-02T18:00:04.408Z",
+      "updatedAt": "2026-04-06T03:25:11.499Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143566",
+      "name": "Áo thun Urban Glow 2026",
+      "description": "",
+      "price": 888783,
+      "originalPrice": 1155417,
+      "categoryId": "69ceaea4e38938c41714354c",
+      "categorySlug": "ao-thun",
+      "categoryName": "Áo thun",
+      "variants": [
+        {
+          "color": "Xanh",
+          "colorCode": "#0000ff",
+          "images": [
+            "https://bizweb.dktcdn.net/thumb/1024x1024/100/442/302/products/thumbnail-sale-web17.jpg?v=1774342416090"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 59
+        },
+        {
+          "color": "Xám",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://bizweb.dktcdn.net/thumb/1024x1024/100/442/302/products/2-d724cfbb-32f8-40a5-b597-3dc807f4babb.png?v=1774342416090"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 69,
+      "images": [
+        "https://bizweb.dktcdn.net/thumb/1024x1024/100/442/302/products/thumbnail-sale-web17.jpg?v=1774342416090",
+        "https://bizweb.dktcdn.net/thumb/1024x1024/100/442/302/products/2-d724cfbb-32f8-40a5-b597-3dc807f4babb.png?v=1774342416090"
+      ],
+      "image": "https://bizweb.dktcdn.net/thumb/1024x1024/100/442/302/products/thumbnail-sale-web17.jpg?v=1774342416090",
+      "badge": "",
+      "material": "Wool",
+      "sizeGuideImage": "",
+      "collectionName": "Urban Glow 2026",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 2,
+      "createdAt": "2026-04-02T18:00:04.408Z",
+      "updatedAt": "2026-04-06T03:25:11.511Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143567",
+      "name": "Áo len Premium Silk by Format",
+      "description": "",
+      "price": 1422084,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c41714354d",
+      "categorySlug": "ao-len",
+      "categoryName": "Áo len",
+      "variants": [
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://bizweb.dktcdn.net/100/502/737/products/o1cn010lrf9d1j9lgifidcp1660954.jpg?v=1728975454807"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 31
+        },
+        {
+          "color": "Xanh tím",
+          "colorCode": "#000040",
+          "images": [
+            "https://bizweb.dktcdn.net/100/502/737/products/o1cn01fxnthw1j9lgiffc7n1660954.jpg?v=1728975454807"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 41,
+      "images": [
+        "https://bizweb.dktcdn.net/100/502/737/products/o1cn010lrf9d1j9lgifidcp1660954.jpg?v=1728975454807",
+        "https://bizweb.dktcdn.net/100/502/737/products/o1cn01fxnthw1j9lgiffc7n1660954.jpg?v=1728975454807"
+      ],
+      "image": "https://bizweb.dktcdn.net/100/502/737/products/o1cn010lrf9d1j9lgifidcp1660954.jpg?v=1728975454807",
+      "badge": "",
+      "material": "Polyester",
+      "sizeGuideImage": "",
+      "collectionName": "No.11 Être Douce",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.514Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143568",
+      "name": "Áo vest / Blazer Urban Glow 2026",
+      "description": "",
+      "price": 1222657,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c41714354e",
+      "categorySlug": "ao-vest-blazer",
+      "categoryName": "Áo vest / Blazer",
+      "variants": [
+        {
+          "color": "Nâu",
+          "colorCode": "#804000",
+          "images": [
+            "https://pos.nvncdn.com/cb7602-216363/ps/20251120_XQlIIjzc6w.webp?v=1763610299"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 59
+        },
+        {
+          "color": "Kem",
+          "colorCode": "#c7beba",
+          "images": [
+            "https://pos.nvncdn.com/cb7602-216363/ps/20251120_ohlVSYCvTU.webp?v=1763610297"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 69,
+      "images": [
+        "https://pos.nvncdn.com/cb7602-216363/ps/20251120_XQlIIjzc6w.webp?v=1763610299",
+        "https://pos.nvncdn.com/cb7602-216363/ps/20251120_ohlVSYCvTU.webp?v=1763610297"
+      ],
+      "image": "https://pos.nvncdn.com/cb7602-216363/ps/20251120_XQlIIjzc6w.webp?v=1763610299",
+      "badge": "",
+      "material": "Silk",
+      "sizeGuideImage": "",
+      "collectionName": "Urban Glow 2026",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.516Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143569",
+      "name": "Áo khoác dạ No.11 Être Douce",
+      "description": "",
+      "price": 405199,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c41714354f",
+      "categorySlug": "ao-khoac-da",
+      "categoryName": "Áo khoác dạ",
+      "variants": [
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/77c39f7f961ccea3463515efc57b4048/1/0/10005539_10005531__en_en_1590000_1590000_2100055390052_2100055310012_9__2_3_3.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 42
+        },
+        {
+          "color": "Be ",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/77c39f7f961ccea3463515efc57b4048/1/0/10005539_10005523_be_nh_t_en_1590000_1590000_2100055390014_2100055230013_3__1_1.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 52,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/77c39f7f961ccea3463515efc57b4048/1/0/10005539_10005531__en_en_1590000_1590000_2100055390052_2100055310012_9__2_3_3.jpg",
+        "https://format.vn/media/catalog/product/cache/77c39f7f961ccea3463515efc57b4048/1/0/10005539_10005523_be_nh_t_en_1590000_1590000_2100055390014_2100055230013_3__1_1.jpg"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/77c39f7f961ccea3463515efc57b4048/1/0/10005539_10005531__en_en_1590000_1590000_2100055390052_2100055310012_9__2_3_3.jpg",
+      "badge": "",
+      "material": "Cashmere",
+      "sizeGuideImage": "",
+      "collectionName": "First Class",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.518Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714356a",
+      "name": "Tết / Holiday Collection First Class",
+      "description": "",
+      "price": 1156290,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143550",
+      "categorySlug": "holiday-tet",
+      "categoryName": "Tết / Holiday Collection",
+      "variants": [
+        {
+          "color": "Trắng bông",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://cdn.prod.website-files.com/6128ead3fee31c3c277ee742/6978c24420fc769e53c94f1d_IMG_5927.JPG"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 24
+        },
+        {
+          "color": "Kem",
+          "colorCode": "#ff8080",
+          "images": [
+            "https://cdn.prod.website-files.com/6128ead3fee31c3c277ee742/6978c203c7822147b19d5a58_IMG_5915.JPG"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 34,
+      "images": [
+        "https://cdn.prod.website-files.com/6128ead3fee31c3c277ee742/6978c24420fc769e53c94f1d_IMG_5927.JPG",
+        "https://cdn.prod.website-files.com/6128ead3fee31c3c277ee742/6978c203c7822147b19d5a58_IMG_5915.JPG"
+      ],
+      "image": "https://cdn.prod.website-files.com/6128ead3fee31c3c277ee742/6978c24420fc769e53c94f1d_IMG_5927.JPG",
+      "badge": "",
+      "material": "Silk",
+      "sizeGuideImage": "",
+      "collectionName": "First Class",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.519Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714356b",
+      "name": "Valentine / Noel / Halloween First Class",
+      "description": "",
+      "price": 622843,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143551",
+      "categorySlug": "seasonal-events",
+      "categoryName": "Valentine / Noel / Halloween",
+      "variants": [
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://imgcdn.thitruongsi.com/tts/rs:fill:1200:0:1:1/g:sm/plain/file://product/2023/11/30/30f6fb30-8f8c-11ee-a284-55f1ceee0135.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 61
+        },
+        {
+          "color": "Trắng",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://imgcdn.thitruongsi.com/tts/rs:fill:1200:0:1:1/g:sm/plain/file://product/2023/11/30/30e5bd20-8f8c-11ee-a284-55f1ceee0135.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 71,
+      "images": [
+        "https://imgcdn.thitruongsi.com/tts/rs:fill:1200:0:1:1/g:sm/plain/file://product/2023/11/30/30f6fb30-8f8c-11ee-a284-55f1ceee0135.jpg",
+        "https://imgcdn.thitruongsi.com/tts/rs:fill:1200:0:1:1/g:sm/plain/file://product/2023/11/30/30e5bd20-8f8c-11ee-a284-55f1ceee0135.jpg"
+      ],
+      "image": "https://imgcdn.thitruongsi.com/tts/rs:fill:1200:0:1:1/g:sm/plain/file://product/2023/11/30/30f6fb30-8f8c-11ee-a284-55f1ceee0135.jpg",
+      "badge": "",
+      "material": "Silk",
+      "sizeGuideImage": "",
+      "collectionName": "Premium Silk by Format",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.522Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714356c",
+      "name": "Tiệc cưới & Dạ hội First Class",
+      "description": "",
+      "price": 575214,
+      "originalPrice": 747778,
+      "categoryId": "69ceaea4e38938c417143552",
+      "categorySlug": "evening-bridal",
+      "categoryName": "Tiệc cưới & Dạ hội",
+      "variants": [
+        {
+          "color": "Hồng",
+          "colorCode": "#ff8080",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10005817_h_ng_nh_t_3990_10004876_h_ng_nh_t_1990_5_2_4.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 80
+        },
+        {
+          "color": "Trắng",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://anhvienmimosa.com.vn/wp-content/uploads/2019/01/ao-cuoi-da-hoi-3.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 90,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10005817_h_ng_nh_t_3990_10004876_h_ng_nh_t_1990_5_2_4.jpg",
+        "https://anhvienmimosa.com.vn/wp-content/uploads/2019/01/ao-cuoi-da-hoi-3.jpg"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10005817_h_ng_nh_t_3990_10004876_h_ng_nh_t_1990_5_2_4.jpg",
+      "badge": "",
+      "material": "Polyester",
+      "sizeGuideImage": "",
+      "collectionName": "First Class",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.527Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714356d",
+      "name": "Du lịch & Nghỉ hè No.11 Être Douce",
+      "description": "",
+      "price": 615128,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143553",
+      "categorySlug": "resort-collection",
+      "categoryName": "Du lịch & Nghỉ hè",
+      "variants": [
+        {
+          "color": "Xám",
+          "colorCode": "#808080",
+          "images": [
+            "https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/fd1cea7f96324ceb83437c8985fc299d~tplv-o3syd03w52-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my3&from=2378011839"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 75
+        },
+        {
+          "color": "Trắng",
+          "colorCode": "#ffffff",
+          "images": [
+            "https://cdn.eva.vn/upload/3-2025/images/duongtat/screenshot-5-07-06--1751738979-371-width550height820.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 85,
+      "images": [
+        "https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/fd1cea7f96324ceb83437c8985fc299d~tplv-o3syd03w52-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my3&from=2378011839",
+        "https://cdn.eva.vn/upload/3-2025/images/duongtat/screenshot-5-07-06--1751738979-371-width550height820.jpg"
+      ],
+      "image": "https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/fd1cea7f96324ceb83437c8985fc299d~tplv-o3syd03w52-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my3&from=2378011839",
+      "badge": "",
+      "material": "Polyester",
+      "sizeGuideImage": "",
+      "collectionName": "Urban Glow 2026",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.528Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714356e",
+      "name": "Đầm & Váy (Dress Edit) No.11 Être Douce",
+      "description": "",
+      "price": 1197965,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143554",
+      "categorySlug": "dress-edit",
+      "categoryName": "Đầm & Váy (Dress Edit)",
+      "variants": [
+        {
+          "color": "Xám",
+          "colorCode": "#808080",
+          "images": [
+            "https://product.hstatic.net/1000035031/product/dam-xoe-cong-so-thoi-trang-eden-co-v-phoi-hoa-d511__11__29ba634075d44549bdbeccf9a47dee99_master.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 36
+        },
+        {
+          "color": "Be",
+          "colorCode": "#ff8040",
+          "images": [
+            "https://product.hstatic.net/1000035031/product/dam-xoe-cong-so-thoi-trang-eden-co-v-phoi-hoa-d511__6__aa0dc218921143b8a9be0405dd946108_master.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 46,
+      "images": [
+        "https://product.hstatic.net/1000035031/product/dam-xoe-cong-so-thoi-trang-eden-co-v-phoi-hoa-d511__11__29ba634075d44549bdbeccf9a47dee99_master.jpg",
+        "https://product.hstatic.net/1000035031/product/dam-xoe-cong-so-thoi-trang-eden-co-v-phoi-hoa-d511__6__aa0dc218921143b8a9be0405dd946108_master.jpg"
+      ],
+      "image": "https://product.hstatic.net/1000035031/product/dam-xoe-cong-so-thoi-trang-eden-co-v-phoi-hoa-d511__11__29ba634075d44549bdbeccf9a47dee99_master.jpg",
+      "badge": "",
+      "material": "Wool",
+      "sizeGuideImage": "",
+      "collectionName": "First Class",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.533Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714356f",
+      "name": "Áo khoác (Outerwear) No.11 Être Douce",
+      "description": "",
+      "price": 1121991,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143555",
+      "categorySlug": "outerwear",
+      "categoryName": "Áo khoác (Outerwear)",
+      "variants": [
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10005995__en_2590_8_1_4.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 94
+        },
+        {
+          "color": "Be",
+          "colorCode": "#ff8080",
+          "images": [
+            "https://pos.nvncdn.com/3d26e0-79464/ps/20220812_1zDVlALyoEr4Jdr584ATstWU.jpg?v=1673620982"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 104,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10005995__en_2590_8_1_4.jpg",
+        "https://pos.nvncdn.com/3d26e0-79464/ps/20220812_1zDVlALyoEr4Jdr584ATstWU.jpg?v=1673620982"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10005995__en_2590_8_1_4.jpg",
+      "badge": "",
+      "material": "Wool",
+      "sizeGuideImage": "",
+      "collectionName": "First Class",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.541Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143570",
+      "name": "Đồ Denim Premium Silk by Format",
+      "description": "",
+      "price": 1039173,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143556",
+      "categorySlug": "denim-wear",
+      "categoryName": "Đồ Denim",
+      "variants": [
+        {
+          "color": "Xanh ",
+          "colorCode": "#004080",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005632_xanh_t_m_than_1690_1.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 67
+        },
+        {
+          "color": "Xanh đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005634_t_m_than_1990000_2100056340018_1_a.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 77,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005632_xanh_t_m_than_1690_1.jpg",
+        "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005634_t_m_than_1990000_2100056340018_1_a.jpg"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005632_xanh_t_m_than_1690_1.jpg",
+      "badge": "",
+      "material": "Polyester",
+      "sizeGuideImage": "",
+      "collectionName": "No.11 Être Douce",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.544Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143571",
+      "name": "Đồ cơ bản (Essentials) Premium Silk by Format",
+      "description": "",
+      "price": 857971,
+      "originalPrice": 1115362,
+      "categoryId": "69ceaea4e38938c417143557",
+      "categorySlug": "basics-essentials",
+      "categoryName": "Đồ cơ bản (Essentials)",
+      "variants": [
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10005160__en_3990000_2100051600025_1_2_3_2.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 80
+        },
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005159___3990000_2100051590029_1.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 90,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10005160__en_3990000_2100051600025_1_2_3_2.jpg",
+        "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005159___3990000_2100051590029_1.jpg"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10005160__en_3990000_2100051600025_1_2_3_2.jpg",
+      "badge": "",
+      "material": "Silk",
+      "sizeGuideImage": "",
+      "collectionName": "Urban Glow 2026",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.546Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143572",
+      "name": "Xuân Hè 2026 Premium Silk by Format",
+      "description": "",
+      "price": 772613,
+      "originalPrice": 1004396,
+      "categoryId": "69ceaea4e38938c417143558",
+      "categorySlug": "spring-summer-2026",
+      "categoryName": "Xuân Hè 2026",
+      "variants": [
+        {
+          "color": "Trắng",
+          "colorCode": "#ffffff",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10004798_10004803_be_nh_t.h_a_ti_t_02_be_nh_t.h_a_ti_t_02_2990000_2990000_2100047980056_2100048030064_1_3_2_1.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 70
+        },
+        {
+          "color": "Nâu",
+          "colorCode": "#800000",
+          "images": [
+            "https://bazaarvietnam.vn/wp-content/uploads/2025/10/hermes-xuan-he-2026-004-400x533.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 80,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10004798_10004803_be_nh_t.h_a_ti_t_02_be_nh_t.h_a_ti_t_02_2990000_2990000_2100047980056_2100048030064_1_3_2_1.jpg",
+        "https://bazaarvietnam.vn/wp-content/uploads/2025/10/hermes-xuan-he-2026-004-400x533.jpg"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10004798_10004803_be_nh_t.h_a_ti_t_02_be_nh_t.h_a_ti_t_02_2990000_2990000_2100047980056_2100048030064_1_3_2_1.jpg",
+      "badge": "",
+      "material": "Polyester",
+      "sizeGuideImage": "",
+      "collectionName": "Urban Glow 2026",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.547Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143573",
+      "name": "Thu Đông 2025 Urban Glow 2026",
+      "description": "",
+      "price": 1004200,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143559",
+      "categorySlug": "fall-winter-2025",
+      "categoryName": "Thu Đông 2025",
+      "variants": [
+        {
+          "color": "Xám",
+          "colorCode": "#000000",
+          "images": [
+            "https://leika.vn/wp-content/uploads/2025/10/Ao-vest-croptop-ve-cach-dieu-phoi-vai-2.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 29
+        },
+        {
+          "color": "Xanh",
+          "colorCode": "#8080c0",
+          "images": [
+            "https://pos.nvncdn.com/7d27de-65076/art/Cap-nhat-xu-huong-thoi-trang-Thu-Dong-2025-dang-duoc-san-don-nhieu-nhat-hien-nay_thoi-trang-thu-dong-3.webp"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 39,
+      "images": [
+        "https://leika.vn/wp-content/uploads/2025/10/Ao-vest-croptop-ve-cach-dieu-phoi-vai-2.jpg",
+        "https://pos.nvncdn.com/7d27de-65076/art/Cap-nhat-xu-huong-thoi-trang-Thu-Dong-2025-dang-duoc-san-don-nhieu-nhat-hien-nay_thoi-trang-thu-dong-3.webp"
+      ],
+      "image": "https://leika.vn/wp-content/uploads/2025/10/Ao-vest-croptop-ve-cach-dieu-phoi-vai-2.jpg",
+      "badge": "",
+      "material": "Soft Cotton",
+      "sizeGuideImage": "",
+      "collectionName": "First Class",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.549Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143574",
+      "name": "Pre-Fall Collection No.11 Être Douce",
+      "description": "",
+      "price": 434215,
+      "originalPrice": 564479,
+      "categoryId": "69ceaea4e38938c41714355a",
+      "categorySlug": "pre-fall",
+      "categoryName": "Pre-Fall Collection",
+      "variants": [
+        {
+          "color": "Trắng",
+          "colorCode": "#ffffff",
+          "images": [
+            "https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2025%2F07%2F28%2Fwe11done-pre-fall-2025-celluloid-dreams-collection-lookbook-info-001.jpg?w=1440&cbr=1&q=90&fit=max"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 65
+        },
+        {
+          "color": "Xám",
+          "colorCode": "#808080",
+          "images": [
+            "https://emwear.vn/cdn/shop/files/1_9d84bd48-d94e-4f8f-aca8-6ba8b7805772_800x.jpg?v=1697430382"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 75,
+      "images": [
+        "https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2025%2F07%2F28%2Fwe11done-pre-fall-2025-celluloid-dreams-collection-lookbook-info-001.jpg?w=1440&cbr=1&q=90&fit=max",
+        "https://emwear.vn/cdn/shop/files/1_9d84bd48-d94e-4f8f-aca8-6ba8b7805772_800x.jpg?v=1697430382"
+      ],
+      "image": "https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2025%2F07%2F28%2Fwe11done-pre-fall-2025-celluloid-dreams-collection-lookbook-info-001.jpg?w=1440&cbr=1&q=90&fit=max",
+      "badge": "",
+      "material": "Wool",
+      "sizeGuideImage": "",
+      "collectionName": "First Class",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.550Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143575",
+      "name": "Holiday Capsule First Class",
+      "description": "",
+      "price": 633354,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c41714355b",
+      "categorySlug": "holiday-capsule",
+      "categoryName": "Holiday Capsule",
+      "variants": [
+        {
+          "color": "Trắng",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005177_be_3590_10005178_be_19990_4-2.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 41
+        },
+        {
+          "color": "Hồng",
+          "colorCode": "#ff80c0",
+          "images": [
+            "https://pos.nvncdn.com/3d26e0-79464/ps/Ao-Jacket-nu-1-lop-251JWS1032-FY2504-2.jpg?v=1763081206"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 51,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005177_be_3590_10005178_be_19990_4-2.jpg",
+        "https://pos.nvncdn.com/3d26e0-79464/ps/Ao-Jacket-nu-1-lop-251JWS1032-FY2504-2.jpg?v=1763081206"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005177_be_3590_10005178_be_19990_4-2.jpg",
+      "badge": "",
+      "material": "Soft Cotton",
+      "sizeGuideImage": "",
+      "collectionName": "Premium Silk by Format",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.551Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714357e",
+      "name": "Áo sơ mi No.11 Être Douce",
+      "description": "",
+      "price": 952919,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c41714354b",
+      "categorySlug": "ao-so-mi",
+      "categoryName": "Áo sơ mi",
+      "variants": [
+        {
+          "color": "Trắng",
+          "colorCode": "#ffffff",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005695_tra_ng_1590_10005916_tra_ng_01_990_3.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 90
+        },
+        {
+          "color": "Xám",
+          "colorCode": "#000000",
+          "images": [
+            "https://pos.nvncdn.com/8073c5-83109/ps/20240325_aiPIIkR1M3.jpeg?v=1711341772"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        },
+        {
+          "color": "Nâu",
+          "colorCode": "#804040",
+          "images": [
+            "https://cerauniforms.com/assets/shops/ao-so-mi-nu/ao-so-mi-lua-nu-mau-nau.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 110,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005695_tra_ng_1590_10005916_tra_ng_01_990_3.jpg",
+        "https://pos.nvncdn.com/8073c5-83109/ps/20240325_aiPIIkR1M3.jpeg?v=1711341772",
+        "https://cerauniforms.com/assets/shops/ao-so-mi-nu/ao-so-mi-lua-nu-mau-nau.jpg"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005695_tra_ng_1590_10005916_tra_ng_01_990_3.jpg",
+      "badge": "",
+      "material": "Linen",
+      "sizeGuideImage": "",
+      "collectionName": "Premium Silk by Format",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.553Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714357f",
+      "name": "Áo thun Urban Glow 2026",
+      "description": "",
+      "price": 802182,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c41714354c",
+      "categorySlug": "ao-thun",
+      "categoryName": "Áo thun",
+      "variants": [
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://img.vuahanghieu.com/unsafe/0x0/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/news/content/2024/04/ao-thun-hot-trend-2024-4-jpg-1713929587-24042024103307.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 55
+        },
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREY8nPVsds5IBePgRVGqhyV9o-nh6zevLYRg&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 65,
+      "images": [
+        "https://img.vuahanghieu.com/unsafe/0x0/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/news/content/2024/04/ao-thun-hot-trend-2024-4-jpg-1713929587-24042024103307.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREY8nPVsds5IBePgRVGqhyV9o-nh6zevLYRg&s"
+      ],
+      "image": "https://img.vuahanghieu.com/unsafe/0x0/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/news/content/2024/04/ao-thun-hot-trend-2024-4-jpg-1713929587-24042024103307.jpg",
+      "badge": "",
+      "material": "Cashmere",
+      "sizeGuideImage": "",
+      "collectionName": "No.11 Être Douce",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.555Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143580",
+      "name": "Áo len No.11 Être Douce",
+      "description": "",
+      "price": 757209,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c41714354d",
+      "categorySlug": "ao-len",
+      "categoryName": "Áo len",
+      "variants": [
+        {
+          "color": "Đỏ ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005524_10005525__m_m_1290000_990000_2100055240050_2100055250059_7_.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 51
+        },
+        {
+          "color": "Trắng Be",
+          "colorCode": "#ff8080",
+          "images": [
+            "https://cdn.hstatic.net/products/200000503583/ao-len-nu__5__f6a4b34fa3434208b7957c0db6b28d90_master.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 61,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005524_10005525__m_m_1290000_990000_2100055240050_2100055250059_7_.jpg",
+        "https://cdn.hstatic.net/products/200000503583/ao-len-nu__5__f6a4b34fa3434208b7957c0db6b28d90_master.jpg"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005524_10005525__m_m_1290000_990000_2100055240050_2100055250059_7_.jpg",
+      "badge": "",
+      "material": "Wool",
+      "sizeGuideImage": "",
+      "collectionName": "Urban Glow 2026",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.557Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143581",
+      "name": "Áo vest / Blazer Urban Glow 2026",
+      "description": "",
+      "price": 410993,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c41714354e",
+      "categorySlug": "ao-vest-blazer",
+      "categoryName": "Áo vest / Blazer",
+      "variants": [
+        {
+          "color": "Xám",
+          "colorCode": "#808080",
+          "images": [
+            "https://maymacthanhtung.vn/wp-content/uploads/2025/08/mau-vest-nu-cong-so-2026.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 93
+        },
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4aqk2RmYAwzjk5CAi04L2OwE-cTVrV2fgeQ&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 103,
+      "images": [
+        "https://maymacthanhtung.vn/wp-content/uploads/2025/08/mau-vest-nu-cong-so-2026.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4aqk2RmYAwzjk5CAi04L2OwE-cTVrV2fgeQ&s"
+      ],
+      "image": "https://maymacthanhtung.vn/wp-content/uploads/2025/08/mau-vest-nu-cong-so-2026.jpg",
+      "badge": "",
+      "material": "Linen",
+      "sizeGuideImage": "",
+      "collectionName": "Urban Glow 2026",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.559Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143582",
+      "name": "Áo khoác dạ Urban Glow 2026",
+      "description": "",
+      "price": 520487,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c41714354f",
+      "categorySlug": "ao-khoac-da",
+      "categoryName": "Áo khoác dạ",
+      "variants": [
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://leika.vn/wp-content/uploads/2026/01/Ao-khoac-ngan-khoa-dong-tui-coi-doc-1-510x765.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 30
+        },
+        {
+          "color": "Xám",
+          "colorCode": "#808080",
+          "images": [
+            "https://leika.vn/wp-content/uploads/2026/01/Ao-khoac-dai-suong-2-hang-cuc-2-510x765.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 40,
+      "images": [
+        "https://leika.vn/wp-content/uploads/2026/01/Ao-khoac-ngan-khoa-dong-tui-coi-doc-1-510x765.jpg",
+        "https://leika.vn/wp-content/uploads/2026/01/Ao-khoac-dai-suong-2-hang-cuc-2-510x765.jpg"
+      ],
+      "image": "https://leika.vn/wp-content/uploads/2026/01/Ao-khoac-ngan-khoa-dong-tui-coi-doc-1-510x765.jpg",
+      "badge": "",
+      "material": "Polyester",
+      "sizeGuideImage": "",
+      "collectionName": "Urban Glow 2026",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.560Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143583",
+      "name": "Tết / Holiday Collection First Class",
+      "description": "",
+      "price": 380500,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143550",
+      "categorySlug": "holiday-tet",
+      "categoryName": "Tết / Holiday Collection",
+      "variants": [
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://bizweb.dktcdn.net/100/502/737/products/o1cn01atbjbk1j9lg7abekq1660954.jpg?v=1729064092873"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 90
+        },
+        {
+          "color": "Trắng ",
+          "colorCode": "#000000",
+          "images": [
+            "https://cdn.hstatic.net/products/1000354082/29_8151997ce82d487cb2cbc60287dedcc1_grande.png"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 100,
+      "images": [
+        "https://bizweb.dktcdn.net/100/502/737/products/o1cn01atbjbk1j9lg7abekq1660954.jpg?v=1729064092873",
+        "https://cdn.hstatic.net/products/1000354082/29_8151997ce82d487cb2cbc60287dedcc1_grande.png"
+      ],
+      "image": "https://bizweb.dktcdn.net/100/502/737/products/o1cn01atbjbk1j9lg7abekq1660954.jpg?v=1729064092873",
+      "badge": "",
+      "material": "Wool",
+      "sizeGuideImage": "",
+      "collectionName": "First Class",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.562Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143584",
+      "name": "Valentine / Noel / Halloween First Class",
+      "description": "",
+      "price": 752782,
+      "originalPrice": 978616,
+      "categoryId": "69ceaea4e38938c417143551",
+      "categorySlug": "seasonal-events",
+      "categoryName": "Valentine / Noel / Halloween",
+      "variants": [
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://trangphucdien.net/wp-content/uploads/2019/12/vay-noel-trang-phuc-noel-giang-sinh-021-600x600.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 44
+        },
+        {
+          "color": "Hồng",
+          "colorCode": "#ff8080",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvyzx9H2RfhRxPn8fNCtcfshOMYFNYJXic_A&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 54,
+      "images": [
+        "https://trangphucdien.net/wp-content/uploads/2019/12/vay-noel-trang-phuc-noel-giang-sinh-021-600x600.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvyzx9H2RfhRxPn8fNCtcfshOMYFNYJXic_A&s"
+      ],
+      "image": "https://trangphucdien.net/wp-content/uploads/2019/12/vay-noel-trang-phuc-noel-giang-sinh-021-600x600.jpg",
+      "badge": "",
+      "material": "Soft Cotton",
+      "sizeGuideImage": "",
+      "collectionName": "Premium Silk by Format",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.563Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143585",
+      "name": "Tiệc cưới & Dạ hội Urban Glow 2026",
+      "description": "",
+      "price": 1098573,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143552",
+      "categorySlug": "evening-bridal",
+      "categoryName": "Tiệc cưới & Dạ hội",
+      "variants": [
+        {
+          "color": "Trắng",
+          "colorCode": "#000000",
+          "images": [
+            "https://cdn.nicolebridal.vn/wp-content/uploads/2024/11/Nicole-Bridal-Va%CC%81y-cu%CC%9Bo%CC%9B%CC%81i-kie%CC%82%CC%89u-da%CC%A3-ho%CC%A3%CC%82i-hi%CC%80nh-8.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 81
+        },
+        {
+          "color": "Xanh",
+          "colorCode": "#008040",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0bvQFKTX52LtJ1DytTOhQK7r3UYgTd0MgyQ&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 91,
+      "images": [
+        "https://cdn.nicolebridal.vn/wp-content/uploads/2024/11/Nicole-Bridal-Va%CC%81y-cu%CC%9Bo%CC%9B%CC%81i-kie%CC%82%CC%89u-da%CC%A3-ho%CC%A3%CC%82i-hi%CC%80nh-8.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0bvQFKTX52LtJ1DytTOhQK7r3UYgTd0MgyQ&s"
+      ],
+      "image": "https://cdn.nicolebridal.vn/wp-content/uploads/2024/11/Nicole-Bridal-Va%CC%81y-cu%CC%9Bo%CC%9B%CC%81i-kie%CC%82%CC%89u-da%CC%A3-ho%CC%A3%CC%82i-hi%CC%80nh-8.jpg",
+      "badge": "",
+      "material": "Wool",
+      "sizeGuideImage": "",
+      "collectionName": "Urban Glow 2026",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.569Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143586",
+      "name": "Du lịch & Nghỉ hè Premium Silk by Format",
+      "description": "",
+      "price": 701549,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143553",
+      "categorySlug": "resort-collection",
+      "categoryName": "Du lịch & Nghỉ hè",
+      "variants": [
+        {
+          "color": "Xanh",
+          "colorCode": "#000000",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10004799_be_nh_t.h_a_ti_t_4490000_2100047990024_3.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 88
+        },
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10004801__.h_a_ti_t_4990000_2100048010028_2.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 98,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10004799_be_nh_t.h_a_ti_t_4490000_2100047990024_3.jpg",
+        "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10004801__.h_a_ti_t_4990000_2100048010028_2.jpg"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/9efa0051eb467dd5527f3aa75bf792d1/1/0/10004799_be_nh_t.h_a_ti_t_4490000_2100047990024_3.jpg",
+      "badge": "",
+      "material": "Soft Cotton",
+      "sizeGuideImage": "",
+      "collectionName": "First Class",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.571Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143587",
+      "name": "Đầm & Váy (Dress Edit) Urban Glow 2026",
+      "description": "",
+      "price": 1469478,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143554",
+      "categorySlug": "dress-edit",
+      "categoryName": "Đầm & Váy (Dress Edit)",
+      "variants": [
+        {
+          "color": "Xanh",
+          "colorCode": "#0000ff",
+          "images": [
+            "https://js0fpsb45jobj.vcdn.cloud/storage/upload/media/gumac3/dg01086/1-xanh-dg01086.png"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 37
+        },
+        {
+          "color": "Xanh Cây",
+          "colorCode": "#000000",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw64AkI4hL4vS87ZqHZMpkKFJ4lHec8c8SVg&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        },
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://leika.vn/wp-content/uploads/2026/03/Dam-xoe-tay-cape-dinh-cuc-3.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 57,
+      "images": [
+        "https://js0fpsb45jobj.vcdn.cloud/storage/upload/media/gumac3/dg01086/1-xanh-dg01086.png",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw64AkI4hL4vS87ZqHZMpkKFJ4lHec8c8SVg&s",
+        "https://leika.vn/wp-content/uploads/2026/03/Dam-xoe-tay-cape-dinh-cuc-3.jpg"
+      ],
+      "image": "https://js0fpsb45jobj.vcdn.cloud/storage/upload/media/gumac3/dg01086/1-xanh-dg01086.png",
+      "badge": "",
+      "material": "Linen",
+      "sizeGuideImage": "",
+      "collectionName": "No.11 Être Douce",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.572Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143588",
+      "name": "Áo khoác (Outerwear) No.11 Être Douce",
+      "description": "",
+      "price": 505849,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143555",
+      "categorySlug": "outerwear",
+      "categoryName": "Áo khoác (Outerwear)",
+      "variants": [
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://product.hstatic.net/1000378223/product/den_6a5106c25a024f0e86e7fe53e18d0886.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 43
+        },
+        {
+          "color": "Hồng",
+          "colorCode": "#000000",
+          "images": [
+            "https://bizweb.dktcdn.net/100/502/737/products/o1cn01fkypwd1imhjrscbh98566609.jpg?v=1734596744990"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 53,
+      "images": [
+        "https://product.hstatic.net/1000378223/product/den_6a5106c25a024f0e86e7fe53e18d0886.jpg",
+        "https://bizweb.dktcdn.net/100/502/737/products/o1cn01fkypwd1imhjrscbh98566609.jpg?v=1734596744990"
+      ],
+      "image": "https://product.hstatic.net/1000378223/product/den_6a5106c25a024f0e86e7fe53e18d0886.jpg",
+      "badge": "",
+      "material": "Wool",
+      "sizeGuideImage": "",
+      "collectionName": "Premium Silk by Format",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.573Z"
+    },
+    {
+      "_id": "69ceaea4e38938c417143589",
+      "name": "Đồ Denim First Class",
+      "description": "",
+      "price": 474723,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143556",
+      "categorySlug": "denim-wear",
+      "categoryName": "Đồ Denim",
+      "variants": [
+        {
+          "color": "Xanh",
+          "colorCode": "#004080",
+          "images": [
+            "https://product.hstatic.net/1000304105/product/set-denim-xch2-te324j8492__1__3dad2977c7054163a647f178cc7c75a4.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 66
+        },
+        {
+          "color": "Xanh đậm",
+          "colorCode": "#0000ff",
+          "images": [
+            "https://bizweb.dktcdn.net/thumb/1024x1024/100/403/511/products/o1cn01tv3x431m8d3ipysbf4650613.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 76,
+      "images": [
+        "https://product.hstatic.net/1000304105/product/set-denim-xch2-te324j8492__1__3dad2977c7054163a647f178cc7c75a4.jpg",
+        "https://bizweb.dktcdn.net/thumb/1024x1024/100/403/511/products/o1cn01tv3x431m8d3ipysbf4650613.jpg"
+      ],
+      "image": "https://product.hstatic.net/1000304105/product/set-denim-xch2-te324j8492__1__3dad2977c7054163a647f178cc7c75a4.jpg",
+      "badge": "",
+      "material": "Soft Cotton",
+      "sizeGuideImage": "",
+      "collectionName": "Urban Glow 2026",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.575Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714358a",
+      "name": "Đồ cơ bản (Essentials) First Class",
+      "description": "",
+      "price": 807840,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143557",
+      "categorySlug": "basics-essentials",
+      "categoryName": "Đồ cơ bản (Essentials)",
+      "variants": [
+        {
+          "color": "Trắng",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005177_be_3590_10005178_be_19990_2-2.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 75
+        },
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005184___3590_1.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 85,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005177_be_3590_10005178_be_19990_2-2.jpg",
+        "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005184___3590_1.jpg"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10005177_be_3590_10005178_be_19990_2-2.jpg",
+      "badge": "",
+      "material": "Cashmere",
+      "sizeGuideImage": "",
+      "collectionName": "Premium Silk by Format",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.576Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714358b",
+      "name": "Xuân Hè 2026 Urban Glow 2026",
+      "description": "",
+      "price": 1471063,
+      "originalPrice": 1912381,
+      "categoryId": "69ceaea4e38938c417143558",
+      "categorySlug": "spring-summer-2026",
+      "categoryName": "Xuân Hè 2026",
+      "variants": [
+        {
+          "color": "Xám",
+          "colorCode": "#808080",
+          "images": [
+            "https://noidia.b-cdn.net/thumbnails/735312510167.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 90
+        },
+        {
+          "color": "Hồng",
+          "colorCode": "#000000",
+          "images": [
+            "https://image.uniqlo.com/UQ/ST3/vn/imagesgoods/483810/item/vngoods_10_483810_3x4.jpg?width=828"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 100,
+      "images": [
+        "https://noidia.b-cdn.net/thumbnails/735312510167.jpg",
+        "https://image.uniqlo.com/UQ/ST3/vn/imagesgoods/483810/item/vngoods_10_483810_3x4.jpg?width=828"
+      ],
+      "image": "https://noidia.b-cdn.net/thumbnails/735312510167.jpg",
+      "badge": "",
+      "material": "Linen",
+      "sizeGuideImage": "",
+      "collectionName": "Urban Glow 2026",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.578Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714358c",
+      "name": "Thu Đông 2025 First Class",
+      "description": "",
+      "price": 512596,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c417143559",
+      "categorySlug": "fall-winter-2025",
+      "categoryName": "Thu Đông 2025",
+      "variants": [
+        {
+          "color": "Trắng",
+          "colorCode": "#ffffff",
+          "images": [
+            "https://leika.vn/wp-content/uploads/2025/10/Ao-vest-om-co-2-ve-ca-sau-dinh-cuc-8.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 87
+        },
+        {
+          "color": "Xám",
+          "colorCode": "#000000",
+          "images": [
+            "https://pos.nvncdn.com/7d27de-65076/art/Cap-nhat-xu-huong-thoi-trang-Thu-Dong-2025-dang-duoc-san-don-nhieu-nhat-hien-nay_thoi-trang-thu-dong-8.webp"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 97,
+      "images": [
+        "https://leika.vn/wp-content/uploads/2025/10/Ao-vest-om-co-2-ve-ca-sau-dinh-cuc-8.jpg",
+        "https://pos.nvncdn.com/7d27de-65076/art/Cap-nhat-xu-huong-thoi-trang-Thu-Dong-2025-dang-duoc-san-don-nhieu-nhat-hien-nay_thoi-trang-thu-dong-8.webp"
+      ],
+      "image": "https://leika.vn/wp-content/uploads/2025/10/Ao-vest-om-co-2-ve-ca-sau-dinh-cuc-8.jpg",
+      "badge": "",
+      "material": "Cashmere",
+      "sizeGuideImage": "",
+      "collectionName": "No.11 Être Douce",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.579Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714358d",
+      "name": "Pre-Fall Collection Premium Silk by Format",
+      "description": "",
+      "price": 807511,
+      "originalPrice": 1049764,
+      "categoryId": "69ceaea4e38938c41714355a",
+      "categorySlug": "pre-fall",
+      "categoryName": "Pre-Fall Collection",
+      "variants": [
+        {
+          "color": "hồng",
+          "colorCode": "#000000",
+          "images": [
+            "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10004797_10004645_h_ng__3490000_1490000_2100047970064_2100046450024_4.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 82
+        },
+        {
+          "color": "Trắng",
+          "colorCode": "#000000",
+          "images": [
+            "https://format.vn//media/catalog/category/10005205_10004875_Tr_ng_en_1390000_1990000_2100052050010_2100048750023_4_.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 92,
+      "images": [
+        "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10004797_10004645_h_ng__3490000_1490000_2100047970064_2100046450024_4.jpg",
+        "https://format.vn//media/catalog/category/10005205_10004875_Tr_ng_en_1390000_1990000_2100052050010_2100048750023_4_.jpg"
+      ],
+      "image": "https://format.vn/media/catalog/product/cache/7a0c685c631a276dd4175330dfc2fae8/1/0/10004797_10004645_h_ng__3490000_1490000_2100047970064_2100046450024_4.jpg",
+      "badge": "",
+      "material": "Linen",
+      "sizeGuideImage": "",
+      "collectionName": "No.11 Être Douce",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.581Z"
+    },
+    {
+      "_id": "69ceaea4e38938c41714358e",
+      "name": "Holiday Capsule First Class",
+      "description": "",
+      "price": 1409474,
+      "originalPrice": null,
+      "categoryId": "69ceaea4e38938c41714355b",
+      "categorySlug": "holiday-capsule",
+      "categoryName": "Holiday Capsule",
+      "variants": [
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://pos.nvncdn.com/3d26e0-79464/ps/Ao-Jacket-nu-1-lop-251JWS1032-FY2504-6.jpg?v=1763081213"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 94
+        },
+        {
+          "color": "Xám",
+          "colorCode": "#000000",
+          "images": [
+            "https://bizweb.dktcdn.net/100/502/737/products/o1cn01ofxm0o1g3h3vixef12020370-9a0b7a64-946f-439b-b24b-ca0ff8fa88ef.jpg?v=1732942818870"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 104,
+      "images": [
+        "https://pos.nvncdn.com/3d26e0-79464/ps/Ao-Jacket-nu-1-lop-251JWS1032-FY2504-6.jpg?v=1763081213",
+        "https://bizweb.dktcdn.net/100/502/737/products/o1cn01ofxm0o1g3h3vixef12020370-9a0b7a64-946f-439b-b24b-ca0ff8fa88ef.jpg?v=1732942818870"
+      ],
+      "image": "https://pos.nvncdn.com/3d26e0-79464/ps/Ao-Jacket-nu-1-lop-251JWS1032-FY2504-6.jpg?v=1763081213",
+      "badge": "",
+      "material": "Silk",
+      "sizeGuideImage": "",
+      "collectionName": "No.11 Être Douce",
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-02T18:00:04.409Z",
+      "updatedAt": "2026-04-06T03:25:11.582Z"
+    },
+    {
+      "_id": "69d3206cf4378f86e6fdda57",
+      "name": "Áo Kiểu Nữ Tay Dài Cổ V – Tết Collection",
+      "description": "Áo kiểu nữ tay dài cổ V thanh lịch, thiết kế tối giản phù hợp diện Tết và dịp lễ. Chất liệu lụa tơ tằm mềm mại, thoáng mát, không nhăn. Phối dễ dàng cùng quần âu hoặc chân váy.",
+      "price": 450000,
+      "originalPrice": 580000,
+      "categoryId": "69ceaea4e38938c417143550",
+      "categorySlug": "holiday-tet",
+      "categoryName": "Tết / Holiday Collection",
+      "variants": [
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://trangphuchonghanh.com/files/assets/tin_tuc/ao-dai-co-v.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        },
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://down-vn.img.susercontent.com/file/vn-11134207-820l4-mhry8beg37d14e"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 20,
+      "images": [
+        "https://trangphuchonghanh.com/files/assets/tin_tuc/ao-dai-co-v.jpg",
+        "https://down-vn.img.susercontent.com/file/vn-11134207-820l4-mhry8beg37d14e"
+      ],
+      "image": "https://trangphuchonghanh.com/files/assets/tin_tuc/ao-dai-co-v.jpg",
+      "badge": "",
+      "material": "Lụa tơ tằm",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T02:54:36.565Z",
+      "updatedAt": "2026-04-06T03:25:11.583Z"
+    },
+    {
+      "_id": "69d320dcf4378f86e6fddacb",
+      "name": "Áo Thun Unisex Oversize \"Phúc Lộc Thọ\" – Holiday First Class",
+      "description": "Áo thun unisex form rộng in hoạ tiết \"Phúc Lộc Thọ\" độc quyền cho bộ sưu tập Tết 2025. Chất cotton 100% dày dặn, co giãn 4 chiều, giữ form tốt sau nhiều lần giặt. Unisex – phù hợp cả nam lẫn nữ.",
+      "price": 340000,
+      "originalPrice": 540000,
+      "categoryId": "69ceaea4e38938c417143550",
+      "categorySlug": "holiday-tet",
+      "categoryName": "Tết / Holiday Collection",
+      "variants": [
+        {
+          "color": "Trắng",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://img.lazcdn.com/g/p/737bb6f1696882116791d1244c983af9.png_720x720q80.png"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        },
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://product.hstatic.net/200000863757/product/z5861880430166_8a6644a552205d22f800e8e08e1d9e9f_805b515ac4604ff9a164d82f8ef681de.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 20,
+      "images": [
+        "https://img.lazcdn.com/g/p/737bb6f1696882116791d1244c983af9.png_720x720q80.png",
+        "https://product.hstatic.net/200000863757/product/z5861880430166_8a6644a552205d22f800e8e08e1d9e9f_805b515ac4604ff9a164d82f8ef681de.jpg"
+      ],
+      "image": "https://img.lazcdn.com/g/p/737bb6f1696882116791d1244c983af9.png_720x720q80.png",
+      "badge": "",
+      "material": "Cotton 100%",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T02:56:28.611Z",
+      "updatedAt": "2026-04-06T03:25:11.585Z"
+    },
+    {
+      "_id": "69d32180f4378f86e6fdde83",
+      "name": "Áo Thun Couple \"Be Mine\" – Valentine Collection",
+      "description": "Áo thun đôi thiết kế riêng cho mùa Valentine, in hoạ tiết trái tim và chữ \"Be Mine\" tối giản nhưng ngọt ngào. Chất cotton combed 100%, mềm mịn sát da. Mua 2 áo giảm thêm 10%.",
+      "price": 320000,
+      "originalPrice": 400000,
+      "categoryId": "69ceaea4e38938c417143551",
+      "categorySlug": "seasonal-events",
+      "categoryName": "Valentine / Noel / Halloween",
+      "variants": [
+        {
+          "color": "Nâu",
+          "colorCode": "#804040",
+          "images": [
+            "https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/055b2b05a77846f0a99b99f2da25a06d~tplv-aphluv4xwc-resize-webp:750:1000.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 1000
+        },
+        {
+          "color": "Trắng",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://sakurafashion.vn/upload/a/2335-couple-tx-5423.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 1010,
+      "images": [
+        "https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/055b2b05a77846f0a99b99f2da25a06d~tplv-aphluv4xwc-resize-webp:750:1000.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839",
+        "https://sakurafashion.vn/upload/a/2335-couple-tx-5423.jpg"
+      ],
+      "image": "https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/055b2b05a77846f0a99b99f2da25a06d~tplv-aphluv4xwc-resize-webp:750:1000.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839",
+      "badge": "",
+      "material": "Cotton Combed 100%",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T02:59:12.428Z",
+      "updatedAt": "2026-04-06T03:25:11.587Z"
+    },
+    {
+      "_id": "69d321fdf4378f86e6fddf54",
+      "name": "Áo Sweater Unisex \"Silent Night\" – Noel First Class",
+      "description": "Áo sweater dày dặn phong cách Giáng Sinh với hoạ tiết tuyết rơi và cây thông thêu tay tinh xảo. Form rộng, ấm áp, thích hợp mặc Noel hoặc du lịch mùa đông.",
+      "price": 550000,
+      "originalPrice": 760000,
+      "categoryId": "69ceaea4e38938c417143551",
+      "categorySlug": "seasonal-events",
+      "categoryName": "Valentine / Noel / Halloween",
+      "variants": [
+        {
+          "color": "Xám",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2SUYZHmct3DsbJSN82mPXTaEC2k0wLtikMg&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 100
+        },
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://bizweb.dktcdn.net/100/346/025/products/sweater-do.jpg?v=1732264005710"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 110,
+      "images": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2SUYZHmct3DsbJSN82mPXTaEC2k0wLtikMg&s",
+        "https://bizweb.dktcdn.net/100/346/025/products/sweater-do.jpg?v=1732264005710"
+      ],
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2SUYZHmct3DsbJSN82mPXTaEC2k0wLtikMg&s",
+      "badge": "",
+      "material": "Nỉ bông dày",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:01:17.403Z",
+      "updatedAt": "2026-04-06T03:25:11.588Z"
+    },
+    {
+      "_id": "69d322abf4378f86e6fde028",
+      "name": "Đầm Dạ Hội Lệch Vai Đính Hạt Ngọc Trai",
+      "description": "Đầm dạ hội lệch vai sang trọng với điểm nhấn hạt ngọc trai thủ công trên vai. Chất liệu satin cao cấp ôm dáng, tôn vóc dáng tối đa. Phù hợp tiệc cưới, dạ tiệc, sự kiện cao cấp.",
+      "price": 1700000,
+      "originalPrice": 4500000,
+      "categoryId": "69ceaea4e38938c417143552",
+      "categorySlug": "evening-bridal",
+      "categoryName": "Tiệc cưới & Dạ hội",
+      "variants": [
+        {
+          "color": "Xanh đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://vayemy.vn/wp-content/uploads/2023/04/em6981-dam-da-hoi-co-cach-dieu-4.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        },
+        {
+          "color": "Trắng",
+          "colorCode": "#ffffff",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0F5yyORSj9_w8kpaNqhBIDuOAbaTxn9ciVA&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 20,
+      "images": [
+        "https://vayemy.vn/wp-content/uploads/2023/04/em6981-dam-da-hoi-co-cach-dieu-4.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0F5yyORSj9_w8kpaNqhBIDuOAbaTxn9ciVA&s"
+      ],
+      "image": "https://vayemy.vn/wp-content/uploads/2023/04/em6981-dam-da-hoi-co-cach-dieu-4.jpg",
+      "badge": "",
+      "material": "Satin lụa cao cấp",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:04:11.161Z",
+      "updatedAt": "2026-04-06T03:25:11.589Z"
+    },
+    {
+      "_id": "69d322edf4378f86e6fde0a4",
+      "name": "Áo Blazer Sequin Ánh Kim Dự Tiệc",
+      "description": "Blazer sequin ánh kim phong cách tối giản nhưng nổi bật, dễ phối cùng quần ống rộng hoặc chân váy midi. Lý tưởng cho tiệc tối, lễ cưới hay sự kiện VIP.",
+      "price": 1200000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143552",
+      "categorySlug": "evening-bridal",
+      "categoryName": "Tiệc cưới & Dạ hội",
+      "variants": [
+        {
+          "color": "Trắng",
+          "colorCode": "#ffffff",
+          "images": [
+            "https://images2.thanhnien.vn/528068263637045248/2026/2/21/myan-ao-blazer-1771688143479756738239.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 100
+        },
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://static.zara.net/assets/public/4dd3/0fe0/b74f4cb2a6d6/a3dd7b2f063a/02253555800-p/02253555800-p.jpg?ts=1769080738420&w=352"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 100
+        }
+      ],
+      "stock": 200,
+      "images": [
+        "https://images2.thanhnien.vn/528068263637045248/2026/2/21/myan-ao-blazer-1771688143479756738239.jpg",
+        "https://static.zara.net/assets/public/4dd3/0fe0/b74f4cb2a6d6/a3dd7b2f063a/02253555800-p/02253555800-p.jpg?ts=1769080738420&w=352"
+      ],
+      "image": "https://images2.thanhnien.vn/528068263637045248/2026/2/21/myan-ao-blazer-1771688143479756738239.jpg",
+      "badge": "",
+      "material": "Sequin + lớp lót Cotton",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:05:17.828Z",
+      "updatedAt": "2026-04-06T03:25:11.591Z"
+    },
+    {
+      "_id": "69d32336f4378f86e6fde122",
+      "name": "Set Đồ Đi Biển Co-ord Hoa Nhiệt Đới",
+      "description": "Bộ co-ord áo croptop + quần shorts hoạ tiết hoa nhiệt đới sặc sỡ. Chất liệu vải đũi nhẹ, thoáng khí, chống nhăn – lý tưởng cho chuyến du lịch biển hay resort.",
+      "price": 260000,
+      "originalPrice": 430000,
+      "categoryId": "69ceaea4e38938c417143553",
+      "categorySlug": "resort-collection",
+      "categoryName": "Du lịch & Nghỉ hè",
+      "variants": [
+        {
+          "color": "Vàng",
+          "colorCode": "#ffff00",
+          "images": [
+            "https://thegioiaodoi.vn/wp-content/uploads/2022/09/ee3f38180550c10e9841.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        },
+        {
+          "color": "Xanh",
+          "colorCode": "#004080",
+          "images": [
+            "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mmd5alhzeg3zf6"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 20,
+      "images": [
+        "https://thegioiaodoi.vn/wp-content/uploads/2022/09/ee3f38180550c10e9841.jpg",
+        "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mmd5alhzeg3zf6"
+      ],
+      "image": "https://thegioiaodoi.vn/wp-content/uploads/2022/09/ee3f38180550c10e9841.jpg",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:06:30.796Z",
+      "updatedAt": "2026-04-06T03:25:11.592Z"
+    },
+    {
+      "_id": "69d3236df4378f86e6fde1a2",
+      "name": "Váy Maxi Thắt Eo Đi Biển – Boho Vibe",
+      "description": "",
+      "price": 340000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143553",
+      "categorySlug": "resort-collection",
+      "categoryName": "Du lịch & Nghỉ hè",
+      "variants": [
+        {
+          "color": "Xanh",
+          "colorCode": "#004080",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6lWjvzZ5Eb3BTy8_6VYyXXbw5YYcQK-BTA&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        },
+        {
+          "color": "hồng",
+          "colorCode": "#ff80c0",
+          "images": [
+            "https://bizweb.dktcdn.net/100/300/101/products/dam-maxi-set-bikini-hong-kim-tuyen-dm813-3.jpg?v=1656304284807"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 20,
+      "images": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6lWjvzZ5Eb3BTy8_6VYyXXbw5YYcQK-BTA&s",
+        "https://bizweb.dktcdn.net/100/300/101/products/dam-maxi-set-bikini-hong-kim-tuyen-dm813-3.jpg?v=1656304284807"
+      ],
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6lWjvzZ5Eb3BTy8_6VYyXXbw5YYcQK-BTA&s",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:07:25.826Z",
+      "updatedAt": "2026-04-06T03:25:11.593Z"
+    },
+    {
+      "_id": "69d323ddf4378f86e6fde7ed",
+      "name": "Đầm Wrap Cổ V Dáng A-Line Công Sở",
+      "description": "",
+      "price": 450000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143554",
+      "categorySlug": "dress-edit",
+      "categoryName": "Đầm & Váy (Dress Edit)",
+      "variants": [
+        {
+          "color": "Xanh",
+          "colorCode": "#8080c0",
+          "images": [
+            "https://cdn.kkfashion.vn/20659-large_default/dam-wrap-dress-cong-so-nhan-eo-kk130-26.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        },
+        {
+          "color": "Trắng",
+          "colorCode": "#ffffff",
+          "images": [
+            "https://img.alicdn.com/img/ibank/O1CN01URwRne1ns0Eg2qJKu_!!2886565144-0-cib.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        },
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaXLqrD4bAITzISRt2OOfSUCVTBwgeaPkE5w&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 30,
+      "images": [
+        "https://cdn.kkfashion.vn/20659-large_default/dam-wrap-dress-cong-so-nhan-eo-kk130-26.jpg",
+        "https://img.alicdn.com/img/ibank/O1CN01URwRne1ns0Eg2qJKu_!!2886565144-0-cib.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaXLqrD4bAITzISRt2OOfSUCVTBwgeaPkE5w&s"
+      ],
+      "image": "https://cdn.kkfashion.vn/20659-large_default/dam-wrap-dress-cong-so-nhan-eo-kk130-26.jpg",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:09:17.009Z",
+      "updatedAt": "2026-04-06T03:25:11.595Z"
+    },
+    {
+      "_id": "69d3240af4378f86e6fde873",
+      "name": "Chân Váy Midi Xếp Ly Pleated Tông Trung Tính",
+      "description": "",
+      "price": 560000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143554",
+      "categorySlug": "dress-edit",
+      "categoryName": "Đầm & Váy (Dress Edit)",
+      "variants": [
+        {
+          "color": "Xanh",
+          "colorCode": "#808000",
+          "images": [
+            "https://cdn.kkfashion.vn/35078-large_default/chan-vay-xep-ly-dang-dai-mau-xanh-reu-cv08-37.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        },
+        {
+          "color": "Xám",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyM_rKa3aAgh3iZjxoKs3fE7H3TQJAHXikGw&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 20,
+      "images": [
+        "https://cdn.kkfashion.vn/35078-large_default/chan-vay-xep-ly-dang-dai-mau-xanh-reu-cv08-37.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyM_rKa3aAgh3iZjxoKs3fE7H3TQJAHXikGw&s"
+      ],
+      "image": "https://cdn.kkfashion.vn/35078-large_default/chan-vay-xep-ly-dang-dai-mau-xanh-reu-cv08-37.jpg",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:10:02.035Z",
+      "updatedAt": "2026-04-06T03:25:11.596Z"
+    },
+    {
+      "_id": "69d32446f4378f86e6fde961",
+      "name": "Áo Khoác Dạ Dáng Dài Oversized Coat",
+      "description": "",
+      "price": 2400000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143555",
+      "categorySlug": "outerwear",
+      "categoryName": "Áo khoác (Outerwear)",
+      "variants": [
+        {
+          "color": "Nâu",
+          "colorCode": "#804040",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOQILw663eyXlPoSfiB1MpG63mFUOB8wjphg&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 100
+        }
+      ],
+      "stock": 100,
+      "images": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOQILw663eyXlPoSfiB1MpG63mFUOB8wjphg&s"
+      ],
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOQILw663eyXlPoSfiB1MpG63mFUOB8wjphg&s",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Active",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:11:02.121Z",
+      "updatedAt": "2026-04-06T03:25:11.598Z"
+    },
+    {
+      "_id": "69d3246ef4378f86e6fde9e8",
+      "name": "Áo Bomber Jacket Unisex Thêu Hoa",
+      "description": "",
+      "price": 459000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143555",
+      "categorySlug": "outerwear",
+      "categoryName": "Áo khoác (Outerwear)",
+      "variants": [
+        {
+          "color": "Trắng",
+          "colorCode": "#ffffff",
+          "images": [
+            "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-mc9zrlcwbf0cd0"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-mc9zrlcwbf0cd0"
+      ],
+      "image": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-mc9zrlcwbf0cd0",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:11:42.952Z",
+      "updatedAt": "2026-04-06T03:25:11.599Z"
+    },
+    {
+      "_id": "69d3249ff4378f86e6fdea70",
+      "name": "Quần Jeans Ống Rộng Lưng Cao Wide-Leg",
+      "description": "",
+      "price": 560000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143556",
+      "categorySlug": "denim-wear",
+      "categoryName": "Đồ Denim",
+      "variants": [
+        {
+          "color": "Xanh nhạt",
+          "colorCode": "#0080ff",
+          "images": [
+            "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-majq7vhb96tz60"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        },
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://minio.theciu.vn/theciu-beta/1000/images/9tDOnFVusoFtb7yqoZWhKee5fJsoM5BXYFKYETag.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 20,
+      "images": [
+        "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-majq7vhb96tz60",
+        "https://minio.theciu.vn/theciu-beta/1000/images/9tDOnFVusoFtb7yqoZWhKee5fJsoM5BXYFKYETag.jpg"
+      ],
+      "image": "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-majq7vhb96tz60",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:12:31.792Z",
+      "updatedAt": "2026-04-06T03:25:11.600Z"
+    },
+    {
+      "_id": "69d324bbf4378f86e6fdeafb",
+      "name": "Áo Jeans Denim Jacket Cổ Điển Unisex",
+      "description": "",
+      "price": 340000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143556",
+      "categorySlug": "denim-wear",
+      "categoryName": "Đồ Denim",
+      "variants": [
+        {
+          "color": "Xanh đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://product.hstatic.net/200000642007/product/50ins_3adkm0144_1_594fa8e27bd24258951bd9833b89a7b5_d3fdbafeb94e4ed0b8124c3dc83d3d37_master.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://product.hstatic.net/200000642007/product/50ins_3adkm0144_1_594fa8e27bd24258951bd9833b89a7b5_d3fdbafeb94e4ed0b8124c3dc83d3d37_master.jpg"
+      ],
+      "image": "https://product.hstatic.net/200000642007/product/50ins_3adkm0144_1_594fa8e27bd24258951bd9833b89a7b5_d3fdbafeb94e4ed0b8124c3dc83d3d37_master.jpg",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:12:59.682Z",
+      "updatedAt": "2026-04-06T03:25:11.602Z"
+    },
+    {
+      "_id": "69d324d4f4378f86e6fdeb86",
+      "name": "Áo Thun Trơn Cổ Tròn Premium Cotton",
+      "description": "",
+      "price": 23000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143557",
+      "categorySlug": "basics-essentials",
+      "categoryName": "Đồ cơ bản (Essentials)",
+      "variants": [
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://bizweb.dktcdn.net/thumb/1024x1024/100/346/025/products/vn-11134207-7r98o-lt84vfkrg6mxc7-1715144050919.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://bizweb.dktcdn.net/thumb/1024x1024/100/346/025/products/vn-11134207-7r98o-lt84vfkrg6mxc7-1715144050919.jpg"
+      ],
+      "image": "https://bizweb.dktcdn.net/thumb/1024x1024/100/346/025/products/vn-11134207-7r98o-lt84vfkrg6mxc7-1715144050919.jpg",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:13:24.921Z",
+      "updatedAt": "2026-04-06T03:25:11.603Z"
+    },
+    {
+      "_id": "69d324f7f4378f86e6fdec12",
+      "name": " phẩmQuần Tây Ống Suông Basic – Công Sở & Dạo Phố",
+      "description": "",
+      "price": 67000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c41714354b",
+      "categorySlug": "ao-so-mi",
+      "categoryName": "Áo sơ mi",
+      "variants": [
+        {
+          "color": "Xám",
+          "colorCode": "#000000",
+          "images": [
+            "https://dongphuchaianh.vn/wp-content/uploads/2022/06/mau-quan-au-ong-dung-dong-phuc-cong-so-nu.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://dongphuchaianh.vn/wp-content/uploads/2022/06/mau-quan-au-ong-dung-dong-phuc-cong-so-nu.jpg"
+      ],
+      "image": "https://dongphuchaianh.vn/wp-content/uploads/2022/06/mau-quan-au-ong-dung-dong-phuc-cong-so-nu.jpg",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:13:59.186Z",
+      "updatedAt": "2026-04-06T03:25:11.605Z"
+    },
+    {
+      "_id": "69d3251df4378f86e6fdec9f",
+      "name": "Áo Sơ Mi Linen Tay Lỡ Xuân Hè 2026",
+      "description": "",
+      "price": 230000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143558",
+      "categorySlug": "spring-summer-2026",
+      "categoryName": "Xuân Hè 2026",
+      "variants": [
+        {
+          "color": "Be",
+          "colorCode": "#c0c0c0",
+          "images": [
+            "https://www.uniqlo.com/jp/ja/contents/feature/masterpiece/common/img/product/poster/item_41_kv.jpg?260115"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://www.uniqlo.com/jp/ja/contents/feature/masterpiece/common/img/product/poster/item_41_kv.jpg?260115"
+      ],
+      "image": "https://www.uniqlo.com/jp/ja/contents/feature/masterpiece/common/img/product/poster/item_41_kv.jpg?260115",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:14:37.851Z",
+      "updatedAt": "2026-04-06T03:25:11.606Z"
+    },
+    {
+      "_id": "69d32552f4378f86e6fdfbb5",
+      "name": "Váy Mini Ruffle Viền Bèo SS26",
+      "description": "",
+      "price": 450000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143558",
+      "categorySlug": "spring-summer-2026",
+      "categoryName": "Xuân Hè 2026",
+      "variants": [
+        {
+          "color": "Đỏ",
+          "colorCode": "#ff0000",
+          "images": [
+            "https://product.hstatic.net/1000197303/product/pro_do_1_7abc9f73cbec4403abdd75e9115fda38_master.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://product.hstatic.net/1000197303/product/pro_do_1_7abc9f73cbec4403abdd75e9115fda38_master.jpg"
+      ],
+      "image": "https://product.hstatic.net/1000197303/product/pro_do_1_7abc9f73cbec4403abdd75e9115fda38_master.jpg",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:15:30.288Z",
+      "updatedAt": "2026-04-06T03:25:11.608Z"
+    },
+    {
+      "_id": "69d3259ef4378f86e6fe0150",
+      "name": "Áo Len Cổ Lọ Knit Turtleneck AW25",
+      "description": "",
+      "price": 450000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143559",
+      "categorySlug": "fall-winter-2025",
+      "categoryName": "Thu Đông 2025",
+      "variants": [
+        {
+          "color": "Xám",
+          "colorCode": "#000000",
+          "images": [
+            "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m35spdtfqlcr74"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m35spdtfqlcr74"
+      ],
+      "image": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m35spdtfqlcr74",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:16:46.287Z",
+      "updatedAt": "2026-04-06T03:25:11.609Z"
+    },
+    {
+      "_id": "69d325bbf4378f86e6fe01e0",
+      "name": "Set Cardigan + Quần Ống Rộng Tone-on-Tone AW25",
+      "description": "",
+      "price": 560000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c417143559",
+      "categorySlug": "fall-winter-2025",
+      "categoryName": "Thu Đông 2025",
+      "variants": [
+        {
+          "color": "Đen",
+          "colorCode": "#000000",
+          "images": [
+            "https://file.hstatic.net/200000503583/file/phoi-quan-ong-rong-mua-dong-6_2fc4c0094ed54382a0f5ebe00c99a8b5.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://file.hstatic.net/200000503583/file/phoi-quan-ong-rong-mua-dong-6_2fc4c0094ed54382a0f5ebe00c99a8b5.jpg"
+      ],
+      "image": "https://file.hstatic.net/200000503583/file/phoi-quan-ong-rong-mua-dong-6_2fc4c0094ed54382a0f5ebe00c99a8b5.jpg",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:17:15.555Z",
+      "updatedAt": "2026-04-06T03:25:11.612Z"
+    },
+    {
+      "_id": "69d325e5f4378f86e6fe0271",
+      "name": "Áo Sơ Mi Oversized Kẻ Caro Pre-Fall",
+      "description": "",
+      "price": 560000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c41714355a",
+      "categorySlug": "pre-fall",
+      "categoryName": "Pre-Fall Collection",
+      "variants": [
+        {
+          "color": "Xanh",
+          "colorCode": "#000000",
+          "images": [
+            "https://bizweb.dktcdn.net/100/455/439/products/345584952-549964883980227-3272376343609644891-n.jpg?v=1694404092187"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://bizweb.dktcdn.net/100/455/439/products/345584952-549964883980227-3272376343609644891-n.jpg?v=1694404092187"
+      ],
+      "image": "https://bizweb.dktcdn.net/100/455/439/products/345584952-549964883980227-3272376343609644891-n.jpg?v=1694404092187",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:17:57.441Z",
+      "updatedAt": "2026-04-06T03:25:11.615Z"
+    },
+    {
+      "_id": "69d32600f4378f86e6fe0303",
+      "name": "Quần Culottes Vải Tweed Pre-Fall",
+      "description": "",
+      "price": 450000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c41714355a",
+      "categorySlug": "pre-fall",
+      "categoryName": "Pre-Fall Collection",
+      "variants": [
+        {
+          "color": "Nâu",
+          "colorCode": "#000000",
+          "images": [
+            "https://cdn.kkfashion.vn/14986-large_default/quan-culottes-nu-dang-lung-ong-rong-qcs02-33.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://cdn.kkfashion.vn/14986-large_default/quan-culottes-nu-dang-lung-ong-rong-qcs02-33.jpg"
+      ],
+      "image": "https://cdn.kkfashion.vn/14986-large_default/quan-culottes-nu-dang-lung-ong-rong-qcs02-33.jpg",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:18:24.768Z",
+      "updatedAt": "2026-04-06T03:25:11.619Z"
+    },
+    {
+      "_id": "69d3261bf4378f86e6fe0396",
+      "name": "Áo Len Thêu Tuyết Giáng Sinh Holiday Capsule",
+      "description": "",
+      "price": 570000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c41714355b",
+      "categorySlug": "holiday-capsule",
+      "categoryName": "Holiday Capsule",
+      "variants": [
+        {
+          "color": "Nâu",
+          "colorCode": "#000000",
+          "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfxaQJDHaRWlmEB1CH5d6_WNbeIXLYATmsZg&s"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfxaQJDHaRWlmEB1CH5d6_WNbeIXLYATmsZg&s"
+      ],
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfxaQJDHaRWlmEB1CH5d6_WNbeIXLYATmsZg&s",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:18:51.918Z",
+      "updatedAt": "2026-04-06T03:25:11.620Z"
+    },
+    {
+      "_id": "69d32636f4378f86e6fe042a",
+      "name": "Váy Nhung Midi Dự Tiệc Cuối Năm – Holiday Capsule",
+      "description": "",
+      "price": 450000,
+      "originalPrice": 0,
+      "categoryId": "69ceaea4e38938c41714355b",
+      "categorySlug": "holiday-capsule",
+      "categoryName": "Holiday Capsule",
+      "variants": [
+        {
+          "color": "Đỏ",
+          "colorCode": "#000000",
+          "images": [
+            "https://images2.thanhnien.vn/528068263637045248/2026/1/15/nem-vay-midi-17684606326762041689294.jpg"
+          ],
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "stock": 10
+        }
+      ],
+      "stock": 10,
+      "images": [
+        "https://images2.thanhnien.vn/528068263637045248/2026/1/15/nem-vay-midi-17684606326762041689294.jpg"
+      ],
+      "image": "https://images2.thanhnien.vn/528068263637045248/2026/1/15/nem-vay-midi-17684606326762041689294.jpg",
+      "badge": "",
+      "material": "",
+      "sizeGuideImage": "",
+      "collectionName": null,
+      "status": "Low Stock",
+      "rating": 5,
+      "numReviews": 0,
+      "totalSold": 0,
+      "createdAt": "2026-04-06T03:19:18.171Z",
+      "updatedAt": "2026-04-06T03:25:11.622Z"
+    }
+  ]
+}

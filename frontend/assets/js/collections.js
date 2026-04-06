@@ -3,9 +3,9 @@ import { createProductCard, syncWishlistVisuals } from './common.js';
 
 const COLLECTION_GROUPS = ['THEO DỊP', 'SẢN PHẨM ĐẶC TRƯNG', 'THEO MÙA'];
 const GROUP_COPY = {
-  'THEO DỊP': 'Nhung bo suu tap duoc phan theo dip dac biet de ban chon look nhanh va dung tinh than.',
-  'SẢN PHẨM ĐẶC TRƯNG': 'Nhung item signature noi bat nhat cua Aurelia, duoc khach hang yeu thich xuyen suot mua.',
-  'THEO MÙA': 'Bang mau va chat lieu duoc tuyen chon theo nhip mua de giup tong the mac dep nhat quan.'
+  'THEO DỊP': 'Những bộ sưu tập được phân theo dịp đặc biệt để bạn chọn look nhanh và đúng tinh thần.',
+  'SẢN PHẨM ĐẶC TRƯNG': 'Những item signature nổi bật nhất của Aurelia, được khách hàng yêu thích xuyên suốt mùa.',
+  'THEO MÙA': 'Bảng màu và chất liệu được tuyển chọn theo nhịp mùa để giúp tổng thể mặc đẹp nhất quán.'
 };
 const PRODUCTS_PER_PAGE = 24;
 
@@ -91,7 +91,7 @@ function renderGroupTabs() {
       return `
         <button class="collections-tab ${groupName === activeGroup ? 'active' : ''}" data-group="${groupName}">
           <span class="collections-tab-label">${label}</span>
-          <span class="collections-tab-meta">${categoriesCount} danh muc | ${productsCount} san pham</span>
+          <span class="collections-tab-meta">${categoriesCount} danh mục | ${productsCount} sản phẩm</span>
         </button>
       `;
     })
@@ -134,7 +134,7 @@ function renderSections() {
               <article class="collection-category" id="category-${catSlug}">
                 <div class="collection-category-head">
                   <h3>${category.name}</h3>
-                  <span>${productsInCategory.length} san pham</span>
+                  <span>${productsInCategory.length} sản phẩm</span>
                 </div>
                 <div class="collection-grid">
                   ${displayProducts.map(createProductCard).join('')}
@@ -158,7 +158,7 @@ function renderSections() {
 
             paginationHtml = `
               <div class="collection-pagination" data-category="${catSlug}">
-                ${currentPage > 1 ? `<button class="pagination-btn pagination-prev" data-page="${currentPage - 1}">← Truoc</button>` : ''}
+                ${currentPage > 1 ? `<button class="pagination-btn pagination-prev" data-page="${currentPage - 1}">← Trước</button>` : ''}
                 <div class="pagination-numbers">
                   ${pageNumbers
                     .map(
@@ -179,7 +179,7 @@ function renderSections() {
             <article class="collection-category" id="category-${catSlug}">
               <div class="collection-category-head">
                 <h3>${category.name}</h3>
-                <span>${productsInCategory.length} san pham</span>
+                <span>${productsInCategory.length} sản phẩm</span>
               </div>
               <div class="collection-grid">
                 ${displayProducts.map(createProductCard).join('')}
@@ -193,7 +193,7 @@ function renderSections() {
       if (!categoryHtml) return '';
 
       const groupSummary =
-        GROUP_COPY[groupName] || 'Danh muc duoc sap xep ro rang de theo doi va chon nhanh hon.';
+        GROUP_COPY[groupName] || 'Danh mục được sắp xếp rõ ràng để theo dõi và chọn nhanh hơn.';
 
       return `
         <section class="collection-group" id="group-${slugify(groupName)}">
@@ -208,7 +208,7 @@ function renderSections() {
     .join('');
 
   if (!groupHtml) {
-    sectionsRoot.innerHTML = '<div class="collections-empty">Chua co du lieu bo suu tap phu hop.</div>';
+    sectionsRoot.innerHTML = '<div class="collections-empty">Chưa có dữ liệu bộ sưu tập phù hợp.</div>';
     return;
   }
 
@@ -275,7 +275,7 @@ async function initCollectionsPage() {
     renderSections();
     applyQueryDefaults();
   } catch (error) {
-    sectionsRoot.innerHTML = `<div class="collections-empty">Khong the tai du lieu bo suu tap: ${error.message}</div>`;
+    sectionsRoot.innerHTML = `<div class="collections-empty">Không thể tải dữ liệu bộ sưu tập: ${error.message}</div>`;
   }
 }
 
